@@ -1,0 +1,205 @@
+﻿@model List<RelationListServiceModel>
+@{
+    ViewData["Title"] = "Релации";
+}
+
+<div class="row" style="padding-left: 10px; padding-right:10px;">
+    <h3 class="center-block text-center">Р е л а ц и и</h3>
+    <div class="col-md-6">
+        <form method="get" asp-controller="ClassClient" asp-action="Relations">
+            <input name="searchString" style="width: 350px;" />
+            <button type="submit" class="button search" style="margin-bottom:10px;">Търси</button>
+        </form>
+        <table class="table table-bordered table-hover" style="background-color:honeydew;">
+            <thead>
+                <tr>
+                    <th style="text-align:center; width:100%;" class="col-md-12">
+                        НАИМЕНОВАНИЯ
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i <= Model.Count - 1; i++)
+                {
+                    <tr>
+                        <td>
+                            <span class="classLeaf" id="@Model[i].Id"><strong>@Model[i].Description</strong></span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+    <div class="col-md-6">
+        <div class="note">
+            <h4 class="center-block text-center">Информация за маркираната релация</h4>
+            <h5 class="center-block text-center" style="font-size:small; margin-top:15px;" id="noinfo">Няма маркирана релация</h5>
+            <table id="tblinfo" hidden>
+                <tbody>
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Наименование :</strong>
+                            </p>
+                        </td>
+                        <td style="padding-left:10px;">
+                            <p id="inforelNameBG">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Класификация източник :</strong>
+                            </p>
+                        </td>
+                        <td style="padding-left:10px;">
+                            <p id="infoClassSrc">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Версия източник :</strong>
+                            </p>
+                        </td>
+                        <td style="padding-left:10px;">
+                            <p id="infoVersionSrc">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Класификация цел :</strong>
+                            </p>
+                        </td>
+                        <td style="padding-left:10px;">
+                            <p id="infoClassDst">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Версия цел :</strong>
+                            </p>
+                        </td>
+                        <td style="padding-left:10px;">
+                            <p id="infoVersionDst">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Брой елементи :</strong>
+                            </p>
+                        </td>
+                        <td style="padding-left:10px;">
+                            <p id="elementCount">
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Валидна от:&nbsp;&nbsp;</strong>
+                            </p>
+                        </td>
+                        <td style="padding-left:10px;">
+                            <p id="validFrom">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Валидна до:&nbsp;&nbsp;</strong>
+                            </p>
+                        </td>
+                        <td style="padding-left:10px;">
+                            <p id="validТо">
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Статус:&nbsp;&nbsp;</strong>
+                            </p>
+                        </td>
+                        <td style="padding-left:10px;">
+                            <p id="isDeleted">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Действия:&nbsp;&nbsp;</strong>
+                            </p>
+                        </td>
+                        <td style="padding-left:10px;">
+                            <span style="padding-left:10px;" id="export"></span>
+                        </td>
+                        <td class="meaning-version">
+                            @if (User.IsInRole(DataConstants.AdministratorRole) || User.IsInRole(DataConstants.DeveloperRole))
+                            {
+                                <span style="padding-left:10px;" id="adminActions"></span>
+                            }
+                        </td>
+                    </tr>
+
+                    @*@if (User.IsInRole(DataConstants.AdministratorRole) || User.IsInRole(DataConstants.DeveloperRole))
+        {
+            <tr>
+                <td class="meaning-version">
+                    <p style="margin-top:12px;"><strong>Действия: </strong></p>
+                </td>
+                <td style="padding-left:10px;" id="adminActions"></td>    target=\"_blank\"
+            </tr>
+        }*@
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    var toggler = document.getElementsByClassName("classLeaf");
+    function getstatus(status) {
+        if (status == false) {
+            return 'Активна'
+        } else {
+            return 'Неактивна'
+        }
+    }
+
+    for (i = 0; i < toggler.length; i++) {
+        toggler[i].addEventListener("click", function () {
+            $.getJSON('\GetRelInfoByCode\?relCode=' + $(this).attr("Id"), { get_param: 'value' }, function (data) {
+                $('#tblinfo').show();
+                $("#noinfo").hide();
+                $("#inforelNameBG").text(data["description"]);
+                $("#infoClassSrc").text(data["srcClassifId"]); 
+                $("#infoVersionSrc").text(data["srcVersionId"]);
+                $("#infoClassDst").text(data["destClassifId"]);
+                $("#infoVersionDst").text(data["destVersionId"]);
+                $("#elementCount").text(data["relationsCount"]);
+                $("#validFrom").text(data["valid_From_Date"]);
+                $("#validTo").text(data["valid_To_Date"]);
+                $("#isDeleted").text(getstatus(data["isDeleted"]));
+                $("#export").html("<a style=\"margin-top:8px; margin-right:8px;\"  class=\"btn btn-info btn-sm\" href=\"/ClassClient/ExportRelation?relCode=" + data["id"] + "\">Експорт</a><br />");
+                $("#adminActions").html("<a style=\"margin-top:8px; margin-right:8px;\"  class=\"btn btn-info btn-sm\" href=\"\/Admin\/Relations\/RelDetails?relCode=" + data["id"] + "\">Редакция</a><br />");
+            });
+        });
+    }
+</script>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

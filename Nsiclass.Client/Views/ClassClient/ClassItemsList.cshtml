@@ -1,0 +1,343 @@
+﻿@using Microsoft.AspNetCore.Html
+@using Microsoft.AspNetCore.Mvc.Razor
+@model ItemsTreeViewModel
+
+@{
+    ViewData["Title"] = "Елементи на класификация";
+}
+
+<div class="row" style="padding-left: 10px; padding-right:10px;">
+
+
+    <h3 class="center-block text-center">Класификация : @Model.ClassCode  @Model.VersionCode</h3>
+
+</div>
+
+<div class="row" style="padding-left: 10px; padding-right:10px;">
+
+    <div class="col-md-6">
+
+        @{
+            Func<ICollection<TC_Classif_Items>, IHtmlContent> ShowTree = null;
+            Func<ICollection<TC_Classif_Items>, IHtmlContent> ShowTreeChilds = null;
+            ShowTree = @<text>@{
+            var Items = item;
+            <ul id="myUL">
+                @foreach (var foo in Items)
+                {
+                    @if (foo.ItemLevel <= 1)
+                    {
+                        <li style="padding:8px;">
+                            @if (foo.IsLeaf)
+                            {
+                                if (foo.IsDeleted)
+                                {
+                                    <span style="color:red;" class="classLeaf" classCode="@foo.Classif" versionCode="@foo.Version" id="@foo.ItemCode">| <strong style="color:red;">@foo.ItemCode</strong> | @foo.Description</span>
+                                }
+                                else
+                                {
+                                    <span class="classLeaf" classCode="@foo.Classif" versionCode="@foo.Version" id="@foo.ItemCode">| <strong style="color:red;">@foo.ItemCode</strong> | @foo.Description</span>
+                                }
+                            }
+                            else
+                            {
+                                <span class="caret" style="padding:5px;" classCode="@foo.Classif" versionCode="@foo.Version" id="@foo.ItemCode">| <strong style="color:red;">@foo.ItemCode</strong> | @foo.Description</span>
+
+                                @ShowTreeChilds(foo.ChildItems)
+
+                            }
+                        </li>
+
+                    }
+                }
+
+            </ul>
+    }</text>;
+
+
+            ShowTreeChilds = @<text>@{
+            var Items = item;
+            <ul class="nested" style="padding:10px;">
+                @foreach (var foo in Items)
+                {
+                    <li style="padding:10px;">
+                        @if (foo.IsLeaf)
+                        {
+                            if (foo.IsDeleted)
+                            {
+                                <span style="color:red;" class="classLeaf" classCode="@foo.Classif" versionCode="@foo.Version" id="@foo.ItemCode">| <strong style="color:red;">@foo.ItemCode</strong> | @foo.Description</span>
+                            }
+                            else
+                            {
+                                <span class="classLeaf" classCode="@foo.Classif" versionCode="@foo.Version" id="@foo.ItemCode">| <strong style="color:red;">@foo.ItemCode</strong> | @foo.Description</span>
+                            }
+                            @*<span class="classLeaf" classCode="@foo.Classif" versionCode="@foo.Version" id="@foo.ItemCode">| <strong style="color:red;">@foo.ItemCode</strong> | @foo.Description</span>*@
+                            }
+                            else
+                            {
+                                <span class="caret" style="padding:5px;" classCode="@foo.Classif" versionCode="@foo.Version" id="@foo.ItemCode">| <strong style="color:red;">@foo.ItemCode</strong> | @foo.Description</span>
+
+                                @ShowTreeChilds(foo.ChildItems)
+
+                            }
+                    </li>
+                }
+
+            </ul>
+    }</text>;
+
+        }
+        @if (Model.isSearchResult)
+        {
+            <div class="classtree">
+                <ul id="myUL">
+                    @foreach (var foo in Model.Items)
+                    {
+                        <li style="padding:10px;">
+                            <span class="classLeaf" classCode="@foo.Classif" versionCode="@foo.Version" id="@foo.ItemCode">| <strong style="color:red;">@foo.ItemCode</strong> | @foo.Description</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+        else
+        {
+            <div class="classtree">
+                @ShowTree(Model.Items)
+            </div>
+        }
+
+            <form method="get" asp-controller="ClassClient" asp-action="ClassItemsList">
+                <input name="classCode" value="@Model.ClassCode" hidden />
+                <input name="versionCode" value="@Model.VersionCode" hidden />
+                <input name="searchString" style="width:30%;" />
+                <button type="submit" class="button search" style="margin-bottom:10px;">Търси</button>
+                <a class="button back-small" style="text-decoration: none;" asp-area="" asp-action="ClassList" asp-controller="ClassClient">Назад</a>
+                <a href="/ClassClient/ExportVersion?classCode=@(Model.ClassCode)&versionCode=@(Model.VersionCode)" style="text-decoration: none;" class="button btnrestore-small">Експорт</a>
+
+            </form>
+
+    </div>
+    <div class="col-md-6">
+        <div class="note-version-list">
+            <h4 class="center-block text-center">Информация за маркирания елемент</h4>
+            <h5 class="center-block text-center" style="font-size:small;" id="noinfo">Няма маркиран елемент</h5>
+            <div class="items-info">
+                <table id="tblinfo" class="table-info" hidden>
+                    <tbody>
+                        <tr>
+                            <td class="meaning">
+                                <p>
+                                    <strong>КОД :</strong>
+                                </p>
+                            </td>
+                            <td>
+                                <p id="infoItemCode">
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="meaning">
+                                <p>
+                                    <strong>Наименование :</strong>
+                                </p>
+                            </td>
+                            <td>
+                                <p id="infoItemNameBG">
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="meaning">
+                                <p>
+                                    <strong>Name :</strong>
+                                </p>
+                            </td>
+                            <td>
+                                <p id="infoItemNameEn">
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="meaning">
+                                <p>
+                                    <strong>Ниво:&nbsp;</strong>
+                                </p>
+                            </td>
+                            <td>
+                                <p id="itemLevel">
+                                </p>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="meaning">
+                                <p>
+                                    <strong>Включва:&nbsp;</strong>
+                                </p>
+                            </td>
+                            <td>
+                                <pre id="dopinfoincl">
+                        </pre>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="meaning">
+                                <p>
+                                    <strong>Включва още:&nbsp;</strong>
+                                </p>
+                            </td>
+                            <td>
+                                <pre id="dopinfoinclMore">
+                        </pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="meaning">
+                                <p>
+                                    <strong>Не включва: </strong>
+                                </p>
+                            </td>
+                            <td>
+                                <pre id="dopinfoinclNo">
+                        </pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="meaning">
+                                <p>
+                                    <strong>Съставни елементи: </strong>
+                                </p>
+                            </td>
+                            <td>
+                                <p id="itemChildrenInfo">
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="meaning">
+                                <p>
+                                    <strong>Релации: </strong>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="meaning">
+                                <p>
+                                    <strong>Елемента е източник в следните релации: </strong>
+                                </p>
+                            </td>
+                            <td>
+                                <p id="itemRelSrcInfo">
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="meaning">
+                                <p>
+                                    <strong>Елемента е цел в следните релации: </strong>
+                                </p>
+                            </td>
+                            <td>
+                                <p id="itemRelDstInfo">
+                                </p>
+                            </td>
+                        </tr>
+                        @if (User.IsInRole(DataConstants.AdministratorRole) || User.IsInRole(DataConstants.DeveloperRole))
+                        {
+                            <tr>
+                                <td>
+                                    <p style="margin-top:12px;"><strong>Действия: </strong></p>
+                                </td>
+                                <td id="adminActions"></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+            @*<label id="classIdLabel"></label>*@
+            @*<textarea id="classInfo" rows="7" style="width:100%" placeholder="Информация за маркираната класификация"></textarea>*@
+        </div>
+
+    </div>
+</div>
+<script>
+    function getChilds(childs) {
+        let names = "";
+        for (var i = 0; i <= childs.length - 1; i++) {
+            names = names + " - | " + childs[i].itemCode + " | " + childs[i].description + "<br />";
+        }
+        return names;
+    }
+    function getRelations(childs) {
+        let names = "";
+        let relationTypeName = "";
+        for (var i = 0; i <= childs.length - 1; i++) {
+            let currentRelationTypeName = childs[i].relationTypeName;
+            if (relationTypeName !== currentRelationTypeName) {
+                relationTypeName = currentRelationTypeName;
+                names = names + "&nbsp&nbsp&nbsp" + "<strong>" + relationTypeName + "</strong>" + "<br />";
+            }
+            if (childs[i].isDeleted) {
+
+            }
+            names = names + " - " + "<a href=\"#\" style=\"color:" + (childs[i].isDeleted ? "red" : "navy") + ";\">" + childs[i].classCode + "&nbsp" + childs[i].versionCode + "&nbsp" + childs[i].itemCode + "&nbsp" + childs[i].itemName + "</a><br />";
+
+        }
+        return names;
+    }
+
+    function getItemInfo(classCode, versionCode, itemCode) {
+        $.ajax({
+            url: '\GetItemInfoByCode\?classCode=' + classCode + '&versionCode=' + versionCode + '&itemCode=' + itemCode,
+            type: "GET",
+            contentType: JSON,
+            //async: false,
+            success: function (data) {
+                $('#tblinfo').show();
+                $("#noinfo").hide();
+                $("#infoItemCode").text(data["itemCode"]);
+                $("#infoItemNameBG").text(data["description"]);
+                $("#infoItemNameEn").text(data["descriptionEng"]);
+                $("#dopinfoinclMore").text(data["includesMore"]);
+                $("#dopinfoincl").text(data["includes"]);
+                $("#dopinfoinclNo").text(data["includesNo"]);
+                $("#itemLevel").text(data["itemLevel"]);
+                $("#itemChildrenInfo").html(getChilds(data["childItems"]));
+                $("#itemRelSrcInfo").html(getRelations(data["destRelations"]));
+                $("#itemRelDstInfo").html(getRelations(data["srcRelations"]));
+                $("#adminActions").html("<a style=\"margin-top:8px; margin-right:8px; text-decoration:none;\"  class=\"button redaction\" href=\"\/Admin\/Items\/ItemDetails?classCode=" + classCode + "&versionCode=" + versionCode + "&itemCode=" + itemCode + "\">Редактиране</a><br />");
+            },
+            error: function () {
+                $('#tblinfo').hide();
+                $("#noinfo").show();
+            }
+        });
+
+    }
+
+    var toggler = document.getElementsByClassName("caret");
+    var i;
+
+    for (i = 0; i < toggler.length; i++) {
+        toggler[i].addEventListener("click", function () {
+            this.parentElement.querySelector(".nested").classList.toggle("active");
+            this.classList.toggle("caret-down");
+            getItemInfo($(this).attr("classCode"), $(this).attr("versionCode"), $(this).attr("Id"))
+        });
+    }
+
+    var leaf = document.getElementsByClassName("classLeaf");
+    for (i = 0; i < leaf.length; i++) {
+        leaf[i].addEventListener("click", function () {
+            getItemInfo($(this).attr("classCode"), $(this).attr("versionCode"), $(this).attr("Id"))
+        });
+    }
+
+</script>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+

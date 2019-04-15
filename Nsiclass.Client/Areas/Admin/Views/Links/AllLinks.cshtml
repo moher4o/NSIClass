@@ -1,0 +1,119 @@
+﻿@model List<AdminLinksServiceModel>
+@{
+    ViewData["Title"] = "Връзки";
+}
+
+<h4 class="text-center" style="color:azure;">Връзки към други системи</h4>
+<br />
+<div class="row">
+    <a class="button search pull-right" asp-controller="Links" asp-action="AddSystem">Създаване на нова връзка</a>
+</div>
+
+<div class="row" style="margin:10px;">
+    <table class="table table-hover table-bordered">
+        <thead style="background: #51596a; text-transform: uppercase;">
+            <tr style="color:azure; font-size:16px;">
+                <th style="color:whitesmoke">
+                    Име
+                </th>
+                <th style="color:whitesmoke">
+                    Линк
+                </th>
+                <th style="color:whitesmoke" class="col-md-2">
+                    Операции
+                </th>
+
+            </tr>
+        </thead>
+        <tbody style="background-color:bisque">
+            @foreach (var link in Model)
+            {
+
+                <tr style="background-color:@(link.isDeleted == true ? "salmon" : "bisque")">
+                    <td>
+                        @{string name = link.Name.Length > 44 ? (link.Name).Substring(0, 44) + "..." : link.Name;}
+                        @{string modaId = "modal" + link.Id.ToString(); }
+                        <a asp-area="Admin" asp-action="EditLink" asp-controller="Links" asp-route-linkId=@link.Id>@name</a>
+                    </td>
+                    <td>
+                        <a href="@link.Link" target="_blank">@link.Link</a>
+                    </td>
+                    <td style="text-align:center" class="col-md-3">
+
+                        @if ((User.IsInRole(DataConstants.AdministratorRole) || User.IsInRole(DataConstants.DeveloperRole)) && (link.isDeleted == false))
+                        {
+                            <form method="post" asp-controller="Links" asp-action="DestroyLink" asp-route-linkId="@link.Id">
+                                <a class="btn btn-success btn-sm" asp-area="Admin" asp-action="EditLink" asp-controller="Links" asp-route-linkId=@link.Id>Редактиране</a>
+                                <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#@modaId">Изтриване</a>
+
+                                <div class="modal fade" id="@modaId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div style="background-color:papayawhip;" class="modal-content">
+                                            <div class="modal-body">
+                                                <h4>Сигурни ли сте, че искате да изтриете връзка към</h4> <h4><span style="font-weight:700">@name</span></h4>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отказ</button>
+                                                <button type="submit" class="btn btn-danger">Потвърди</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="post" asp-controller="Links" asp-action="RestoreLink" asp-route-linkId="@link.Id">
+                                <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#@modaId">Възстановяване</a>
+                                <div class="modal fade" id="@modaId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div style="background-color:papayawhip;" class="modal-content">
+                                            <div class="modal-body">
+                                                <h4>Сигурни ли сте, че искате да изтриете връзка към</h4> <h4><span style="font-weight:700">@name</span></h4>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отказ</button>
+                                                <button type="submit" class="btn btn-danger">Потвърди</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<br />
+
+@*<!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

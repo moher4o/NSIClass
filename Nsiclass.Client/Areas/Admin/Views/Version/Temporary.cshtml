@@ -1,0 +1,188 @@
+﻿
+@{
+    ViewData["Title"] = "Temporary";
+}
+
+<h2>Test</h2>
+*<h1>
+    File Upload Demo
+</h1>
+<div id="FileBrowse">
+    <div class="row">
+        <div class="col-sm-4">
+            <input type="file" id="Files" />
+        </div>
+        <div class="col-sm-2">
+            <input type="button" id="UploadBtn" class="btn btn-danger" value="Upload" />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <div id="progressbar-5">
+            <div class="progress-label">
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<div class="row">
+    <div class="col-sm-6">
+        <table class="table" id="ListofFiles">
+            <tr>
+                <th>
+                    Files
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </table>
+    </div>
+</div>
+<br />
+<br />
+<input type="button" id="TreeBtn" class="btn btn-danger" value="Get Data" />
+<div class="container-fluid">
+    <div id="tree"></div>
+</div>
+
+
+<br />
+<br />
+
+@section scripts{
+    @*<script src="https://code.jquery.com/jquery-1.10.2.js"></script>*@
+    @*<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>*@
+    <script>
+
+        $('#UploadBtn').click(function () {
+
+            var fileUpload = $("#Files").get(0);
+            var files = fileUpload.files;
+            // Create FormData object
+            var fileData = new FormData();
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
+            }
+            $.ajax({
+                url: '\UploadFiles',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                async: false,
+                success: function (result) {
+                    if (result != "") {
+                        $('#FileBrowse').find("*").prop("disabled", true);
+                        LoadProgressBar(result); //calling LoadProgressBar function to load the progress bar.
+                    }
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+
+        });
+
+        function LoadProgressBar(result) {
+            var progressbar = $("#progressbar-5");
+            var progressLabel = $(".progress-label");
+            progressbar.show();
+            $("#progressbar-5").progressbar({
+                //value: false,
+                change: function () {
+                    progressLabel.text(
+                        progressbar.progressbar("value") + "%");  // Showing the progress increment value in progress bar
+                },
+                complete: function () {
+                    progressLabel.text("Loading Completed!");
+                    progressbar.progressbar("value", 0);  //Reinitialize the progress bar value 0
+                    progressLabel.text("");
+                    progressbar.hide(); //Hiding the progress bar
+                    var markup = "<tr><td>" + result + "</td><td><a href='#' onclick='DeleteFile(\"" + result + "\")'><span class='glyphicon glyphicon-remove red'></span></a></td></tr>"; // Binding the file name
+                    $("#ListofFiles tbody").append(markup);
+                    $('#Files').val('');
+                    $('#FileBrowse').find("*").prop("disabled", false);
+                }
+            });
+            function progress() {
+                var val = progressbar.progressbar("value") || 0;
+                progressbar.progressbar("value", val + 1);
+                if (val < 99) {
+                    setTimeout(progress, 25);
+                }
+            }
+            setTimeout(progress, 100);
+        }
+
+        function DeleteFile(FileName) {
+
+            //Write your delete logic here
+        }
+
+        $('#TreeBtn').on('click', getTree);
+
+        function getTree() {
+        };
+
+
+    </script>
+
+}
+
+
+<div id="jstree">
+</div>
+@using (Html.BeginForm("Test", "Admin/Class", FormMethod.Post))
+{
+    <input type="hidden" name="selectedItems" id="selectedItems" />
+    <input type="submit" value="Submit" />
+}
+
+@*@section scripts{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#jstree').on('changed.jstree', function (e, data) {
+                var i, j;
+                var postedItems = [];
+                for(i = 0, j = data.selected.length; i < j; i++) {
+
+                    //Fetch the Id.
+                    var id = data.selected[i];
+
+                    //Remove the ParentId.
+                    if (id.lastIndexOf('-') != -1){
+                        id = id.split("-")[1];
+                    }
+
+                    //Add the Node to the JSON Array.
+                    postedItems.push({
+                        text: data.instance.get_node(data.selected[i]).text,
+                        id: id,
+                        parent: data.node.parents[0]
+                    });
+                }
+
+                //Serialize the JSON Array and save in HiddenField.
+                $('#selectedItems').val(JSON.stringify(postedItems));
+            }).jstree({
+                "core": {
+                    "themes": {
+                        "variant": "large"
+                    },
+                    "data": @Html.Raw(ViewBag.Json)
+                    },
+                "checkbox": {
+                    "keep_selected_style": false
+                },
+                "plugins": ["wholerow", "checkbox"],
+            });
+        });
+    </script>
+}*@

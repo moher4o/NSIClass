@@ -1,0 +1,210 @@
+﻿@model AdminRelationsDetailsServiceModel
+
+@{
+    ViewData["Title"] = "Детайли на релация";
+}
+
+
+<form method="post">
+    <div style="color:azure; padding-top:15px;" class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-4">
+            <input asp-for="Id" type="hidden" />
+            <div class="form-group">
+                <label asp-for="SrcClassifId"></label>
+                <p style="color:bisque; font-size:medium;"><strong>@Model.SrcClassifId</strong></p>
+            </div>
+            <div class="form-group">
+                <label asp-for="SrcVersionId"></label>
+                <p style="color:bisque; font-size:medium;"><strong>@Model.SrcVersionId</strong></p>
+            </div>
+            <div class="form-group">
+                <label asp-for="SourceClassificationName"></label>
+                <p style="color:bisque; font-size:medium;"><strong>@Model.SourceClassificationName</strong></p>
+
+            </div>
+
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <input asp-for="Description" class="form-control" id="description" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Valid_From"></label>
+                <input asp-for="Valid_From" class="form-control" id="validFrom" />
+                <span asp-validation-for="Valid_From" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Valid_To"></label>
+                <input asp-for="Valid_To" class="form-control" id="validTo" />
+                <span asp-validation-for="Valid_To" class="text-warning"></span>
+            </div>
+
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="DestClassifId"></label>
+                <p style="color:bisque; font-size:medium;"><strong>@Model.DestClassifId</strong></p>
+
+            </div>
+            <div class="form-group">
+                <label asp-for="DestVersionId"></label>
+                <p style="color:bisque; font-size:medium;"><strong>@Model.DestVersionId</strong></p>
+
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DestClassificationName"></label>
+                <p style="color:bisque; font-size:medium;"><strong>@Model.DestClassificationName</strong></p>
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="center-block text-center" style="margin-top:8px;">
+            <button type="button" class="button save" id="send">Запис</button>
+            <a class="button btncansel" style="text-decoration: none;" asp-area="" asp-controller="ClassClient" asp-action="Relations" asp-route-searchString="@Model.Description">Отказ</a>
+        </div>
+        <input type="submit" class="btn button-invisible" value="REALSENDSEND" id="realsend" />
+    </div>
+</form>
+
+<div style="padding-top:15px;" class="row">
+    <table style="width:98%;" class="table table-fixed-small center-block table-hover table-striped">
+        <thead>
+            <tr>
+                <th style="padding-left:10px;" class="col-sm-1">
+                    Код кл.
+                </th>
+                <th class="col-sm-1">
+                    Код вер.
+                </th>
+                <th class="col-sm-1">
+                    Код ел.
+                </th>
+                <th class="col-sm-1">
+                    |
+                </th>
+                <th class="col-sm-1">
+                    Код кл.
+                </th>
+                <th class="col-sm-1">
+                    Код вер.
+                </th>
+                <th class="col-sm-1">
+                    Код ел.
+                </th>
+
+                <th class="col-sm-2">
+                    Дата на въвеждане
+                </th>
+                <th class="col-sm-3">
+                    Действия
+                </th>
+
+            </tr>
+        </thead>
+        <tbody style="background-color:bisque">
+            @for (var i = 0; i < Model.Relations.Count; i++)
+            {
+
+                <tr style="background-color:@(Model.Relations[i].IsDeleted == true ? "salmon" : "bisque")" id="@i">
+                    <td class="col-sm-1">
+                        @{string kod = Model.Relations[i].SrcClassif.Length > 8 ? (Model.Relations[i].SrcClassif).Substring(0, 8) + "..." : Model.Relations[i].SrcClassif;}
+                        @kod
+                    </td>
+                    <td class="col-sm-1">
+                        @{string ver = Model.Relations[i].SrcVer.Length > 8 ? (Model.Relations[i].SrcVer).Substring(0, 8) + "..." : Model.Relations[i].SrcVer;}
+                        @ver
+                    </td>
+                    <td class="col-sm-1">
+                        @{string iid = Model.Relations[i].SrcItemId.Length > 8 ? (Model.Relations[i].SrcItemId).Substring(0, 8) + "..." : Model.Relations[i].SrcItemId;}
+                        @iid
+                    </td>
+                    <td style="padding-left:11px;" class="col-sm-1">
+                        |
+                    </td>
+
+                    <td style="padding-left:5px;" class="col-sm-1">
+                        @{string dkod = Model.Relations[i].DestClassif.Length > 8 ? (Model.Relations[i].DestClassif).Substring(0, 8) + "..." : Model.Relations[i].DestClassif;}
+                        @dkod
+                    </td>
+                    <td style="padding-left:7px;" class="col-sm-1">
+                        @{string vkod = Model.Relations[i].DestVer.Length > 8 ? (Model.Relations[i].DestVer).Substring(0, 8) + "..." : Model.Relations[i].DestVer;}
+                        @vkod
+                    </td>
+                    <td style="padding-left:7px;" class="col-sm-1">
+                        @{string diid = Model.Relations[i].DestItemId.Length > 8 ? (Model.Relations[i].DestItemId).Substring(0, 8) + "..." : Model.Relations[i].DestItemId;}
+                        @diid
+                    </td>
+                    <td style="padding-left:15px;" class="col-sm-2">
+                        @Model.Relations[i].EntryTime
+                    </td>
+                    <td class="col-sm-3">
+                        <a class="btn btn-info glyphicon glyphicon-repeat" style="text-decoration:none; padding-top:1px; padding-bottom:2px; padding-right:10px; font-weight:600;"  targetEl="@i" destclassCode="@Model.Relations[i].DestClassif" destversionCode="@Model.Relations[i].DestVer" destitemCode="@Model.Relations[i].DestItemId" relationId="@Model.Id" srcitemCode="@Model.Relations[i].SrcItemId" srcversionCode="@Model.Relations[i].SrcVer" srcclassCode="@Model.Relations[i].SrcClassif" onclick="changeStatus(event);"></a>
+                        @(Model.Relations[i].EntryTime.Date == DateTime.Now.Date ? "Нова връзка" : "")
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <!-- Modal placeholder -->
+        <div id="modal-placeholder"></div>
+        <!-- Button trigger modal -->
+        <button type="button" class="button btnrestore-small" data-toggle="ajax-modal" data-target="#add-contact" data-url="@Url.Action("AddRelationItem")" data-relid="@Model.Id">
+            Добави релация
+        </button>
+    </div>
+    <div style="background-color:rgba(79, 85, 109, 0.90);" class="col-md-3">
+        <p><span style="color:salmon;" class="glyphicon glyphicon-stop"> Изтрит елемент</span></p>
+    </div>
+    <div style="background-color:rgba(79, 85, 109, 0.90);" class="col-md-3">
+        <p><span style="color:bisque;" class="glyphicon glyphicon-stop"> Активен елемент</span></p>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+
+<script type="text/javascript">
+    function changeStatus(event) {
+        let srcclasscode = event.target.attributes.srcclasscode.value;
+        let srcversioncode = event.target.attributes.srcversioncode.value;
+        let srcitemcode = event.target.attributes.srcitemcode.value;
+        let destclasscode = event.target.attributes.destclasscode.value;
+        let destversioncode = event.target.attributes.destversioncode.value;
+        let destitemcode = event.target.attributes.destitemcode.value;
+        let relationId = event.target.attributes.relationId.value;
+        let targetEl = event.target.attributes.targetEl.value;
+
+        $.ajax({
+            url: '\UpdateRelationStatus\?relTypeId=' + relationId + '&srcclassCode=' + srcclasscode + '&srcversionCode=' + srcversioncode + '&srcitemCode=' + srcitemcode + '&destclassCode=' + destclasscode + '&destversionCode=' + destversioncode + '&destitemCode=' + destitemcode,
+            type: "POST",
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            success: function (data) {
+                if (data === 'restored') {
+                    document.getElementById(targetEl).style.backgroundColor = "bisque";
+
+                }
+                else if (data === 'deleted') {
+                    document.getElementById(targetEl).style.backgroundColor = "salmon";
+                }
+                else if (data === 'error') {
+                    alert('Грешка при смяна на статуса на елемента!');
+                }
+                else {
+                    alert(data);
+                }
+            }
+        });
+
+    }
+</script>
+<script src="~/js/relationDetails.js"></script>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+

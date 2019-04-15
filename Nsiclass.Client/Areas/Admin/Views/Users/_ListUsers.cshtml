@@ -1,0 +1,102 @@
+﻿@model IEnumerable<AdminUserServiceModel>
+
+<table class="table table-fixed">
+    <thead>
+        <tr>
+            @*<thead style="background: #51596a; text-transform: uppercase;">
+                <tr style="color:azure; font-size:12px;">*@
+            <th style="padding-left:2px;" class="col-sm-3">
+                <a asp-area="Admin" asp-action="AllUsers" asp-controller="Users" asp-route-sortOrder="Name" asp-route-role=@ViewData["role"] style="color:whitesmoke">Име</a>
+            </th>
+            <th style="padding-left:2px;" class="col-sm-2">
+                <a asp-area="Admin" asp-action="AllUsers" asp-controller="Users" asp-route-sortOrder="Department" asp-route-role=@ViewData["role"] style="color:whitesmoke">Месторабота</a>
+            </th>
+            <th style="padding-left:2px;" class="col-sm-2">
+                <a asp-area="Admin" asp-action="AllUsers" asp-controller="Users" asp-route-sortOrder="Parent" asp-route-role=@ViewData["role"] style="color:whitesmoke">Създател</a>
+            </th>
+            <th style="padding-left:2px;" class="col-sm-1">
+                <a style="color:whitesmoke">Телефон</a>
+            </th>
+            <th style="padding-left:2px;" class="col-sm-1">
+                <a asp-area="Admin" asp-action="AllUsers" asp-controller="Users" asp-route-sortOrder="Date" asp-route-role=@ViewData["role"] style="color:whitesmoke">Дата</a>
+            </th>
+
+            <th style="padding-left:2px;" class="col-sm-3">
+                <a style="color:whitesmoke">Операции</a>
+            </th>
+
+        </tr>
+    </thead>
+    <tbody style="background-color:bisque">
+        @foreach (var user in Model)
+        {
+
+            <tr style="background-color:@(user.isDeleted == true ? "salmon" : "bisque")">
+                <td class="col-sm-3">
+                    @{string name = user.Name.Length > 24 ? (user.Name).Substring(0, 24) + "..." : user.Name;}
+                    <a asp-area="Admin" asp-action="EditUser" asp-controller="Users" asp-route-userId=@user.Id>@name</a>
+                </td>
+                <td class="col-sm-2">
+                    @user.DepartmentName
+                </td>
+                <td class="col-sm-2">
+                    @user.ParentUser
+                </td>
+                <td class="col-sm-1">
+                    @user.Phone
+                </td>
+                <td class="col-sm-1">
+                    @user.DateCreated.ToString("dd/MM/yyyy")
+                </td>
+
+                <td style="text-align:center" class="col-sm-3">
+                    @{string modalId = "modal" + user.Id; }
+                    @if (user.Name != string.Concat(DataConstants.DeveloperFirstName, " ", DataConstants.DeveloperLastName))
+                    {
+
+                        @if ((User.IsInRole(DataConstants.AdministratorRole) || User.IsInRole(DataConstants.DeveloperRole)) && (user.isDeleted == false))
+                        {
+                            <form method="post" asp-controller="Users" asp-action="DestroyUser" asp-route-userId="@user.Id">
+
+                                <a class="btn btn-info btn-sm" asp-controller="Users" asp-action="ChangePassword" asp-route-userId="@user.Id">Смяна на парола</a>
+                                <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#@modalId">Изтриване</a>
+                                <div class="modal fade" id="@modalId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div style="background-color:papayawhip;" class="modal-content">
+                                            <div class="modal-body">
+                                                <h4>Сигурни ли сте, че искате да изтриете потребител</h4> <h4><span style="font-weight:700">@user.Name</span></h4>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отказ</button>
+                                                <button type="submit" class="btn btn-danger">Потвърди</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="post" asp-controller="Users" asp-action="UndeleteUser" asp-route-userId="@user.Id">
+                                <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#@modalId">Възстановяване</a>
+                                <div class="modal fade" id="@modalId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div style="background-color:papayawhip;" class="modal-content">
+                                            <div class="modal-body">
+                                                <h4>Сигурни ли сте, че искате да възстановите потребител</h4> <h4><span style="font-weight:700">@user.Name</span></h4>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отказ</button>
+                                                <button type="submit" class="btn btn-danger">Потвърди</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

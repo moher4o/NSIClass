@@ -1,0 +1,101 @@
+﻿@model CreateUserViewModel
+@{
+    ViewData["Title"] = "Създаване на потребител";
+}
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+
+        <h4 style="color:azure;">Създаване на потребител</h4>
+        <hr />
+        <div style="color:azure;" class="col-md-2 center-block text-center">
+        </div>
+
+        <div style="color:azure;" class="col-md-4">
+            <h4 class="center-block text-center" style="color:azure;">Основни данни</h4>
+
+            <div class="form-group">
+                <label asp-for="Username"></label>
+                <input asp-for="Username" class="form-control" id="username" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" id="name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" id="email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="Departments"></label>
+                <select name="departmentName" asp-items="Model.Departments" class="form-control"></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Phone"></label>
+                <input asp-for="Phone" class="form-control" id="phone" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PhoneNumber"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" id="text-danger"></span>
+            </div>
+
+        </div>
+
+        <div style="color:azure;" class="col-md-4 center-block text-center">
+            <h4 style="color:azure;">Роли на потребителя</h4>
+            <br />
+            @{int i = 0;}
+            @foreach (var role in Model.Roles)
+            {
+
+                @Html.CheckBox("role" + i.ToString(), role.Selected, new { @id = "role" + i.ToString(), @hidden = "true" })
+                <input name="input@(i)" value="@role.Text" class="hidden" />
+                <button type="button" class="@(role.Selected ? "button" : "button notselected")" id="button@(i)">@role.Text</button>
+                <br />
+                i++;
+            }
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" class="form-control" id="password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword"></label>
+                <input asp-for="ConfirmPassword" class="form-control" id="passwordConfirmation" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+        </div>
+        <div style="color:azure;" class="col-md-2 center-block text-center">
+        </div>
+
+    </div>
+    @*<br />
+    <br />*@
+    <div class="center-block text-center">
+        @*<a class="btn btn-success button-margin pull-right" id="send" disabled>Запис</a>*@
+
+        <button type="button" class="button save" id="send">Запис</button>
+        <a class="button btncansel" asp-controller="Users" asp-action="AdminTasks">Отказ</a>
+    </div>
+    <input type="submit" class="btn button-invisible" value="REALSENDSEND" id="realsend"/>
+</form>
+<script src="~/js/edituser.js"></script>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+
+

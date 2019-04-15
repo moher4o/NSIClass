@@ -1,0 +1,19 @@
+﻿@model DeleteUserViewModel
+
+@{
+    ViewData["Title"] = "Изтриване на потребител";
+}
+
+
+        <form method="post" asp-controller="Users" asp-action="DestroyUser" asp-route-userId="@Model.UserId">
+            <div class="center-block text-center">
+                <h3 style="color:azure;">Сигурни ли сте, че искате да изтриете потребител: @Model.Name ?</h3>
+                <br />
+                <button type="submit" class="button save">Изтриване</button>
+                <a class="button btncansel" asp-area="Admin" asp-controller="Users" asp-action="Allusers">Отказ</a>
+            </div>
+        </form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

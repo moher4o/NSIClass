@@ -1,0 +1,34 @@
+﻿@model AddRelationItemViewModel
+<!-- Modal -->
+<div class="modal fade" id="add-contact" tabindex="-1" role="dialog" aria-labelledby="addContactLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div style="background-color:papayawhip;" class="modal-content">
+            <div class="modal-header">
+                <label style="font-size:medium;" class="modal-title" id="addContactLabel"><strong>Добавяне на релационна връзка</strong></label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="glyphicon glyphicon-remove"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="AddRelationItem">
+                    <input asp-for="RelationId" class="hidden" />
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+                    <div class="form-group">
+                        <label asp-for="SrcItemId"></label>
+                        <input asp-for="SrcItemId" class="form-control" />
+                        <span asp-validation-for="SrcItemId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DestItemId"></label>
+                        <input asp-for="DestItemId" class="form-control" />
+                        <span asp-validation-for="DestItemId" class="text-danger"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-save="modal">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

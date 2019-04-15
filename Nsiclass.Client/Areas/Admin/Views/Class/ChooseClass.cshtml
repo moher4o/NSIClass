@@ -1,0 +1,29 @@
+﻿@model IList<SelectListItem>
+
+
+@{
+    ViewData["Title"] = "Избор на класификация";
+}
+
+<h4 style="color:azure;">@ViewData["Title"]</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="get" action="SelectVersion">
+            <select name="classCode" asp-items="@Model" class="form-control" id="selectedClass"></select>
+            <br />
+            <div class="center-block text-center">
+                <button type="button" class="button save" id="send">Продължи</button>
+                <a class="button btncansel" asp-controller="Users" asp-action="AdminTasks">Отказ</a>
+            </div>
+            <input type="submit" class="btn button-invisible" value="REALSENDSEND" id="realsend" />
+        </form>
+    </div>
+</div>
+<script src="~/js/selectClass.js"></script>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+
+

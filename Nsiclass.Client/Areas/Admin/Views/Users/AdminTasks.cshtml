@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewData["Title"] = "Настройки";
+}
+
+
+
+<h4 class="center-block text-center" style="color:azure;">Администраторски панел</h4>
+<div style="background-color:bisque;" class="row">
+
+    <div class="col-md-4">
+        <h5 style="font-size:large;"><u>Управление на потребители</u></h5>
+        <ul style="padding-left:0px;">
+            <li><a asp-area="Admin" asp-controller="Users" asp-action="AllUsers">Потребители</a></li>
+            <li><a asp-area="Admin" asp-controller="Users" asp-action="CreateNewUser">Нов потребител</a></li>
+            <li><a asp-area="Admin" asp-controller="Links" asp-action="AllLinks">Връзки</a></li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <h5 style="font-size:large;"><u>Управление на класификации</u></h5>
+        <ul style="padding-left:0px;">
+            <li><a asp-area="Admin" asp-controller="Class" asp-action="ClassList">Списък на класификации</a></li>
+            <li><a asp-area="Admin" asp-controller="Class" asp-action="AddNewClassName">Създаване на нова класификация</a></li>
+            <li><a asp-area="Admin" asp-controller="Class" asp-action="AddNewClassVersion">Създаване на версия</a></li>
+            <li><a asp-area="Admin" asp-controller="Class" asp-action="ChooseClass">Импорт на съдържанието на класификация</a></li>
+        </ul>
+
+    </div>
+    <div class="col-md-4">
+        <h5 style="font-size:large;"><u>Управление на релации</u></h5>
+        <ul style="padding-left:0px;">
+            <li><a asp-area="Admin" asp-controller="Relations" asp-action="RelList">Списък на релации</a></li>
+            <li><a asp-area="Admin" asp-controller="Relations" asp-action="CreateNewClassRelType">Създаване на нова релация</a></li>
+            <li><a asp-area="Admin" asp-controller="Relations" asp-action="ImportRel">Импорт на съдържанието на релация</a></li>
+        </ul>
+    </div>
+
+</div>
+<div style="background-color:bisque;" class="row">
+    <div class="col-md-4">
+        <h5 style="font-size:large;"><u>Връзки към други системи</u></h5>
+        <ul style="padding-left:0px;">
+            <li><a asp-area="Admin" asp-controller="Links" asp-action="AllLinks">Връзки</a></li>
+        </ul>
+    </div>
+
+    <div class="col-md-4">
+        <h5 style="font-size:large;"><u>Програмист</u></h5>
+        <ul style="padding-left:0px;">
+            @if (User.IsInRole(DataConstants.DeveloperRole))
+            {
+                <li>
+                    <a asp-area="Admin" asp-controller="Users" asp-action="ImportUsers">Import Users From Excel</a>
+                </li>
+                <li><a asp-area="Admin" asp-controller="Version" asp-action="Temporary">Temporary</a></li>
+            }
+        </ul>
+    </div>
+
+</div>

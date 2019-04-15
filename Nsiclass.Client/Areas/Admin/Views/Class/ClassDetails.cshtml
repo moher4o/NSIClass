@@ -1,0 +1,185 @@
+﻿@using Microsoft.AspNetCore.Html
+@model AdminClassServiceMoedel
+@{
+    ViewData["Title"] = $"{Model.Id} Детайли";
+}
+
+@{
+    Func<AdminClassServiceMoedel, IHtmlContent> ShowInfo = null;
+    ShowInfo = @<text>@{
+    var Items = item;
+    @if (item.IsHierachy)
+    {
+        <p>Класификацията е <span style="background-color:white; color:black"> ЙЕРАРХИЧНА </span></p>
+    }
+    else
+    {
+        <p>Класификацията е <span style="background-color:white; color:black"> ПЛОСКА </span></p>
+    };
+    @if (item.isDeleted)
+    {
+        <p>Класификацията <strong>НЕ</strong> е действаща</p>
+    }
+    else
+    {
+        <p>Класификацията е действаща</p>
+    };
+
+}</text>;
+}
+
+<h4 style="color:azure;" class="center-block text-center">Редакция на Класификация</h4>
+<hr />
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div style="color:azure;" class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Id"></label>
+                <input asp-for="Id" class="form-control" id="IdCode" readonly />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" id="name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NameEng"></label>
+                <input asp-for="NameEng" class="form-control" id="nameEng" />
+                <span asp-validation-for="NameEng" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Remarks"></label>
+                <textarea asp-for="Remarks" class="form-control" rows="12" style="resize: none;" placeholder="Описание на класификацията..."></textarea>
+                <span asp-validation-for="Remarks" class="text-danger"></span>
+            </div>
+
+        </div>
+        <div class="col-md-4">
+            <div>
+                <h5>Версии на класификацията:</h5>
+                @for (int i = 0; i <= Model.Versions.Count() - 1; i++)
+                {
+                    @if (Model.Versions[i].isDeleted)
+                    {
+                        <a style="margin-left:8px;" class="btn btn-xs btn-danger" asp-area="Admin" asp-controller="Version" asp-action="VersionDetails" asp-route-versionCode="@Model.Versions[i].Version" asp-route-classCode="@Model.Id">@Model.Versions[i].Version</a>
+                    }
+                    else
+                    {
+                        <a style="margin-left:8px;" class="btn btn-xs btn-warning" asp-area="Admin" asp-controller="Version" asp-action="VersionDetails" asp-route-versionCode="@Model.Versions[i].Version" asp-route-classCode="@Model.Id">@Model.Versions[i].Version</a>
+                    }
+                }
+            </div>
+            <h5>Участва в следните релации като източник:</h5>
+            <div style="background-color:white">
+
+                @for (int i = 0; i <= Model.AsSourceClassification.Count() - 1; i++)
+                {
+                    if (Model.AsSourceClassification[i].IsDeleted)
+                    {
+                        <a style="color:red;" asp-area="Admin" asp-controller="Relations" asp-action="RelationDetails" asp-route-versionCode="@Model.AsSourceClassification[i].Id">@Model.AsSourceClassification[i].Description</a>
+                        <br />
+                    }
+                    else
+                    {
+                        <a asp-area="Admin" asp-controller="Relations" asp-action="RelationDetails" asp-route-versionCode="@Model.AsSourceClassification[i].Id">@Model.AsSourceClassification[i].Description</a>
+                        <br />
+                    }
+                }
+            </div>
+            <h5>Участва в следните релации като цел:</h5>
+            <div style="background-color:white">
+
+                @for (int i = 0; i <= Model.AsDestClassification.Count() - 1; i++)
+                {
+                    if (Model.AsDestClassification[i].IsDeleted)
+                    {
+                        <a style="color:red;" asp-area="Admin" asp-controller="Relations" asp-action="RelationDetails" asp-route-versionCode="@Model.AsDestClassification[i].Id">@Model.AsDestClassification[i].Description</a>
+                        <br />
+                    }
+                    else
+                    {
+                        <a asp-area="Admin" asp-controller="Relations" asp-action="RelationDetails" asp-route-versionCode="@Model.AsDestClassification[i].Id">@Model.AsDestClassification[i].Description</a>
+                        <br />
+                    }
+
+                }
+            </div>
+
+
+            <div style="padding-top: 21px;">
+                @ShowInfo(Model)
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="center-block text-center">
+        <button type="button" class="button save" id="send">Запис</button>
+        <a class="button btncansel" style="text-decoration: none;" asp-controller="Users" asp-action="AdminTasks">Отказ</a>
+        @if (Model.isDeleted != true)
+        {
+            <a class="button btndelete" style="text-decoration: none;" data-toggle="modal" data-target="#@Model.Id">Изтриване &#33;&#33;&#33;</a>
+        }
+        else
+        {
+            <a class="button btnrestore" style="text-decoration: none;" data-toggle="modal" data-target="#@Model.Id">Възстановяване &#33;&#33;&#33;</a>
+        }
+
+
+    </div>
+    <input type="submit" class="btn button-invisible" value="REALSENDSEND" id="realsend" />
+</form>
+@if (Model.isDeleted != true)
+{
+    <form method="post" asp-controller="Class" asp-action="DestroyClass" asp-route-classId="@Model.Id">
+
+        <div class="modal fade" id="@Model.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div style="background-color:papayawhip;" class="modal-content">
+                    <div class="modal-body">
+                        <h4>Сигурни ли сте, че искате да изтриете класификация <span style="font-weight:700">@Model.Id</span></h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отказ</button>
+                        <button type="submit" class="btn btn-danger">Потвърди</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+}
+else
+{
+    <form method="post" asp-controller="Class" asp-action="RestoreClass" asp-route-classId="@Model.Id">
+
+        <div class="modal fade" id="@Model.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div style="background-color:papayawhip;" class="modal-content">
+                    <div class="modal-body">
+                        <h4>Сигурни ли сте, че искате да възстановите класификация <span style="font-weight:700">@Model.Id</span></h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отказ</button>
+                        <button type="submit" class="btn btn-danger">Потвърди</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+}
+
+<script src="~/js/classDetails.js"></script>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+
+

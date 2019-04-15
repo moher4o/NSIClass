@@ -1,0 +1,125 @@
+﻿@using Microsoft.AspNetCore.Html
+@using Microsoft.AspNetCore.Mvc.Razor
+@model List<TC_Classif_Items>
+
+@{
+    ViewData["Title"] = "Избор на версия";
+}
+
+@*@{
+        Func<ICollection<TestItemsServiceModels>, IHtmlContent> ShowTree = null;
+        ShowTree = @<text>@{
+        var foos = item;
+
+        <ul>
+            @foreach (var foo in foos)
+            {
+                <li>
+                    @foo.Description
+                    @if (foo.ChildItems.Any())
+                    {
+                        @ShowTree(foo.ChildItems);
+                    }
+                </li>
+            }
+        </ul>
+    }</text>;
+    }*@
+
+@{
+    Func<ICollection<TC_Classif_Items>, IHtmlContent> ShowTree = null;
+    Func<ICollection<TC_Classif_Items>, IHtmlContent> ShowTreeChilds = null;
+    ShowTree = @<text>@{
+    var Items = item;
+
+    @foreach (var foo in Items)
+    {
+        @if (foo.ItemLevel <= 1)
+        {
+            <li style="padding:8px;">
+                @if (foo.IsLeaf)
+                {
+                    <span class="classLeaf" id="@foo.ItemCode">@foo.Description</span>
+                }
+                else
+                {
+                    <span class="caret" style="padding:5px;" id="@foo.ItemCode">@foo.Description</span>
+                    <ul class="nested" style="padding:5px;">
+                        @ShowTreeChilds(foo.ChildItems)
+                    </ul>
+                }
+            </li>
+
+        }
+    }
+
+
+}</text>;
+
+
+ShowTreeChilds = @<text>@{
+var Items = item;
+@foreach (var foo in Items)
+{
+            <li style="padding:5px;">
+                @if (foo.IsLeaf)
+                {
+                <span class="classLeaf" id="@foo.ItemCode">@foo.Description</span>
+                    
+                }
+                else
+                {
+                    <span class="caret" style="padding:5px;" id="@foo.ItemCode">@foo.Description</span>
+                    <ul class="nested" style="padding:5px;">
+                        @ShowTreeChilds(foo.ChildItems)
+                    </ul>
+                }
+            </li>
+}
+}</text>;
+
+}
+@*<ul id="myUL">
+        <li>
+            <span class="caret">Beverages</span>
+            <ul class="nested">
+                <li>Water</li>
+                <li>Coffee</li>
+                <li>
+                    <span class="caret">Tea</span>
+                    <ul class="nested">
+                        <li>Black Tea</li>
+                        <li>White Tea</li>
+                        <li>
+                            <span class="caret">Green Tea</span>
+                            <ul class="nested">
+                                <li>Sencha</li>
+                                <li>Gyokuro</li>
+                                <li>Matcha</li>
+                                <li>Pi Lo Chun</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>*@
+
+            <h4 class="center-block text-center" style="color:azure;">Класификация : </h4>
+<ul style="font-size:smaller; background-color:bisque; margin-top:20px;" id="myUL">
+
+    @ShowTree(Model)
+
+</ul>
+
+<script>
+    var toggler = document.getElementsByClassName("caret");
+    var i;
+
+    for (i = 0; i < toggler.length; i++) {
+        toggler[i].addEventListener("click", function () {
+            this.parentElement.querySelector(".nested").classList.toggle("active");
+            this.classList.toggle("caret-down");
+        });
+    }
+</script>

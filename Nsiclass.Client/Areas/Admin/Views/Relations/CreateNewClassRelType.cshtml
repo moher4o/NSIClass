@@ -1,0 +1,92 @@
+﻿@model AddNewClassRelTypeViewModel
+@{
+    ViewData["Title"] = "Добавяне на релационен тип";
+}
+
+<h4 style="color:azure;">@ViewData["Title"]</h4>
+<hr />
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div style="color:azure;" class="row">
+        <div class="col-md-4">
+
+            <div class="form-group">
+                <label asp-for="SourceClassId"></label>
+                <select name="SourceCode" asp-items="Model.SourceClassId" class="form-control" id="SourceCode" onchange="LoadVersions(event);"></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SourceClassVersionId"></label>
+                <select name="SourceVersionCode" asp-items="Model.SourceClassVersionId" class="form-control" id="SourceVersionCode"></select>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <input asp-for="Description" class="form-control" id="description" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Valid_From"></label>
+                <input asp-for="Valid_From" class="form-control" id="validFrom" />
+                <span asp-validation-for="Valid_From" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Valid_To"></label>
+                <input asp-for="Valid_To" class="form-control" id="validTo" />
+                <span asp-validation-for="Valid_To" class="text-warning"></span>
+            </div>
+
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="DestClassId"></label>
+                <select name="DestCode" asp-items="Model.DestClassId" class="form-control" id="DestCode" onchange="LoadVersions(event);"></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DestClassVersionId"></label>
+                <select name="DestVersionCode" asp-items="Model.DestClassVersionId" class="form-control" id="DestVersionCode"></select>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="center-block text-center">
+        <button type="button" class="button save" id="send">Запис</button>
+        <a class="button btncansel" asp-controller="Users" asp-action="AdminTasks">Отказ</a>
+    </div>
+    <input type="submit" class="btn button-invisible" value="REALSENDSEND" id="realsend" />
+</form>
+<script type="text/javascript">
+
+    function LoadVersions(event) {
+        $.getJSON('\GetClassVersionsByClassCode\?classCode=' + event.target.value, { get_param: 'value' }, function (data) {
+            if (event.target.id == 'SourceCode') {
+                $('#SourceVersionCode').children('option:not(:first)').remove();
+                $.each(data, function (key, value) {
+                    $('#SourceVersionCode')
+                        .append($("<option></option>")
+                            .attr("value", value)
+                            .text(value));
+                });
+            }
+            if (event.target.id == 'DestCode') {
+                $('#DestVersionCode').children('option:not(:first)').remove();
+                $.each(data, function (key, value) {
+                    $('#DestVersionCode')
+                        .append($("<option></option>")
+                            .attr("value", value)
+                            .text(value));
+                });
+            }
+            });
+    }
+
+</script>
+
+<script src="~/js/newRelationType.js"></script>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

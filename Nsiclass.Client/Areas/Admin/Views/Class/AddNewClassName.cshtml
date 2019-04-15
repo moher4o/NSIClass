@@ -1,0 +1,77 @@
+﻿@model ClassificationAttr
+
+@{
+    ViewData["Title"] = "Създаване на Класификация";
+}
+
+<h4 style="color:azure;">@ViewData["Title"]</h4>
+<hr />
+@*<p style="color:azure;">Ако въвеждате версия на съществуваща класификация, моля попълнете правилния код, версия, дати и дали е йерархична, в полетата за име попълнете произволни стойности</p>*@
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div style="color:azure;" class="row">
+        <div class="col-md-4">
+
+            <div class="form-group">
+                <label asp-for="Id"></label>
+                <input asp-for="Id" class="form-control" id="IdCode" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" id="name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NameEng"></label>
+                <input asp-for="NameEng" class="form-control" id="nameEng" />
+                <span asp-validation-for="NameEng" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Version"></label>
+                <input asp-for="Version" class="form-control" id="version" />
+                <span asp-validation-for="Version" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Remarks"></label>
+                <textarea asp-for="Remarks" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="Remarks" class="text-danger"></span>
+            </div>
+
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Valid_From"></label>
+                <input asp-for="Valid_From" class="form-control" id="version" />
+                <span asp-validation-for="Valid_From" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Valid_To"></label>
+                <input asp-for="Valid_To" class="form-control" id="version" />
+                <span asp-validation-for="Valid_From" class="text-warning"></span>
+            </div>
+            <br />
+
+            @Html.CheckBoxFor(model => Model.IsHierachy)
+            @Html.LabelFor(model => Model.IsHierachy)
+
+
+        </div>
+
+    </div>
+    <div class="center-block text-center">
+        <button type="button" class="button save" id="send">Запис</button>
+        <a class="button btncansel" asp-controller="Users" asp-action="AdminTasks">Отказ</a>
+    </div>
+    <input type="submit" class="btn button-invisible" value="REALSENDSEND" id="realsend" />
+</form>
+
+<script src="~/js/newClassName.js"></script>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

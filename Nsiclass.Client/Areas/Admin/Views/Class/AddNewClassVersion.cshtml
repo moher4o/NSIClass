@@ -1,0 +1,56 @@
+﻿@model AddNewClassVersionViewModel
+@{
+    ViewData["Title"] = "Добавяне на версия";
+}
+
+<h4 style="color:azure;">@ViewData["Title"]</h4>
+<hr />
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div style="color:azure;" class="row">
+        <div class="col-md-4">
+
+            <div class="form-group">
+                <label asp-for="ClassCodes"></label>
+                <select name="IdCode" asp-items="Model.ClassCodes" class="form-control" id="IdCode"></select>
+            </div>
+
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Version"></label>
+                <input asp-for="Version" class="form-control" id="version" />
+                <span asp-validation-for="Version" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Remarks"></label>
+                <textarea asp-for="Remarks" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="Remarks" class="text-danger"></span>
+            </div>
+
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Valid_From"></label>
+                <input asp-for="Valid_From" class="form-control" id="version" />
+                <span asp-validation-for="Valid_From" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Valid_To"></label>
+                <input asp-for="Valid_To" class="form-control" id="version" />
+                <span asp-validation-for="Valid_To" class="text-warning"></span>
+            </div>
+        </div>
+
+    </div>
+    <div class="center-block text-center">
+        <button type="button" class="button save" id="send">Запис</button>
+        <a class="button btncansel" asp-controller="Users" asp-action="AdminTasks">Отказ</a>
+    </div>
+    <input type="submit" class="btn button-invisible" value="REALSENDSEND" id="realsend" />
+</form>
+<script src="~/js/newClassVersion.js"></script>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

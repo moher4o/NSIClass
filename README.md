@@ -1,2 +1,2 @@
-# NSIClass
+# Klasifikacii
 Статистически класификации

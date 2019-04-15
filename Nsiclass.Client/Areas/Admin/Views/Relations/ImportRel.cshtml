@@ -1,0 +1,77 @@
+﻿@model ImportNewRelItemsViewModel
+
+@{
+    ViewData["Title"] = "Опции за избор на елементи";
+}
+
+<h4 style="color:azure;">Опции за избор на елементи</h4>
+<hr />
+
+<form method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-4">
+            <label style="color:azure;" asp-for="@Model.RelCodes">Избор на релация:</label>
+            <select name="relName" asp-items="@Model.RelCodes" class="form-control" id="relName"></select>
+            <br />
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="progressbar-5">
+                        <div class="progress-label">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-4" style="color:black;">
+            <div class="bg-info">
+                <label id="relNameSelected">Не е избрана релация</label>
+                <br />
+                <label id="fileName">Не е избран файл с елементи</label>
+                <br />
+                <label id="warning" style="margin-top:10px; font-size:small; color:red">Внимание! Заеждането може да продължи от няколко секунди до няколко минути</label>
+
+            </div>
+            <br />
+
+        </div>
+        <div class="col-md-4">
+            <input type="file" name="newItems" style="display:none" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" id="fileSelected" onchange="checkfile(this);" />
+            <button type="button" class="button choice" onclick="document.getElementsByName('newItems')[0].click()">Избор на файл с елементи</button>
+            <br />
+            <button type="button" class="button save" id="send">Зареждане</button>
+            <br />
+            <a class="button btncansel" asp-controller="Users" asp-action="AdminTasks">Отказ</a>
+        </div>
+    </div>
+
+    <input type="submit" class="btn button-invisible" value="REALSENDSEND" id="realsend" />
+
+</form>
+
+
+
+<script src="~/js/selectRelation.js"></script>
+<script type="text/javascript" language="javascript">
+    function checkfile(sender) {
+        var validExts = new Array(".xlsx", ".xls");
+        var fileExt = sender.value;
+        var fullName = fileExt.substring(fileExt.lastIndexOf('\\') + 1);
+        fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+        if (validExts.indexOf(fileExt) < 0) {
+            notify.showError("Избран е невалиден тип файл, валидните типове са " +
+                validExts.toString() + " .");
+            return false;
+        }
+        else {
+            $("#fileName").text("Избран файл : " + fullName);
+            return true;
+        }
+    }
+
+</script>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+
+

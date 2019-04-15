@@ -1,0 +1,60 @@
+﻿@model IList<ClassListServiceModel>
+
+@{
+    ViewData["Title"] = "Списък";
+}
+
+<div style="color:azure;">
+    <h4 class="center-block text-center">Списък класификации</h4>
+</div>
+
+<table class="table table-fixed">
+    <thead>
+        <tr>
+            <th style="padding-left:10px;" class="col-sm-2">
+                КОД
+            </th>
+            <th style="padding-left:10px;" class="col-sm-5">
+                ИМЕ
+            </th>
+            <th style="padding-left:10px;" class="col-sm-4">
+                NAME
+            </th>
+            <th style="padding-left:10px;" class="col-sm-1">
+                ТИП
+            </th>
+        </tr>
+    </thead>
+    <tbody style="background-color:bisque">
+        @foreach (var itemClass in Model)
+        {
+
+            <tr style="background-color:@(itemClass.IsDeleted == true ? "salmon" : "bisque")">
+                <td class="col-sm-2">
+                    @itemClass.Id
+                </td>
+                <td class="col-sm-5">
+                    @{string name = itemClass.Name.Length > 60 ? (itemClass.Name).Substring(0, 60) + "..." : itemClass.Name;}
+                    <a asp-area="Admin" asp-action="ClassDetails" asp-controller="Class" asp-route-classCode=@itemClass.Id>@name</a>
+                </td>
+                <td class="col-sm-4">
+                    @{string nameEng = itemClass.NameEng.Length > 50 ? (itemClass.NameEng).Substring(0, 50) + "..." : itemClass.NameEng;}
+                    <a asp-area="Admin" asp-action="ClassDetails" asp-controller="Class" asp-route-classCode=@itemClass.Id>@nameEng</a>
+                </td>
+                <td class="col-sm-1">
+                    @(itemClass.IsHierachy ? "Йерархична" : "Плоска")
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div style="margin-top: 20px; padding-bottom: 10px;">
+
+    <form method="get" asp-area="Admin" asp-controller="Class" asp-action="ClassList">
+        <input name="searchString" style="width: 300px;" />
+
+        <button type="submit" class="button search">Търси</button>
+    </form>
+</div>
+
+

@@ -1,0 +1,14 @@
+﻿@model List<AdminLinksServiceModel>
+@{
+    ViewData["Title"] = "Връзки";
+}
+
+<h3 class="text-center" style="color:azure;">Връзки към други системи</h3>
+<div style="background-color:antiquewhite; margin-top: 50px;" class="table-bordered">
+    @foreach (var link in Model)
+    {
+        <div class="row" style="margin:20px; font-size:large;">
+            <a href="@link.Link" target="_blank">@link.Name</a>
+        </div>
+    }
+</div>

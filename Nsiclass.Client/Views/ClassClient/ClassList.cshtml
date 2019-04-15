@@ -1,0 +1,227 @@
+﻿@using Microsoft.AspNetCore.Html
+@using System
+@*@using Microsoft.AspNetCore.Authorization
+    @inject IAuthorizationService AuthorizationService*@
+@model List<ClassListServiceModel>
+
+@{
+    ViewData["Title"] = "Класификации";
+}
+
+<div class="row" style="padding-left: 10px; padding-right:10px;">
+    <h3 class="center-block text-center">К л а с и ф и к а ц и и</h3>
+    <div class="col-md-6">
+
+        @{
+            Func<ICollection<ClassListServiceModel>, IHtmlContent> ShowTree = null;
+            Func<ICollection<TC_Classif_Vers>, IHtmlContent> ShowTreeChilds = null;
+            ShowTree = @<text>@{
+            var Items = item;
+            <ul id="myUL">
+                @foreach (var foo in Items)
+                {
+                    <li style="padding:8px;">
+                        @if (foo.Versions.Count() < 1)
+                        {
+                            <span class="classLeaf" id="@foo.Id">| <strong style="color:red;">@foo.Id</strong> | @foo.Name</span>
+                        }
+                        else
+                        {
+                            <span class="caret" style="padding:5px;" id="@foo.Id">| <strong style="color:red;">@foo.Id</strong> | @foo.Name</span>
+                            @ShowTreeChilds(foo.Versions)
+
+                        }
+                    </li>
+
+
+                }
+
+            </ul>
+
+
+    }</text>;
+
+
+                ShowTreeChilds = @<text>@{
+                var Items = item;
+                <ul class="nested" style="padding:5px;">
+                    @foreach (var foo in Items)
+                    {
+                        //var classVersionId = foo.Classif + "#$" + foo.Version;
+                        var title = foo.Classif + " " + foo.Version;
+                        <li style="margin-top:18px;">
+                            @if (foo.isDeleted)
+                            {
+                                <a class="classLeaf" href="#">@title не е активна</a>
+                            }
+                            else
+                            {
+                                <a class="classLeaf" asp-action="ClassItemsList" asp-controller="ClassClient" asp-route-classCode=@foo.Classif asp-route-versionCode=@foo.Version>@title</a>
+                            }
+                        </li>
+                    }
+                </ul>
+    }</text>;
+
+        }
+        <div class="classtree">
+            @ShowTree(Model)
+        </div>
+        <form method="get" asp-controller="ClassClient" asp-action="ClassList">
+            <input name="searchString" style="width: 350px;" />
+
+            <button type="submit" class="button search" style="margin-bottom:10px;">Търси</button>
+        </form>
+
+    </div>
+    <div class="col-md-6">
+        <div class="note-version-list">
+            <h4 class="center-block text-center">Информация за маркираната класификация</h4>
+            <h5 class="center-block text-center" style="font-size:small; margin-top:15px;" id="noinfo">Няма маркирана класификация</h5>
+            <table id="tblinfo" hidden>
+                <tbody>
+                    <tr>
+                        <td>
+                            <p>
+                                <strong>КОД :</strong>
+                            </p>
+                        </td>
+                        <td>
+                            <p id="infoClassCode">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>
+                                <strong>Наименование :</strong>
+                            </p>
+                        </td>
+                        <td>
+                            <p id="infoClassNameBG">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>
+                                <strong>Name :</strong>
+                            </p>
+                        </td>
+                        <td>
+                            <p id="infoClassNameEn">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>
+                                <strong>Доп. информация :</strong>
+                            </p>
+                        </td>
+                        <td>
+                            <p id="dopinfoClass">
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p>
+                                <strong>Тип на класификацията:&nbsp;&nbsp;</strong>
+                            </p>
+                        </td>
+                        <td>
+                            <p id="infoClassType">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>
+                                <strong>Версии: </strong>
+                            </p>
+                        </td>
+                        <td id="infoClassNumber"></td>
+                    </tr>
+                    @if (User.IsInRole(DataConstants.AdministratorRole) || User.IsInRole(DataConstants.DeveloperRole))
+                    {
+                        <tr>
+                            <td>
+                                <p style="margin-top:12px;"><strong>Действия: </strong></p>
+                            </td>
+                            <td id="adminActions"></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+
+        var toggler = document.getElementsByClassName("caret");
+        var i;
+    function getHierachy(isMember) {
+        return (isMember ? "Йерархична" : "Плоска");
+    }
+    function getVersions(versionList) {
+        let names = "";
+        for (var i = 0; i <= versionList.length - 1; i++) {
+            if (versionList[i].isDeleted) {
+                names = names + "<a href=\"#\">" + versionList[i].classif + " " + versionList[i].version + " не е активна</a><br />";
+            }
+            else {
+                names = names + "<a href=\"\/ClassClient\/ClassItemsList?classCode=" + versionList[i].classif + "&amp;versionCode=" + versionList[i].version + "\">" + versionList[i].classif + " " + versionList[i].version + "</a><br />";
+            }
+        }
+        return names;
+    }
+
+
+        for (i = 0; i < toggler.length; i++) {
+            toggler[i].addEventListener("click", function () {
+                this.parentElement.querySelector(".nested").classList.toggle("active");
+                this.classList.toggle("caret-down");
+                $.getJSON('\GetClassInfoByCode\?classCode=' + $(this).attr("Id"), { get_param: 'value' }, function (data) {
+                    $('#tblinfo').show();
+                    $("#noinfo").hide();
+                    $("#infoClassCode").text(data["id"]);
+                    $("#infoClassNameBG").text(data["name"]);
+                    $("#infoClassNameEn").text(data["nameEng"]);
+                    $("#infoClassType").text(getHierachy(data["isHierachy"]));
+                    $("#dopinfoClass").text(data["remarks"]);
+                    $("#infoClassNumber").html(getVersions(data["versions"]));
+                    $("#adminActions").html("<a style=\"margin-top:8px; margin-right:8px; text-decoration:none;\"  class=\"button redaction\" href=\"\/Admin\/Class\/ClassDetails?classCode=" + data["id"] + "\">Редактиране</a><br />");
+                });
+                @*$.ajax({
+                    url: '\GetClassInfoByCode\?classCode=' + $(this).attr("Id"),
+                    type: "GET",
+                    contentType: JSON,
+                    //async: false,
+                    success: function (data) {
+                        console.log(data);
+                        $("#classInfo").append(data.Id);
+                        $("#classIdLabel").val(data.Id);
+                        data.forEach(function (element) {
+                        $("#classInfo").empty();
+                        $("#classInfo").append("КОД: " + element.Id + "@Environment.NewLine");
+                        $("#classInfo").append("Наименование: " + element.Name + "@Environment.NewLine");
+                        $("#classInfo").append("Тип на класификацията: " + element.isHierachy ? "Йерархична" : "Плоска" + "@Environment.NewLine");
+                        $("#classInfo").append("Брой елементи: " + element.ItemsCount + "@Environment.NewLine");
+                        });
+                    },
+                    error: function () {
+                        $("#classInfo").empty();
+                         $("#classInfo").append("Няма данни за класификацията" + "@Environment.NewLine");
+                    }
+                });*@
+
+            });
+        }
+</script>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+

@@ -1,0 +1,36 @@
+﻿@model IEnumerable<AdminUserServiceModel>
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div class="row">
+    <div class="col-md-2">
+        <h4 class="center-block text-center" style="color:azure;">Вид на извадката</h4>
+        <div style="background-color:cadetblue; margin-top: 50px;" class="table-bordered">
+            <label style="color:azure;" class="rolebutton-margin text-center center-block">По роля</label>
+            <a class="btn btn-primary btn-sm rolebutton-margin center-block" asp-controller="Users" asp-action="AllUsers" asp-route-sortOrder="Name">Всички потребители</a>
+            <a class="btn btn-primary btn-sm rolebutton-margin center-block" asp-controller="Users" asp-action="AllUsers" asp-route-sortOrder="Name" asp-route-role=@AdministratorRole>Администратори</a>
+            <a class="btn btn-primary btn-sm rolebutton-margin center-block" asp-controller="Users" asp-action="AllUsers" asp-route-sortOrder="Name" asp-route-role=@MethodologistsInRole>Методолози вътрешни</a>
+            <a class="btn btn-primary btn-sm rolebutton-margin center-block" asp-controller="Users" asp-action="AllUsers" asp-route-sortOrder="Name" asp-route-role=@MethodologistsExRole>Методолози външни</a>
+            <a class="btn btn-primary btn-sm rolebutton-margin center-block" asp-controller="Users" asp-action="AllUsers" asp-route-sortOrder="Name" asp-route-role=@NsiUser>НСИ потребители</a>
+            <a class="btn btn-primary btn-sm rolebutton-margin center-block" asp-controller="Users" asp-action="AllUsers" asp-route-sortOrder="Name" asp-route-role=@TsbRole>ТСБ потребители</a>
+        </div>
+        <br />
+    </div>
+    <div class="col-md-10">
+        <h4 class="text-center" style="color:azure;">@ViewData["collection"]</h4>
+        @Html.Partial("_ListUsers", Model)
+        <div style="margin-top: 20px; padding-bottom: 10px;">
+
+            <form method="get" asp-area="Admin" asp-controller="users" asp-action="AllUsers">
+                <input name="searchString" style="width: 300px;" />
+                
+                <button type="submit" class="button search">Търси</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

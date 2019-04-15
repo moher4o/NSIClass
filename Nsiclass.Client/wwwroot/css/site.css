@@ -1,0 +1,550 @@
+﻿
+.content {
+    background: url('../jpg/youtube-cover.jpg');
+    /*background-color:#dbeed2;*/
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+}
+.admin-body {
+    /*padding-top: 10px;*/
+    max-height: 93vh;
+    overflow-y: auto;
+}
+.contentin {
+    /*background: rgba(0, 148, 255, 0.9) !important;*/
+    background: rgba(101, 142, 172, 0.90) !important; /*заден цвят*/
+    /*background-color: cornflowerblue;*/
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+div.note {
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    background-color: #f0f7fb;
+    border: solid 1px #3498db;
+    border-radius: 6px;
+    line-height: 18px;
+    padding: 12px;
+    margin-top: 46px;
+}
+
+div.note-version-list {
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    background-color: #f0f7fb;
+    border: solid 1px #3498db;
+    border-radius: 6px;
+    line-height: 18px;
+    padding: 12px;
+}
+
+
+div.note-version {
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    background-color: #f0f7fb;
+    border: solid 1px #3498db;
+    border-radius: 6px;
+    line-height: 18px;
+    padding: 12px;
+    margin-top: 15px;
+    max-height: 72vh;
+    overflow-y: auto;
+}
+
+
+div.classtree {
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border: solid 1px #3498db;
+    border-radius: 6px;
+    font-size: 15px;
+    background-color: #f0f7fb;
+    padding-bottom: 10px;
+    min-height: 75vh;
+    max-height: 75vh;
+    overflow-y: auto;
+}
+
+.modal-dialog {
+    position: absolute;
+    top: 120px;
+    right: 100px;
+    bottom: 0;
+    left: 0;
+    z-index: 10040;
+    overflow: auto;
+    overflow-y: auto;
+}
+
+div.items-info {
+    /*min-height: 69vh;*/
+    max-height: 69vh;
+    overflow-y: auto;
+}
+
+.centerdiv {
+    /*background: #ffffed;*/
+    margin: auto;
+    width: 98%;
+    /*padding-top: 10px;*/
+    min-height: 88vh;
+}
+
+.rolebutton-margin {
+    margin: 5px;
+    min-width: 145px;
+}
+
+.button-invisible {
+    display: none;
+}
+
+/*3D BUTTON*/
+.button {
+    display: inline-block;
+    padding: 10px 15px;
+    font-size: 18px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 15px;
+    /*box-shadow: 0 9px #5088ed;*/
+    box-shadow: 0 7px rgb(67, 93, 111); /*цвят на сянката на бутон*/
+    min-width: 250px;
+    margin: 5px;
+}
+
+    .button:hover {
+        color: #fff;
+        background-color: #3e8e41
+    }
+
+    .button:active {
+        background-color: #3e8e41;
+        /*box-shadow: 0 5px #2e73ef;*/
+        box-shadow: 0 5px rgb(95, 132, 158); /*цвят на сянката при натиснат бутон*/
+        transform: translateY(4px);
+    }
+
+    .button.btndelete {
+        min-width: 150px;
+        padding: 5px 15px;
+        margin-left: 20px;
+        font-size: 14px;
+        color: white;
+        background-color: red;
+    }
+
+        .button.btndelete:hover {
+            background-color: #be0505;
+        }
+
+    .button.btndelete-small {
+        min-width: 80px;
+        padding: 5px 11px;
+        margin-left: 20px;
+        font-size: 12px;
+        color: white;
+        background-color: #e14b4b;
+    }
+
+        .button.btndelete-small:hover {
+            background-color: #be0505;
+        }
+
+    .button.btndelete-extrasmall {
+        max-width: 10% !important;
+        min-width: 20px !important;
+        box-shadow:none;
+        padding: 2px 2px;
+        margin-left: 20px;
+        font-size: 10px;
+        color: white;
+        background-color: #e14b4b;
+        display: normal;
+    }
+
+        .button.btndelete-extrasmall:hover {
+            background-color: #be0505;
+        }
+
+
+    .button.btnrestore {
+        min-width: 150px;
+        padding: 10px 15px;
+        margin-left: 20px;
+        font-size: 14px;
+        color: white;
+        background-color: #52be56;
+    }
+
+        .button.btnrestore:hover {
+            background-color: #28d92f;
+        }
+
+    .button.back-small {
+        min-width: 70px;
+        padding: 5px;
+        font-size: 12px;
+        color: white;
+        background-color:cornflowerblue;
+    }
+
+        .button.back-small:hover {
+            background-color:dodgerblue;
+        }
+
+
+    .button.btnrestore-small {
+        min-width: 100px;
+        padding: 5px 11px;
+        margin-left: 20px;
+        font-size: 12px;
+        color: white;
+        background-color: #52be56;
+    }
+
+        .button.btnrestore-small:hover {
+            background-color: #28d92f;
+        }
+
+    .button.search {
+        margin-right: 20px;
+        min-width: 50px;
+        padding: 5px 10px;
+        font-size: 12px;
+        color: #fff;
+        /*background-color: #afce47*/
+        background-color: rgb(132, 174, 204);
+    }
+
+        .button.search:hover {
+            background-color: rgb(171, 188, 200);
+        }
+
+    .button.redaction {
+        margin-right: 20px;
+        min-width: 50px;
+        padding: 5px 10px;
+        font-size: 12px;
+        color: #fff;
+        /*background-color: #afce47*/
+        background-color:#40b6a4;
+    }
+
+        .button.redaction:hover {
+            background-color:#15a38d;
+        }
+
+
+
+    .button.btncansel {
+        min-width: 150px;
+        padding: 5px 15px;
+        font-size: 14px;
+        color: #000;
+        background-color: #c7d7f3;
+    }
+
+        .button.btncansel:hover {
+            background-color: #a2c0f5;
+        }
+
+    .button.save {
+        margin-right: 20px;
+        min-width: 150px;
+        padding: 5px 15px;
+        font-size: 14px;
+        color: #fff;
+        background-color: #cb8181;
+    }
+    l
+        .button.save:hover {
+            background-color: #ae5d5d;
+        }
+
+.button.choice {
+    margin-right: 20px;
+    min-width: 50px;
+    padding: 5px 10px;
+    font-size: 14px;
+    color: #fff;
+    /*background-color: #afce47*/
+    background-color: #49744a;
+}
+
+    .button.choice:hover {
+        background-color: #478249;
+    }
+
+
+    .button.notselected {
+        color: #000;
+        background-color: #9fa1a5;
+    }
+
+        .button.notselected:hover {
+            background-color: #7f8aa1;
+        }
+
+    .button.btnnotactive {
+        color: #fff;
+        background-color: #ae5d5d;
+    }
+
+        .button.btnnotactive:hover {
+            background-color: #9c3a3a;
+        }
+/*3D BUTTON*/
+/*FIXED TABLE*/
+.table-fixed tbody {
+    height: 490px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.table-fixed thead,
+.table-fixed tbody,
+.table-fixed tr,
+.table-fixed td,
+.table-fixed th {
+    display: block;
+}
+
+    .table-fixed tr:after {
+        content: "";
+        display: block;
+        visibility: hidden;
+        clear: both;
+    }
+
+    .table-fixed tbody td,
+    .table-fixed thead > tr > th {
+        float: left;
+    }
+
+    /*table-fixed-small*/
+.table-fixed-small tbody {
+    height: 420px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.table-fixed-small thead,
+.table-fixed-small tbody,
+.table-fixed-small tr,
+.table-fixed-small td,
+.table-fixed-small th {
+    display: block;
+}
+
+    .table-fixed-small tr:after {
+        content: "";
+        display: block;
+        visibility: hidden;
+        clear: both;
+    }
+
+    .table-fixed-small tbody td,
+    .table-fixed-small thead > tr > th {
+        float: left;
+    }
+/*table-fixed-small*/
+
+
+.table > thead > tr > th,
+.table > thead > tr > td {
+    font-size: .8em;
+    font-weight: 400;
+    border-bottom: 0;
+    letter-spacing: 1px;
+    vertical-align: top;
+    padding: 8px;
+    background: #51596a;
+    text-transform: uppercase;
+    color: #ffffff;
+}
+
+.table-info > tbody > tr > td,
+.table-info > tbody > tr > td > pre,
+.table-info > tbody > tr > td > input,
+.table-info > tbody > tr > td > textarea,
+.table-info > tbody > tr > td > a,
+.table-info > tbody > tr > td > p {
+    margin-left: 10px;
+    min-width: 100px !important;
+}
+
+.meaning {
+    max-width: 160px !important;
+}
+
+.meaning-version {
+    width: 25% !important;
+}
+
+/*FIXED TABLE*/
+/*progress BAR*/
+.ui-widget-header {
+    background: #cedc98;
+    border: 1px solid #DDDDDD;
+    color: #333333;
+    font-weight: bold;
+}
+
+.progress-label {
+    position: absolute;
+    left: 50%;
+    top: 13px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #fff;
+    background: #cedc98;
+}
+
+.red {
+    color: red;
+}
+/*progress BAR*/
+/*TREEVIEW*/
+/* Remove default bullets */
+ul, #myUL {
+    list-style-type: none !important;
+}
+
+/* Remove margins and padding from the parent ul */
+#myUL {
+    margin: 0;
+    padding: 0;
+}
+
+/* Style the caret/arrow */
+.caret {
+    cursor: pointer;
+    user-select: none; /* Prevent text selection */
+    width: auto !important;
+    border-top: unset !important;
+    margin: 8px;
+}
+
+.classLeaf {
+    padding-left: 35px;
+    cursor: pointer;
+    color: darkblue;
+}
+/* Create the caret/arrow with a unicode, and style it */
+.caret::before {
+    content: "\25B6";
+    color: black;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+/* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+.caret-down::before {
+    transform: rotate(90deg);
+}
+
+/* Hide the nested list */
+.nested {
+    display: none;
+}
+
+/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+.active {
+    display: block;
+}
+/*TREEVIEW*/
+/*NAVBAR*/
+
+.navbar {
+    /*background-color: rgba(101, 142, 172, 0.90) !important;*/
+    margin-bottom: 0px !important;
+    border: none;
+}
+
+.navbar-inverse {
+    background-color: unset;
+    border-color: none;
+    font-size: 16px;
+}
+
+    .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+        color: #000;
+        background-color: unset;
+        border-color: none;
+    }
+
+    .navbar-inverse .navbar-brand {
+        color: #000;
+        border-color: none;
+    }
+
+    .navbar-inverse .navbar-text {
+        color: #091914;
+        border-color: none;
+    }
+
+    .navbar-inverse .navbar-nav > li > a {
+        color: #101513;
+    }
+
+    .navbar-inverse .btn-link {
+        color: #101513;
+    }
+/*NAVBAR*/
+
+/*LOGIN NAVBAR*/
+
+#login-dp {
+    min-width: 250px;
+    padding: 14px 14px 0;
+    overflow: hidden;
+    background-color: rgba(161, 208, 186, 0.9);
+}
+
+    #login-dp .help-block {
+        font-size: 12px
+    }
+
+    #login-dp .bottom {
+        background-color: rgba(255,255,255,.8);
+        border-top: 1px solid #ddd;
+        clear: both;
+        padding: 14px;
+    }
+
+    #login-dp .social-buttons {
+        margin: 12px 0
+    }
+
+        #login-dp .social-buttons a {
+            width: 49%;
+        }
+
+    #login-dp .form-group {
+        margin-bottom: 10px;
+    }
+
+@media(max-width:768px) {
+    #login-dp {
+        background-color: inherit;
+        color: #fff;
+    }
+
+        #login-dp .bottom {
+            background-color: inherit;
+            border-top: 0 none;
+        }
+}
+
+/*Login NAVBAR*/

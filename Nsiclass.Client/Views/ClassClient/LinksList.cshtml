@@ -1,0 +1,24 @@
+﻿@model List<AdminLinksServiceModel>
+
+@{
+    ViewData["Title"] = "Връзки";
+}
+
+<div class="row">
+    <h3 class="center-block text-center">Връзки към други информационни системи</h3>
+    <div class="col-md-4"></div>
+    <div class="col-md-4 note-version">
+        @foreach (var link in Model)
+        {
+        <h4>
+            @{string name = link.Name.Length > 44 ? (link.Name).Substring(0, 44) + "..." : link.Name;}
+            <a href="@link.Link" target="_blank">@link.Name</a>
+        </h4>
+        }
+    </div>
+    <div class="col-md-4"></div>
+</div>
+
+
+
+

@@ -1,0 +1,354 @@
+﻿@model ClassItemServiceModel
+@{
+    ViewData["Title"] = "Детайли на елемента";
+}
+
+<h4 style="color:azure;" class="center-block text-center">Редакция на елемент</h4>
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @*<h4 style="color:azure;" class="center-block text-center">@Model.Classif @Model.Version Детайли</h4>
+        <hr />*@
+    <div class="note-version">
+        <table id="tblinfo" class="table-info" style="width:98%;">
+            <tbody>
+                <tr>
+                    <td class="meaning-version">
+                        <p>
+                            <strong>Версия:&nbsp;</strong>
+                        </p>
+                    </td>
+                    <td>
+                        <input asp-for="Classif" type="hidden" />
+                        <input asp-for="Version" type="hidden" />
+                        <input asp-for="ItemCode" type="hidden" />
+                        <a asp-area="" asp-controller="ClassClient" asp-action="ClassItemsList" asp-route-classCode="@Model.Classif" asp-route-versionCode="@Model.Version">@Model.Classif @Model.Version</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="meaning-version">
+                        <p>
+                            <label asp-for="OtherCode"></label>
+                        </p>
+                    </td>
+                    <td>
+                        <p>
+                            @if (Model.IsLeaf && Model.SrcRelations.Count() == 0 && Model.DestRelations.Count() == 0)
+                            {
+                                <input class="form-control" asp-for="OtherCode" id="otherCode" />
+                                <span asp-validation-for="OtherCode" class="text-danger"></span>
+                            }
+                            else
+                            {
+                                <input class="form-control" asp-for="OtherCode" id="otherCode" readonly />
+                                <span asp-validation-for="OtherCode" class="text-danger"></span>
+                            }
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="meaning-version">
+                        <p>
+                            <label asp-for="ItemLevel"></label>
+                        </p>
+                    </td>
+                    <td>
+                        <p>
+                            <strong>@Model.ItemLevel</strong>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="meaning-version">
+                        <p>
+                            <label asp-for="Description"></label>
+                        </p>
+                    </td>
+                    <td>
+                        <p>
+                            <input class="form-control" asp-for="Description" />
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="meaning-version">
+                        <p>
+                            <label asp-for="DescriptionEng"></label>
+                        </p>
+                    </td>
+                    <td>
+                        <p>
+                            <input class="form-control" asp-for="DescriptionEng" />
+                            <span asp-validation-for="DescriptionEng" class="text-danger"></span>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="meaning-version">
+                        <p>
+                            <label asp-for="ParentItemName"></label>
+                        </p>
+                    </td>
+                    <td>
+                        <p>
+                            <strong>| @Model.ParentItemCode | @Model.ParentItemName</strong>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="meaning-version">
+                        <p>
+                            <label asp-for="EnteredByUserName"></label>
+                        </p>
+                    </td>
+                    <td>
+                        <p>
+                            <strong>@Model.EnteredByUserName на @Model.EntryTime.ToShortDateString()</strong>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="meaning-version">
+                        <p>
+                            <label asp-for="ModifiedByUserName"></label>
+                        </p>
+                    </td>
+                    <td>
+                        <p>
+                            @if (!string.IsNullOrWhiteSpace(Model.ModifiedByUserName))
+                            {
+                                <strong>@Model.ModifiedByUserName на @Model.ModifyTime</strong>
+                            }
+                            else
+                            {
+                                <strong>Елемента не е редактиран</strong>
+                            }
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="meaning-version">
+                        <p>
+                            <label asp-for="IsLeaf"></label>
+                        </p>
+                    </td>
+                    <td>
+                        <p>
+                            @if (Model.IsLeaf)
+                            {
+                                <strong>Да</strong>
+                            }
+                            else
+                            {
+                                <strong>Не</strong>
+                            }
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="meaning-version">
+                        <p>
+                            <label asp-for="Includes"></label>
+                        </p>
+                    </td>
+                    <td>
+                        <textarea asp-for="Includes" class="form-control" rows="8" style="resize: none; font-size:small;" placeholder="Описание ..."></textarea>
+                        <span asp-validation-for="Includes" class="text-danger"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="meaning-version">
+                        <p>
+                            <label asp-for="IncludesMore"></label>
+                        </p>
+                    </td>
+                    <td>
+                        <textarea asp-for="IncludesMore" class="form-control" rows="8" style="resize: none; font-size:small;" placeholder="Описание ..."></textarea>
+                        <span asp-validation-for="IncludesMore" class="text-danger"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="meaning-version">
+                        <p>
+                            <label asp-for="IncludesNo"></label>
+                        </p>
+                    </td>
+                    <td>
+                        <textarea asp-for="IncludesNo" class="form-control" rows="8" style="resize: none; font-size:small;" placeholder="Описание ..."></textarea>
+                        <span asp-validation-for="IncludesNo" class="text-danger"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="meaning-version">
+                        <p>
+                            <strong>Статус</strong>
+                        </p>
+                    </td>
+                    <td>
+                        @if (Model.IsLeaf)
+                        {
+                            @if (Model.IsDeleted)
+                            {
+                                <p style="color:red;">Неактивен <a class="button btnrestore-small" style="text-decoration: none;" data-toggle="modal" data-target="#@Model.Version">Активиране &#33;&#33;&#33;</a></p>
+                            }
+                            else
+                            {
+                                <p style="color:green;">Активен <a class="button btndelete-small" style="text-decoration: none;" data-toggle="modal" data-target="#@Model.Version">Деактивиране &#33;&#33;&#33;</a></p>
+                            }
+                        }
+                        else
+                        {
+                            if (Model.IsDeleted)
+                            {
+                                <p style="color:red;">Неактивен</p>
+                            }
+                            else
+                            {
+                                <p style="color:green;">Активен</p>
+                            }
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td class="meaning-version">
+                        <p>
+                            <label asp-for="SrcRelations"></label>
+                        </p>
+                    </td>
+                    <td>
+                        @{
+                            var relationTypeName = "";
+                            for (int i = 0; i < Model.SrcRelations.Count; i++)
+                            {
+                                var currentRelationTypeName = Model.SrcRelations[i].relationTypeName;
+                                if (relationTypeName != currentRelationTypeName)
+                                {
+                                    relationTypeName = currentRelationTypeName;
+                                    <strong>@relationTypeName</strong><br />
+                                }
+                                <span style="color:@(Model.SrcRelations[i].isDeleted == true ? "salmon" : "navy")">
+                                    <a class="button btndelete-extrasmall" style="text-decoration: none;" targetEl="@Model.SrcRelations[i].ItemCode" destclassCode="@Model.Classif" destversionCode="@Model.Version" destitemCode="@Model.ItemCode" relationId="@Model.SrcRelations[i].Id" srcitemCode="@Model.SrcRelations[i].ItemCode" srcversionCode="@Model.SrcRelations[i].VersionCode" srcclassCode="@Model.SrcRelations[i].ClassCode" onclick="changeStatus(event);">Статус &#33;&#33;&#33;</a>
+                                    <span id="@Model.SrcRelations[i].ItemCode">@Model.SrcRelations[i].ClassCode @Model.SrcRelations[i].VersionCode @Model.SrcRelations[i].ItemCode @Model.SrcRelations[i].ItemName</span>
+                                </span><br />
+
+                            }
+                        }
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="meaning-version">
+                        <p>
+                            <label asp-for="DestRelations"></label>
+                        </p>
+                    </td>
+                    <td>
+
+                        @{
+                            relationTypeName = "";
+                            for (int i = 0; i < Model.DestRelations.Count; i++)
+                            {
+                                var currentRelationTypeName = Model.DestRelations[i].relationTypeName;
+                                if (relationTypeName != currentRelationTypeName)
+                                {
+                                    relationTypeName = currentRelationTypeName;
+                                    <strong>@relationTypeName</strong><br />
+                                }
+                                <span style="color:@(Model.DestRelations[i].isDeleted == true ? "salmon" : "navy")">
+                                    <a class="button btndelete-extrasmall" style="text-decoration: none;" targetEl="@Model.DestRelations[i].ItemCode" srcclassCode="@Model.Classif" srcversionCode="@Model.Version" srcitemCode="@Model.ItemCode" relationId="@Model.DestRelations[i].Id" destitemCode="@Model.DestRelations[i].ItemCode" destversionCode="@Model.DestRelations[i].VersionCode" destclassCode="@Model.DestRelations[i].ClassCode" onclick="changeStatus(event);">Статус &#33;&#33;&#33;</a>
+                                    <span id="@Model.DestRelations[i].ItemCode">@Model.DestRelations[i].ClassCode @Model.DestRelations[i].VersionCode @Model.DestRelations[i].ItemCode @Model.DestRelations[i].ItemName</span>
+                                </span><br />
+                            }
+                        }
+
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="center-block text-center" style="margin-top:8px;">
+        <button type="button" class="button save" id="send">Запис</button>
+        <a class="button btncansel" style="text-decoration: none;" asp-area="" asp-controller="ClassClient" asp-action="ClassItemsList" asp-route-classCode="@Model.Classif" asp-route-versionCode="@Model.Version">Отказ</a>
+    </div>
+    <input type="submit" class="btn button-invisible" value="REALSENDSEND" id="realsend" />
+</form>
+
+@if (Model.IsDeleted != true)
+{
+    <form method="post" asp-controller="Items" asp-action="DestroyItem" asp-route-classCode="@Model.Classif" asp-route-versionCode="@Model.Version" asp-route-itemCode="@Model.ItemCode">
+
+        <div class="modal fade" id="@Model.Version" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div style="background-color:papayawhip;" class="modal-content">
+                    <div class="modal-body">
+                        <h4>Сигурни ли сте, че искате да деактивирате елемента: <span style="font-weight:700">| @Model.ItemCode | @Model.Description</span></h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отказ</button>
+                        <button type="submit" class="btn btn-danger">Потвърди</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+}
+else
+{
+    <form method="post" asp-controller="Items" asp-action="RestoreItem" asp-route-classCode="@Model.Classif" asp-route-versionCode="@Model.Version" asp-route-itemCode="@Model.ItemCode">
+
+        <div class="modal fade" id="@Model.Version" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div style="background-color:papayawhip;" class="modal-content">
+                    <div class="modal-body">
+                        <h4>Сигурни ли сте, че искате да активирате елемента: <span style="font-weight:700">| @Model.ItemCode | @Model.Description</span></h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отказ</button>
+                        <button type="submit" class="btn btn-danger">Потвърди</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+}
+<script type="text/javascript">
+    function changeStatus(event) {
+        let srcclasscode = event.target.attributes.srcclasscode.value;
+        let srcversioncode = event.target.attributes.srcversioncode.value;
+        let srcitemcode = event.target.attributes.srcitemcode.value;
+        let destclasscode = event.target.attributes.destclasscode.value;
+        let destversioncode = event.target.attributes.destversioncode.value;
+        let destitemcode = event.target.attributes.destitemcode.value;
+        let relationId = event.target.attributes.relationId.value;
+        let targetEl = event.target.attributes.targetEl.value;
+
+        $.ajax({
+            url: '\UpdateRelationStatus\?relTypeId=' + relationId + '&srcclassCode=' + srcclasscode + '&srcversionCode=' + srcversioncode + '&srcitemCode=' + srcitemcode + '&destclassCode=' + destclasscode + '&destversionCode=' + destversioncode + '&destitemCode=' + destitemcode,
+            type: "POST",
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            success: function (data) {
+                if (data === 'restored') {
+                    document.getElementById(targetEl).style.color = "navy";
+
+                }
+                else if (data === 'deleted') {
+                    document.getElementById(targetEl).style.color = "salmon";
+                }
+                else if (data === 'error') {
+                    alert('Грешка при смяна на статуса на релацията!');
+                }
+                else {
+                    alert(data);
+                }
+            }
+        });
+
+    }
+</script>
+<script src="~/js/itemDetails.js"></script>
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
