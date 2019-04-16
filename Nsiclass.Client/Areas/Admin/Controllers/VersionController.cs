@@ -180,6 +180,16 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
             var result = this.files.GetFilesInDirectory(classCode, versionCode);
             return Json(result);
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Администратор, Програмист")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteFile(string classCode, string versionCode, string fileName)
+        {
+            bool result = this.files.DeleteFile(classCode, versionCode, fileName);
+            return Json(result);
+        }
+
         //public IActionResult UploadFiles()
         //{
         //    string FileName = "";

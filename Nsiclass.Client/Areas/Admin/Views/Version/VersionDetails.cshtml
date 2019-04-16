@@ -220,6 +220,16 @@
             //$("#adminActions").html("<a style=\"margin-top:8px; margin-right:8px;\"  class=\"btn btn-info btn-sm\" href=\"\/Admin\/Relations\/RelDetails?relCode=" + data["id"] + "\">Редакция</a><br />");
         });
     }
+    function DeleteFile(fileName) {
+        var result = confirm("Потвърдете изтриването!");
+        if (result) {
+            $.getJSON('\DeleteFile\?classCode=' + $("#classCodeName").val() + '&versionCode=' + $("#versionCodeName").val() + '&fileName=' + fileName, { get_param: 'value' }, function (data) {
+                if (true) {
+
+                }
+            })
+        };
+    }
 
 
     function checkfile(sender) {

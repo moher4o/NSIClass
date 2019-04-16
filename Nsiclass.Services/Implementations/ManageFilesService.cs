@@ -74,26 +74,63 @@ namespace Nsiclass.Services.Implementations
 
         public IList<string> GetFilesInDirectory(string classCode, string versionCode)
         {
-            string directoryName = string.Concat(classCode, versionCode);
-            string globalPath = Environment.CurrentDirectory;
-
-            var classDirectory = Path.Combine(
-                        globalPath, DataConstants.ClassFilesSubDirectory, directoryName);
-
-            if (!Directory.Exists(classDirectory))
-            {
-                return null;
-            }
-
             var fileList = new List<string>();
-
-            foreach (var file in Directory.GetFiles(classDirectory))
+            try
             {
-                FileInfo info = new FileInfo(file);
-                fileList.Add(Path.GetFileName(info.FullName));
+                string directoryName = string.Concat(classCode, versionCode);
+                string globalPath = Environment.CurrentDirectory;
+
+                var classDirectory = Path.Combine(
+                            globalPath, DataConstants.ClassFilesSubDirectory, directoryName);
+
+                if (!Directory.Exists(classDirectory))
+                {
+                    return null;
+                }
+
+
+
+                foreach (var file in Directory.GetFiles(classDirectory))
+                {
+                    FileInfo info = new FileInfo(file);
+                    fileList.Add(Path.GetFileName(info.FullName));
+                }
+
+            }
+            catch (Exception)
+            {
+                return fileList;
             }
 
             return fileList;
+        }
+
+        public bool DeleteFile(string classCode, string versionCode, string fileName)
+        {
+            try
+            {
+                string directoryName = string.Concat(classCode, versionCode);
+                string globalPath = Environment.CurrentDirectory;
+
+                var classDirectory = Path.Combine(
+                            globalPath, DataConstants.ClassFilesSubDirectory, directoryName);
+
+                if (!Directory.Exists(classDirectory))
+                {
+                    return false;
+                }
+
+                var filePath = Path.Combine(classDirectory, fileName);
+
+                FileInfo file = new FileInfo(filePath);
+                file.Delete();
+                return true;
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }
