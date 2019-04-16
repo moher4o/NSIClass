@@ -181,9 +181,7 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
             return Json(result);
         }
 
-        [HttpPost]
-        [Authorize(Roles = "Администратор, Програмист")]
-        [ValidateAntiForgeryToken]
+        
         public IActionResult DeleteFile(string classCode, string versionCode, string fileName)
         {
             bool result = this.files.DeleteFile(classCode, versionCode, fileName);

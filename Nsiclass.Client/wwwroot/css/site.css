@@ -50,10 +50,10 @@ div.note-version {
     background-color: #f0f7fb;
     border: solid 1px #3498db;
     border-radius: 6px;
-    line-height: 18px;
+    line-height: 14px;
     padding: 12px;
     margin-top: 15px;
-    max-height: 72vh;
+    max-height: 80vh;
     overflow-y: auto;
 }
 
