@@ -221,19 +221,20 @@
         });
     }
     function DeleteFile(fileName) {
-        bootbox.confirm("Потвърдете изтриването на " + fileName, function () {
+        var result = confirm("Потвърдете изтриването на " + fileName);
+        if(result){
 
             $.getJSON('\DeleteFile\?classCode=' + $("#classCodeName").val() + '&versionCode=' + $("#versionCodeName").val() + '&fileName=' + fileName, { get_param: 'value' }, function (data) {
                 if (data) {
-
+                    FileList();
                     bootbox.alert('Файлът ' + fileName + ' беше успешно изтрит');
                 }
                 else {
                     bootbox.alert('Възникна проблем при изтриването на ' + fileName);
                 }
             })
-            FileList();
-        });
+            
+        };
     }
 
 
