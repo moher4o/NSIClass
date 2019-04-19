@@ -89,7 +89,7 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Администратор, Програмист")]
+        [Authorize(Roles = "Програмист")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DestroyVersion(string classCode, string versionCode)
         {
@@ -121,7 +121,7 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Администратор, Програмист")]
+        [Authorize(Roles = "Програмист")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RestoreVersion(string classCode, string versionCode)
         {
@@ -151,9 +151,68 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult Temporary()
+        [HttpPost]
+        [Authorize(Roles = "Програмист, Администратор")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeactivateVersion(string classCode, string versionCode)
         {
-            return View();
+            try
+            {
+                if (!await this.versions.IsClassVersionExistAsync(classCode, versionCode))
+                {
+                    TempData[ErrorMessageKey] = "Грешка!!! Грешен код на класификация или версия.";
+                    return RedirectToAction("AdminTasks", "Users");
+                }
+
+                string result = await this.versions.DeactivateClassVersionAsync(classCode, versionCode);
+                if (result.Contains("успешно"))
+                {
+                    TempData[SuccessMessageKey] = result;
+                }
+                else
+                {
+                    TempData[ErrorMessageKey] = result;
+                }
+
+            }
+            catch (Exception)
+            {
+                TempData[ErrorMessageKey] = "Грешка!!! Възникна неочаквана грешка.";
+                return RedirectToAction("AdminTasks", "Users");
+            }
+            return RedirectToAction("VersionDetails", "Version", new { classCode, versionCode });
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = "Програмист, Администратор")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ActivateVersion(string classCode, string versionCode)
+        {
+            try
+            {
+                if (!await this.versions.IsClassVersionExistAsync(classCode, versionCode))
+                {
+                    TempData[ErrorMessageKey] = "Грешка!!! Грешен код на класификация или версия.";
+                    return RedirectToAction("AdminTasks", "Users");
+                }
+
+                string result = await this.versions.ActivateClassVersionAsync(classCode, versionCode);
+                if (result.Contains("успешно"))
+                {
+                    TempData[SuccessMessageKey] = result;
+                }
+                else
+                {
+                    TempData[ErrorMessageKey] = result;
+                }
+                return RedirectToAction("VersionDetails", "Version", new { classCode, versionCode });
+            }
+            catch (Exception)
+            {
+                TempData[ErrorMessageKey] = "Грешка!!! Възникна неочаквана грешка.";
+                return RedirectToAction("AdminTasks", "Users");
+            }
         }
 
         [HttpPost]
@@ -187,6 +246,12 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
             bool result = this.files.DeleteFile(classCode, versionCode, fileName);
             return Json(result);
         }
+
+        public IActionResult Temporary()
+        {
+            return View();
+        }
+
 
         //public IActionResult UploadFiles()
         //{

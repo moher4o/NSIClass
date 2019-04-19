@@ -21,5 +21,9 @@ namespace Nsiclass.Services
         Task<bool> IsClassVersionDeletedAsync(string classCode, string versionCode);
 
         Task<IEnumerable<string>> GetVersionNamesByClassAsync(string classCode);
+
+        Task<string> ActivateClassVersionAsync(string classCode, string versionCode);
+
+        Task<string> DeactivateClassVersionAsync(string classCode, string versionCode);
     }
 }

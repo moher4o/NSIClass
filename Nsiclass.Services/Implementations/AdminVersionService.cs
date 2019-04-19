@@ -155,5 +155,57 @@ namespace Nsiclass.Services.Implementations
             return true;
         }
 
+        public async Task<bool> IsClassVersionActiveAsync(string classCode, string versionCode)
+        {
+            var currentVersion = await this.db.ClassVersions.Where(v => v.Classif == classCode && v.Version == versionCode).FirstOrDefaultAsync();
+            if (currentVersion.isActive)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
+        public async Task<string> ActivateClassVersionAsync(string classCode, string versionCode)
+        {
+            if (await this.IsClassVersionExistAsync(classCode, versionCode) == false)
+            {
+                return $"Грешка!!! Няма версия с код: {classCode} {versionCode}";
+            }
+
+            var currentVersion = await this.db.ClassVersions.Where(v => v.Classif == classCode && v.Version == versionCode).FirstOrDefaultAsync();
+
+            if (currentVersion.isActive)
+            {
+                return $"Информация!!! Версия с код: {classCode} {versionCode} е активна вече";
+            }
+
+            currentVersion.isActive = true;
+            await this.db.SaveChangesAsync();
+
+            return "Активирането е успешно";
+
+        }
+
+        public async Task<string> DeactivateClassVersionAsync(string classCode, string versionCode)
+        {
+            if (await this.IsClassVersionExistAsync(classCode, versionCode) == false)
+            {
+                return $"Грешка!!! Няма версия с код: {classCode} {versionCode}";
+            }
+            var currentVersion = await this.db.ClassVersions.Where(v => v.Classif == classCode && v.Version == versionCode).FirstOrDefaultAsync();
+
+            if (!currentVersion.isActive)
+            {
+                return $"Информация!!! Версия с код: {classCode} {versionCode} е вече деактивирана";
+            }
+
+            currentVersion.isActive = false;
+            await this.db.SaveChangesAsync();
+
+            return "Деактивирането е успешно";
+
+
+        }
     }
 }

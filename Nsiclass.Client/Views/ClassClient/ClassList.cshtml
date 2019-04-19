@@ -49,16 +49,17 @@
                     {
                         //var classVersionId = foo.Classif + "#$" + foo.Version;
                         var title = foo.Classif + " " + foo.Version;
-                        <li style="margin-top:18px;">
-                            @if (foo.isDeleted)
-                            {
-                                <a class="classLeaf" href="#">@title не е активна</a>
-                            }
-                            else
-                            {
-                                <a class="classLeaf" asp-action="ClassItemsList" asp-controller="ClassClient" asp-route-classCode=@foo.Classif asp-route-versionCode=@foo.Version>@title</a>
-                            }
-                        </li>
+                    <li style="margin-top:18px;">
+                        @if (!foo.isActive)
+                        {
+                            @*<a class="classLeaf" href="#">@title не е активна</a>*@
+                            <a class="classLeaf displayno" asp-action="ClassItemsList" asp-controller="ClassClient" asp-route-classCode=@foo.Classif asp-route-versionCode=@foo.Version >@title не е активна</a>
+                        }
+                        else
+                        {
+                            <a class="classLeaf" asp-action="ClassItemsList" asp-controller="ClassClient" asp-route-classCode=@foo.Classif asp-route-versionCode=@foo.Version>@title</a>
+                        }
+                    </li>
                     }
                 </ul>
     }</text>;

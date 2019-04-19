@@ -21,6 +21,8 @@ namespace Nsiclass.Data.Models
         [MaxLength(1000)]
         public string Description { get; set; }
 
+        public string DescriptionShort { get; set; }
+
         [MaxLength(1000)]
         public string DescriptionEng { get; set; }
 

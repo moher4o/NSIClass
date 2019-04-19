@@ -31,8 +31,11 @@ namespace Nsiclass.Services.Models
         [Display(Name = "Общо описание")]
         public string Remarks { get; set; }
 
-        [Display(Name = "Статус")]
+        [Display(Name = "Изтрита ли е?")]
         public bool isDeleted { get; set; }
+
+        [Display(Name = "Статус")]
+        public bool isActive { get; set; }
 
         [Display(Name = "Брой елементи")]
         public int ItemsCount { get; set; }
