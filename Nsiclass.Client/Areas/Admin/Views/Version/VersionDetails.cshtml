@@ -39,7 +39,7 @@
                     <tr>
                         <td class="meaning-version">
                             <p>
-                                <strong>Статус</strong>
+                                <label asp-for="isDeleted"></label>
                             </p>
                         </td>
                         <td>
@@ -49,7 +49,7 @@
                             }
                             else
                             {
-                                <p style="color:green;">Действаща <a class="button btndelete-small" style="text-decoration: none;" data-toggle="modal" data-target="#@Model.Version">Изтриване &#33;&#33;&#33;</a></p>
+                                <p style="color:green;">Налична <a class="button btndelete-small" style="text-decoration: none;" data-toggle="modal" data-target="#@Model.Version">Изтриване &#33;&#33;&#33;</a></p>
                             }
                         </td>
                     </tr>
@@ -57,7 +57,7 @@
                 <tr>
                     <td class="meaning-version">
                         <p>
-                            <strong>Статус</strong>
+                            <label asp-for="isActive"></label>
                         </p>
                     </td>
                     <td>

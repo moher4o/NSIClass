@@ -73,6 +73,20 @@
                 <tr>
                     <td class="meaning-version">
                         <p>
+                            <label asp-for="DescriptionShort"></label>
+                        </p>
+                    </td>
+                    <td>
+                        <p>
+                            <input class="form-control" asp-for="DescriptionShort" />
+                            <span asp-validation-for="DescriptionShort" class="text-danger"></span>
+                        </p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="meaning-version">
+                        <p>
                             <label asp-for="DescriptionEng"></label>
                         </p>
                     </td>

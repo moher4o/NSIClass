@@ -10,6 +10,7 @@
 
 <div class="row" style="padding-left: 10px; padding-right:10px;">
     <h3 class="center-block text-center">К л а с и ф и к а ц и и</h3>
+    <input style="margin-left:15px;" type="checkbox" name="showInactive" id="showInactive" onchange="InactiveVersionShowOrHide()"> Показване и на неактивните версии<br>
     <div class="col-md-6">
 
         @{
@@ -39,40 +40,50 @@
             </ul>
 
 
-    }</text>;
+}</text>;
 
 
-                ShowTreeChilds = @<text>@{
-                var Items = item;
-                <ul class="nested" style="padding:5px;">
-                    @foreach (var foo in Items)
-                    {
-                        //var classVersionId = foo.Classif + "#$" + foo.Version;
-                        var title = foo.Classif + " " + foo.Version;
+            ShowTreeChilds = @<text>@{
+            var Items = item;
+            <ul class="nested" style="padding:5px;">
+                @foreach (var foo in Items)
+                {
+                    //var classVersionId = foo.Classif + "#$" + foo.Version;
+                    var title = foo.Classif + " " + foo.Version;
                     <li style="margin-top:18px;">
-                        @if (!foo.isActive)
+                        @if (!foo.isDeleted)
                         {
-                            @*<a class="classLeaf" href="#">@title не е активна</a>*@
-                            <a class="classLeaf displayno" asp-action="ClassItemsList" asp-controller="ClassClient" asp-route-classCode=@foo.Classif asp-route-versionCode=@foo.Version >@title не е активна</a>
-                        }
-                        else
-                        {
-                            <a class="classLeaf" asp-action="ClassItemsList" asp-controller="ClassClient" asp-route-classCode=@foo.Classif asp-route-versionCode=@foo.Version>@title</a>
+                            @if (!foo.isActive)
+                            {
+                                <a class="classLeaf displayno" style="color:red;" asp-action="ClassItemsList" asp-controller="ClassClient" asp-route-classCode=@foo.Classif asp-route-versionCode=@foo.Version>@title</a>
+                            }
+                            else
+                            {
+                                <a class="classLeaf" asp-action="ClassItemsList" asp-controller="ClassClient" asp-route-classCode=@foo.Classif asp-route-versionCode=@foo.Version>@title</a>
+                            }
                         }
                     </li>
-                    }
-                </ul>
-    }</text>;
+                }
+            </ul>
+}</text>;
 
         }
         <div class="classtree">
             @ShowTree(Model)
         </div>
-        <form method="get" asp-controller="ClassClient" asp-action="ClassList">
-            <input name="searchString" style="width: 350px;" />
+        <div class="row">
+            <div class="col-md-6">
+                <form method="get" asp-controller="ClassClient" asp-action="ClassList">
+                    <input name="searchString" style="width: 350px;" />
 
-            <button type="submit" class="button search" style="margin-bottom:10px;">Търси</button>
-        </form>
+                    <button type="submit" class="button search" style="margin-bottom:10px;">Търси</button>
+                </form>
+            </div>
+            <div class="col-md-6">
+            </div>
+        </div>
+
+
 
     </div>
     <div class="col-md-6">
@@ -161,7 +172,16 @@
 </div>
 
 <script>
-
+        //var inactiveVersions = documet.getElementsByClassName("displayno");
+    $(".displayno").hide();
+    function InactiveVersionShowOrHide(){
+        if ($("#showInactive").prop('checked') == true) {
+            $(".displayno").show();
+        }
+        else {
+            $(".displayno").hide();
+        }
+    }
         var toggler = document.getElementsByClassName("caret");
         var i;
     function getHierachy(isMember) {
@@ -170,11 +190,15 @@
     function getVersions(versionList) {
         let names = "";
         for (var i = 0; i <= versionList.length - 1; i++) {
-            if (versionList[i].isDeleted) {
-                names = names + "<a href=\"#\">" + versionList[i].classif + " " + versionList[i].version + " не е активна</a><br />";
-            }
-            else {
-                names = names + "<a href=\"\/ClassClient\/ClassItemsList?classCode=" + versionList[i].classif + "&amp;versionCode=" + versionList[i].version + "\">" + versionList[i].classif + " " + versionList[i].version + "</a><br />";
+            if (!versionList[i].isDeleted) {
+                if (!versionList[i].isActive) {
+                    //names = names + "<a href=\"#\">" + versionList[i].classif + " " + versionList[i].version + " не е активна</a><br />";
+                    names = names + "<a class=\"displayno\" style=\"color: red;\" href=\"\/ClassClient\/ClassItemsList?classCode=" + versionList[i].classif + "&amp;versionCode=" + versionList[i].version + "\">" + versionList[i].classif + " " + versionList[i].version + "</a><br />";
+
+                }
+                else {
+                    names = names + "<a href=\"\/ClassClient\/ClassItemsList?classCode=" + versionList[i].classif + "&amp;versionCode=" + versionList[i].version + "\">" + versionList[i].classif + " " + versionList[i].version + "</a><br />";
+                }
             }
         }
         return names;
@@ -195,7 +219,9 @@
                     $("#dopinfoClass").text(data["remarks"]);
                     $("#infoClassNumber").html(getVersions(data["versions"]));
                     $("#adminActions").html("<a style=\"margin-top:8px; margin-right:8px; text-decoration:none;\"  class=\"button redaction\" href=\"\/Admin\/Class\/ClassDetails?classCode=" + data["id"] + "\">Редактиране</a><br />");
+                    InactiveVersionShowOrHide();
                 });
+                
                 @*$.ajax({
                     url: '\GetClassInfoByCode\?classCode=' + $(this).attr("Id"),
                     type: "GET",
@@ -220,7 +246,7 @@
                 });*@
 
             });
-        }
+    }
 </script>
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")

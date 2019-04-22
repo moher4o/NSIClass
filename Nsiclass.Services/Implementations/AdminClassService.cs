@@ -340,6 +340,7 @@ namespace Nsiclass.Services.Implementations
                         Version = items[i].Version,
                         ItemCode = items[i].ItemCode,
                         Description = items[i].Description,
+                        DescriptionShort = items[i].DescriptionShort,
                         DescriptionEng = items[i].DescriptionEng,
                         EnteredByUserId = items[i].EnteredByUserId,
                         EntryTime = items[i].EntryTime,

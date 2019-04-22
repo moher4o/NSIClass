@@ -19,6 +19,10 @@ namespace Nsiclass.Services.Models
         [MaxLength(1000)]
         public string Description { get; set; }
 
+        [Required]
+        [MaxLength(1000)]
+        public string DescriptionShort { get; set; }
+        
         [MaxLength(1000)]
         public string DescriptionEng { get; set; }
 

@@ -178,6 +178,8 @@ namespace Nsiclass.Data.Migrations
                     b.Property<string>("DescriptionEng")
                         .HasMaxLength(1000);
 
+                    b.Property<string>("DescriptionShort");
+
                     b.Property<string>("EnteredByUserId");
 
                     b.Property<DateTime>("EntryTime");

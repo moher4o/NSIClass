@@ -253,6 +253,7 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
                             currentItem.Version = versionCode;
                             currentItem.ItemCode = row.GetCell(0).ToString();
                             currentItem.Description = row.GetCell(1).ToString();
+                            currentItem.DescriptionShort = currentItem.Description;
                             currentItem.DescriptionEng = row.GetCell(2).ToString();
                             bool intParseSuccessfull = int.TryParse(row.GetCell(3).ToString(), out orderNo);
                             if (intParseSuccessfull)

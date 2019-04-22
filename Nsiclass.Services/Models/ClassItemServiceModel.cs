@@ -24,6 +24,9 @@ namespace Nsiclass.Services.Models
         [Display(Name = "Име:")]
         public string Description { get; set; }
 
+        [Display(Name = "Стандартно кратко име:")]
+        public string DescriptionShort { get; set; }
+
         [Display(Name = "Name:")]
         public string DescriptionEng { get; set; }
 
