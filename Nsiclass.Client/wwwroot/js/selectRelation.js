@@ -23,8 +23,10 @@
         }
 
         if (result) {
-            LoadProgressBar();
-            //$("#realsend").click();
+            //LoadProgressBar();
+            $('#warning').css("color", "green");
+            $('#warning').text("Зареждането на файла приключи. Моля, изчакайте обработката!");
+            $("#realsend").click();
             
         }
     }
