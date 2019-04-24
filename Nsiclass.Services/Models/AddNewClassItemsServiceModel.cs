@@ -26,6 +26,15 @@ namespace Nsiclass.Services.Models
         [MaxLength(1000)]
         public string DescriptionEng { get; set; }
 
+        [MaxLength(5000)]
+        public string Includes { get; set; }
+
+        [MaxLength(1000)]
+        public string IncludesMore { get; set; }
+
+        [MaxLength(1000)]
+        public string IncludesNo { get; set; }
+
         public int? OrderNo { get; set; }
 
         public string ParentItemCode { get; set; }
