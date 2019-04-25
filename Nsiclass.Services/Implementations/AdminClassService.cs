@@ -546,7 +546,7 @@ namespace Nsiclass.Services.Implementations
                 return await this.db.ClassItems
                                 .Where(c => c.Classif == classCode && c.Version == versionCode && c.IsDeleted == false)
                                 .Include(c => c.ChildItems)
-                                .OrderBy(c => c.ItemLevel)
+                                .OrderBy(c => c.ItemCode)
                                 .ToListAsync();
 
 
@@ -556,7 +556,7 @@ namespace Nsiclass.Services.Implementations
                 return await this.db.ClassItems
                                     .Where(c => c.Classif == classCode && c.Version == versionCode && (c.ItemCode.Contains(searchString) || c.Description.Contains(searchString) || c.DescriptionEng.Contains(searchString)) && c.IsDeleted == false)
                                     //.Include(c => c.ChildItems)
-                                    .OrderBy(c => c.ItemLevel)
+                                    .OrderBy(c => c.ItemCode)
                                     .ToListAsync();
 
             }

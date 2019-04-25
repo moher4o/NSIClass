@@ -188,10 +188,10 @@ namespace Nsiclass.Data.Migrations
                         .HasMaxLength(5000);
 
                     b.Property<string>("IncludesMore")
-                        .HasMaxLength(1000);
+                        .HasMaxLength(5000);
 
                     b.Property<string>("IncludesNo")
-                        .HasMaxLength(1000);
+                        .HasMaxLength(5000);
 
                     b.Property<bool>("IsDeleted");
 
@@ -205,7 +205,8 @@ namespace Nsiclass.Data.Migrations
 
                     b.Property<int?>("OrderNo");
 
-                    b.Property<string>("OtherCode");
+                    b.Property<string>("OtherCode")
+                        .HasMaxLength(1000);
 
                     b.Property<string>("ParentItemCode");
 

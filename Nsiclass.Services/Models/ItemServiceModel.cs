@@ -30,10 +30,10 @@ namespace Nsiclass.Services.Models
         [MaxLength(5000)]
         public string Includes { get; set; }
 
-        [MaxLength(1000)]
+        [MaxLength(5000)]
         public string IncludesMore { get; set; }
 
-        [MaxLength(1000)]
+        [MaxLength(5000)]
         public string IncludesNo { get; set; }
 
         public int? OrderNo { get; set; }

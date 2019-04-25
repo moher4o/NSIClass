@@ -382,7 +382,7 @@ div.items-info {
 .table-info > tbody > tr > td > a,
 .table-info > tbody > tr > td > p {
     margin-left: 10px;
-    min-width: 100px !important;
+    min-width: 120px !important;
 }
 
 .meaning {

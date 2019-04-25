@@ -363,24 +363,23 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
                                 currentItem.ParentItemCode = row.GetCell(1) != null ? row.GetCell(1).ToString() : null;
                             }
 
-                            bool intParseSuccessfull = int.TryParse(row.GetCell(5).ToString(), out level);
+                            bool intParseSuccessfull = int.TryParse(row.GetCell(2).ToString(), out level);
 
                             if (intParseSuccessfull)
                             {
                                 currentItem.ItemLevel = level;
+                                if (level == 4)
+                                {
+                                    currentItem.IsLeaf = true;
+                                }
+                                else
+                                {
+                                    currentItem.IsLeaf = false;
+                                }
                             }
                             else
                             {
                                 currentItem.ItemLevel = 9999;
-                            }
-                            string isLeaf = row.GetCell(6).ToString();
-                            if (isLeaf == "Y" || isLeaf == "1")
-                            {
-                                currentItem.IsLeaf = true;
-                            }
-                            else
-                            {
-                                currentItem.IsLeaf = false;
                             }
 
                             currentItem.EnteredByUserId = currentuser.Id;
@@ -445,7 +444,7 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
         }
 
         [HttpPost]
-       // [Authorize(Roles = "Администратор, Програмист")]
+        // [Authorize(Roles = "Администратор, Програмист")]
         [Authorize(Policy = "MustBeAdmin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DestroyClass(string classId)
@@ -464,8 +463,8 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
         }
 
         [HttpPost]
-       // [Authorize(Roles = "Администратор, Програмист")] - същото
-        [Authorize(Policy ="MustBeAdmin")]
+        // [Authorize(Roles = "Администратор, Програмист")] - същото
+        [Authorize(Policy = "MustBeAdmin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RestoreClass(string classId)
         {
@@ -488,5 +487,5 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
             return View(classList);
         }
 
-     }
+    }
 }

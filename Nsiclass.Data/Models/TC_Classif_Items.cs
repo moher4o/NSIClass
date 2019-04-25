@@ -15,6 +15,7 @@ namespace Nsiclass.Data.Models
 
         public string ItemCode { get; set; }
 
+        [MaxLength(1000)]
         public string OtherCode { get; set; }
 
         [Required]
@@ -29,10 +30,10 @@ namespace Nsiclass.Data.Models
         [MaxLength(5000)]
         public string Includes { get; set; }
 
-        [MaxLength(1000)]
+        [MaxLength(5000)]
         public string IncludesMore { get; set; }
 
-        [MaxLength(1000)]
+        [MaxLength(5000)]
         public string IncludesNo { get; set; }
 
         public int? OrderNo { get; set; }
