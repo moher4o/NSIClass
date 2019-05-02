@@ -1,4 +1,6 @@
-﻿using AutoMapper.QueryableExtensions;
+﻿//using AutoMapper.Configuration;
+using Microsoft.Extensions.Configuration;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Nsiclass.Data;
 using Nsiclass.Data.Models;
@@ -8,16 +10,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
 
 namespace Nsiclass.Services.Implementations
 {
    public class AdminVersionService : IAdminVersionService
     {
         private readonly ClassDbContext db;
-        public AdminVersionService(ClassDbContext db)
+        public AdminVersionService(ClassDbContext db, IConfiguration configuration)
         {
             this.db = db;
+            this.Configuration = configuration;
         }
+
+        public IConfiguration Configuration { get; }
 
         public async Task<IEnumerable<string>> GetVersionNamesByClassAsync(string classCode)
         {
@@ -234,43 +240,61 @@ namespace Nsiclass.Services.Implementations
                 Parent = sourceVersion.Parent
             };
 
+            var connectionString = Configuration.GetSection("ConnectionStrings:DefaultConnection").Value;
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand com = new SqlCommand("ALTER TABLE ClassItems NOCHECK CONSTRAINT FK_ClassItems_ClassItems_Classif_Version_ParentItemCode");
+            SqlCommand comend = new SqlCommand("ALTER TABLE ClassItems CHECK CONSTRAINT FK_ClassItems_ClassItems_Classif_Version_ParentItemCode");
+            com.Connection = con;
+            comend.Connection = con;
+
+            con.Open();
+            com.ExecuteNonQuery();
+
+
             await this.db.Database.BeginTransactionAsync();
             try
             {
                 await this.db.ClassVersions.AddAsync(brandNewVersion);
                 await this.db.SaveChangesAsync();
 
-                this.db.ClassItems.Where(i => i.Classif == classCode && i.Version == versionCode).ToList().ForEach(r => {
+                var items = await this.db.ClassItems.Where(i => i.Classif == classCode && i.Version == versionCode).ToListAsync();
+
+                foreach (var item in items)
+                {
                     var newItem = new TC_Classif_Items()
                     {
-                        Classif = r.Classif,
+                        Classif = item.Classif,
                         Version = brandNewVersion.Version,
-                        Description = r.Description,
-                        DescriptionShort = r.DescriptionShort,
-                        DescriptionEng = r.DescriptionEng,
-                        Includes = r.Includes,
-                        IncludesMore = r.IncludesMore,
-                        IncludesNo = r.IncludesNo,
-                        IsLeaf = r.IsLeaf,
-                        ItemCode = r.ItemCode,
-                        ItemLevel = r.ItemLevel,
+                        Description = item.Description,
+                        DescriptionShort = item.DescriptionShort,
+                        DescriptionEng = item.DescriptionEng,
+                        Includes = item.Includes,
+                        IncludesMore = item.IncludesMore,
+                        IncludesNo = item.IncludesNo,
+                        IsLeaf = item.IsLeaf,
+                        ItemCode = item.ItemCode,
+                        ItemLevel = item.ItemLevel,
                         EntryTime = DateTime.Now,
-                        IsDeleted = r.IsDeleted,
-                        OrderNo = r.OrderNo,
-                        OtherCode = r.OtherCode,
-                        ParentItemCode = r.ParentItemCode,
+                        IsDeleted = item.IsDeleted,
+                        OrderNo = item.OrderNo,
+                        OtherCode = item.OtherCode,
+                        ParentItemCode = item.ParentItemCode,
                         EnteredByUserId = userId,
                     };
-                    this.db.ClassItems.AddAsync(newItem);
-                });
+                   await this.db.ClassItems.AddAsync(newItem);
+                }
                 await this.db.SaveChangesAsync();
-             }
+            }
             catch (Exception)
             {
                 this.db.Database.RollbackTransaction();
+                comend.ExecuteNonQuery();
+                con.Close();
                 return $"Грешка!!! Възникна проблем при създаването на новата версия.";
             }
             this.db.Database.CommitTransaction();
+            comend.ExecuteNonQuery();
+            con.Close();
             return $"Версия с код: {classCode} {newVersion} беше създадена успешно";
 
         }

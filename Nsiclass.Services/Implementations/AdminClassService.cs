@@ -24,7 +24,7 @@ namespace Nsiclass.Services.Implementations
             this.Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         public async Task<string> GetClassNameByIdAsync(string classCode)
         {

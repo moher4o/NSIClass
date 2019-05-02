@@ -65,7 +65,7 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
                 {
                     return View(model);
                 }
-
+                
                 var result = await this.versions.EditVersionAsync(model.Classif, model.Version, model.Parent, model.Publications, model.Remarks, model.ByLow, model.Valid_From, model.Valid_To, model.UseAreas);
                 if (result.Contains("успешна"))
                 {
@@ -234,7 +234,7 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
                 if (result.Contains("успешно"))
                 {
                     TempData[SuccessMessageKey] = result;
-                    return RedirectToAction("VersionDetails", "Version", new { classCode, newVersion });
+                    return RedirectToAction("VersionDetails", "Version", new { classCode, versionCode = newVersion });
                 }
                 else
                 {
