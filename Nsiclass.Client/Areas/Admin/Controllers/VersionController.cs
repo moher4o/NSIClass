@@ -216,6 +216,41 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Програмист, Администратор")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateCopyVersion(string classCode, string versionCode, string newVersion)
+        {
+            try
+            {
+                if (!await this.versions.IsClassVersionExistAsync(classCode, versionCode))
+                {
+                    TempData[ErrorMessageKey] = "Грешка!!! Грешен код на класификация или версия.";
+                    return RedirectToAction("AdminTasks", "Users");
+                }
+
+                var currentuser = await this.userManager.GetUserAsync(User);
+
+                string result = await this.versions.CreateCopyVersionAsync(classCode, versionCode, newVersion, currentuser.Id);
+                if (result.Contains("успешно"))
+                {
+                    TempData[SuccessMessageKey] = result;
+                    return RedirectToAction("VersionDetails", "Version", new { classCode, newVersion });
+                }
+                else
+                {
+                    TempData[ErrorMessageKey] = result;
+                    return RedirectToAction("VersionDetails", "Version", new { classCode, versionCode });
+                }
+                
+            }
+            catch (Exception)
+            {
+                TempData[ErrorMessageKey] = "Грешка!!! Възникна неочаквана грешка.";
+                return RedirectToAction("AdminTasks", "Users");
+            }
+        }
+
+        [HttpPost]
         public async Task<IActionResult> UploadFiles(IFormFile file1, string classCode, string versionCode)
         {
 

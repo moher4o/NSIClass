@@ -13,7 +13,7 @@ namespace Nsiclass.Services
 
         Task<bool> ItemExistAsync(string classCode, string versionCode, string itemCode);
 
-        Task<string> EditItemDetailsAsync(string classCode, string versionCode, string itemCode, string newItemCode, string description, string descriptionEng, string include, string includeMore, string includeNo, string userId, DateTime editTime);
+        Task<string> EditItemDetailsAsync(string classCode, string versionCode, string itemCode, string newItemCode, string description, string descriptionShort, string descriptionEng, string include, string includeMore, string includeNo, string userId, DateTime editTime);
 
         Task<string> DeleteItemAsync(string classCode, string versionCode, string itemCode, string userId);
 

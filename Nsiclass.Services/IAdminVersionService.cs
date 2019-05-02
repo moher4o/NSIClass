@@ -25,5 +25,7 @@ namespace Nsiclass.Services
         Task<string> ActivateClassVersionAsync(string classCode, string versionCode);
 
         Task<string> DeactivateClassVersionAsync(string classCode, string versionCode);
+
+        Task<string> CreateCopyVersionAsync(string classCode, string versionCode, string newVersion, string userId);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Nsiclass.Data;
+using Nsiclass.Data.Models;
 using Nsiclass.Services.Models;
 using System;
 using System.Collections.Generic;
@@ -205,6 +206,72 @@ namespace Nsiclass.Services.Implementations
 
             return "Деактивирането е успешно";
 
+
+        }
+
+        public async Task<string> CreateCopyVersionAsync(string classCode, string versionCode, string newVersion, string userId)
+        {
+            if (await this.IsClassVersionExistAsync(classCode, versionCode) == false)
+            {
+                return $"Грешка!!! Няма версия източник с код: {classCode} {versionCode}";
+            }
+            if (await this.IsClassVersionExistAsync(classCode, newVersion) == true)
+            {
+                return $"Грешка!!! Вече има версия с код: {classCode} {newVersion}";
+            }
+
+            var sourceVersion = await this.db.ClassVersions.Where(v => v.Classif == classCode && v.Version == versionCode).FirstOrDefaultAsync();
+
+
+            var brandNewVersion = new TC_Classif_Vers()
+            {
+                Classif = sourceVersion.Classif,
+                Version = newVersion,
+                Remarks = sourceVersion.Remarks,
+                ByLow = sourceVersion.ByLow,
+                Publications = sourceVersion.Publications,
+                UseAreas = sourceVersion.UseAreas,
+                Parent = sourceVersion.Parent
+            };
+
+            await this.db.Database.BeginTransactionAsync();
+            try
+            {
+                await this.db.ClassVersions.AddAsync(brandNewVersion);
+                await this.db.SaveChangesAsync();
+
+                this.db.ClassItems.Where(i => i.Classif == classCode && i.Version == versionCode).ToList().ForEach(r => {
+                    var newItem = new TC_Classif_Items()
+                    {
+                        Classif = r.Classif,
+                        Version = brandNewVersion.Version,
+                        Description = r.Description,
+                        DescriptionShort = r.DescriptionShort,
+                        DescriptionEng = r.DescriptionEng,
+                        Includes = r.Includes,
+                        IncludesMore = r.IncludesMore,
+                        IncludesNo = r.IncludesNo,
+                        IsLeaf = r.IsLeaf,
+                        ItemCode = r.ItemCode,
+                        ItemLevel = r.ItemLevel,
+                        EntryTime = DateTime.Now,
+                        IsDeleted = r.IsDeleted,
+                        OrderNo = r.OrderNo,
+                        OtherCode = r.OtherCode,
+                        ParentItemCode = r.ParentItemCode,
+                        EnteredByUserId = userId,
+                    };
+                    this.db.ClassItems.AddAsync(newItem);
+                });
+                await this.db.SaveChangesAsync();
+             }
+            catch (Exception)
+            {
+                this.db.Database.RollbackTransaction();
+                return $"Грешка!!! Възникна проблем при създаването на новата версия.";
+            }
+            this.db.Database.CommitTransaction();
+            return $"Версия с код: {classCode} {newVersion} беше създадена успешно";
 
         }
     }

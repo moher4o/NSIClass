@@ -64,7 +64,7 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
                 }
                 var currentUser = await this.userManager.GetUserAsync(User);
 
-                var result = await this.items.EditItemDetailsAsync(model.Classif, model.Version, model.ItemCode, model.OtherCode, model.Description, model.DescriptionEng, model.Includes, model.IncludesMore, model.IncludesNo,currentUser.Id, DateTime.UtcNow);
+                var result = await this.items.EditItemDetailsAsync(model.Classif, model.Version, model.ItemCode, model.OtherCode, model.Description, model.DescriptionShort, model.DescriptionEng, model.Includes, model.IncludesMore, model.IncludesNo,currentUser.Id, DateTime.UtcNow);
                 if (result.Contains("успешна"))
                 {
                     TempData[SuccessMessageKey] = result;

@@ -150,6 +150,17 @@
                         <tr>
                             <td class="meaning">
                                 <p>
+                                    <strong>Кратко наименование :</strong>
+                                </p>
+                            </td>
+                            <td>
+                                <p id="infoItemNameShortBG">
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="meaning">
+                                <p>
                                     <strong>Name :</strong>
                                 </p>
                             </td>
@@ -300,6 +311,7 @@
                 $("#noinfo").hide();
                 $("#infoItemCode").text(data["itemCode"]);
                 $("#infoItemNameBG").text(data["description"]);
+                $("#infoItemNameShortBG").text(data["descriptionShort"]);
                 $("#infoItemNameEn").text(data["descriptionEng"]);
                 $("#dopinfoinclMore").text(data["includesMore"]);
                 $("#dopinfoincl").text(data["includes"]);

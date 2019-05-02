@@ -47,7 +47,7 @@ namespace Nsiclass.Services.Implementations
             return result;
         }
 
-        public async Task<string> EditItemDetailsAsync(string classCode, string versionCode, string itemCode, string newItemCode, string description, string descriptionEng, string include, string includeMore, string includeNo, string userId, DateTime editTime)
+        public async Task<string> EditItemDetailsAsync(string classCode, string versionCode, string itemCode, string newItemCode, string description, string descriptionShort, string descriptionEng, string include, string includeMore, string includeNo, string userId, DateTime editTime)
         {
             var item = await this.db.ClassItems.Where(i => i.Classif == classCode && i.Version == versionCode && i.ItemCode == itemCode).FirstOrDefaultAsync();
             if (newItemCode.Trim() != itemCode)
@@ -56,6 +56,7 @@ namespace Nsiclass.Services.Implementations
                 {
                     item.ItemCode = newItemCode.Trim();
                     item.Description = description;
+                    item.DescriptionShort = descriptionShort;
                     item.DescriptionEng = descriptionEng;
                     item.Includes = include;
                     item.IncludesMore = includeMore;
@@ -75,6 +76,7 @@ namespace Nsiclass.Services.Implementations
                 try
                 {
                     item.Description = description;
+                    item.DescriptionShort = descriptionShort;
                     item.DescriptionEng = descriptionEng;
                     item.Includes = include;
                     item.IncludesMore = includeMore;
