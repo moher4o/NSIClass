@@ -80,7 +80,11 @@ namespace Nsiclass.Client
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseBrowserLink();
+                app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
+
+//                app.UseExceptionHandler("/Home/Error");
             }
 
             app.UseStaticFiles();
