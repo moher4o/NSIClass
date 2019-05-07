@@ -53,6 +53,10 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ClassFiles\НКИД2008\" />
+  </ItemGroup>
+
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES2015</TypeScriptTarget>
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
