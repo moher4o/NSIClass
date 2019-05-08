@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -150,24 +151,36 @@ namespace Nsiclass.Client.Controllers
                 return View(model);
             }
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
+            Regex regex = new Regex(@"^(?=.*[\p{Ll}])(?=.*[\p{Lu}])(?=.*\d)(?=.*[$@$!%*?&])[\p{Ll}\p{Lu}\d$@$!%*?&]{8,}");
+            Match match = regex.Match(model.NewPassword);
+            if (match.Success)
             {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
 
-            var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-            if (!changePasswordResult.Succeeded)
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                }
+
+                var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                if (!changePasswordResult.Succeeded)
+                {
+                    AddErrors(changePasswordResult);
+                    return View(model);
+                }
+
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                _logger.LogInformation("User changed their password successfully.");
+                StatusMessage = "Паролата беше сменена успешно.";
+
+                return RedirectToAction(nameof(ChangePassword));
+            }
+            else
             {
-                AddErrors(changePasswordResult);
-                return View(model);
+                StatusMessage = "Паролата не е сменена. Новата паролата не отговаря на ISO 27000. Поне 8 символа, главна буква, малка буква, цифра, специален символ.";
+                return RedirectToAction(nameof(ChangePassword));
+
             }
-
-            await _signInManager.SignInAsync(user, isPersistent: false);
-            _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "Your password has been changed.";
-
-            return RedirectToAction(nameof(ChangePassword));
         }
 
         [HttpGet]

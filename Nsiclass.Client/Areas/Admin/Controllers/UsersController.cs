@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
@@ -630,31 +631,38 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
                     return RedirectToAction(nameof(AllUsers));
                 }
 
-                var userToEdit = await this.userManager.FindByIdAsync(model.Id);
-
-                string code = await this.userManager.GeneratePasswordResetTokenAsync(userToEdit);
-
-                IdentityResult result = await this.userManager.ResetPasswordAsync(userToEdit, code, model.Password);
-
-
-
-                if (result.Succeeded)
+                Regex regex = new Regex(@"^(?=.*[\p{Ll}])(?=.*[\p{Lu}])(?=.*\d)(?=.*[$@$!%*?&])[\p{Ll}\p{Lu}\d$@$!%*?&]{8,}");
+                Match match = regex.Match(model.Password);
+                if (match.Success)
                 {
-                    TempData[SuccessMessageKey] = $"Успешно сменена парола на потребител: {model.Username} ";
-                    await this.userManager.ResetAuthenticatorKeyAsync(userToEdit);
+                    var userToEdit = await this.userManager.FindByIdAsync(model.Id);
 
-                    var currentUser = await this.userManager.FindByNameAsync(User.Identity.Name);
+                    string code = await this.userManager.GeneratePasswordResetTokenAsync(userToEdit);
 
-                    if (currentUser.UserName == userToEdit.UserName)
+                    IdentityResult result = await this.userManager.ResetPasswordAsync(userToEdit, code, model.Password);
+                    if (result.Succeeded)
                     {
-                        await signInManager.SignOutAsync();
-                        TempData.Remove("SuccessMessageKey");
+                        TempData[SuccessMessageKey] = $"Успешно сменена парола на потребител: {model.Username} ";
+                        await this.userManager.ResetAuthenticatorKeyAsync(userToEdit);
+
+                        var currentUser = await this.userManager.FindByNameAsync(User.Identity.Name);
+
+                        if (currentUser.UserName == userToEdit.UserName)
+                        {
+                            await signInManager.SignOutAsync();
+                            TempData.Remove("SuccessMessageKey");
+                        }
+
+                    }
+                    else
+                    {
+                        TempData[ErrorMessageKey] = $"Паролата не е сменена. Програмна грешка";
                     }
 
                 }
                 else
                 {
-                    TempData[ErrorMessageKey] = $"Паролата не е сменена";
+                    TempData[ErrorMessageKey] = $"Паролата не отговаря на ISO 27000";
                 }
 
                 return RedirectToAction(nameof(AllUsers));
@@ -742,40 +750,54 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
                     TempData[ErrorMessageKey] = "Нямате права за промяна на данните на потребителя";
                     return RedirectToAction(nameof(AllUsers));
                 }
-                var adminUser = await this.userManager.GetUserAsync(User);
-                var roles = new List<string>();
-                if (role0)
-                {
-                    roles.Add(input0);
-                }
-                if (role1)
-                {
-                    roles.Add(input1);
-                }
-                if (role2)
-                {
-                    roles.Add(input2);
-                }
-                if (role3)
-                {
-                    roles.Add(input3);
-                }
-                if (role4)
-                {
-                    roles.Add(input4);
-                }
 
-                var parentUser = await this.userManager.GetUserAsync(User);
-                var result = await this.users.CreateNewUser(model.Username, model.Name, model.Phone, model.PhoneNumber, model.Email, model.Password, departmentName, roles, parentUser.Id);
-
-                if (result == "success")
+                Regex regex = new Regex(@"^(?=.*[\p{Ll}])(?=.*[\p{Lu}])(?=.*\d)(?=.*[$@$!%*?&])[\p{Ll}\p{Lu}\d$@$!%*?&]{8,}");
+                Match match = regex.Match(model.Password);
+                if (match.Success)
                 {
-                    TempData[SuccessMessageKey] = "Промените са записани успешно";
-                    return RedirectToAction(nameof(AllUsers), new { sortOrder = "Date" });
+
+
+                    var adminUser = await this.userManager.GetUserAsync(User);
+                    var roles = new List<string>();
+                    if (role0)
+                    {
+                        roles.Add(input0);
+                    }
+                    if (role1)
+                    {
+                        roles.Add(input1);
+                    }
+                    if (role2)
+                    {
+                        roles.Add(input2);
+                    }
+                    if (role3)
+                    {
+                        roles.Add(input3);
+                    }
+                    if (role4)
+                    {
+                        roles.Add(input4);
+                    }
+
+                    var parentUser = await this.userManager.GetUserAsync(User);
+                    var result = await this.users.CreateNewUser(model.Username, model.Name, model.Phone, model.PhoneNumber, model.Email, model.Password, departmentName, roles, parentUser.Id);
+
+                    if (result == "success")
+                    {
+                        TempData[SuccessMessageKey] = "Промените са записани успешно";
+                        return RedirectToAction(nameof(AllUsers), new { sortOrder = "Date" });
+                    }
+                    else
+                    {
+                        TempData[ErrorMessageKey] = result;
+                        model = CreateUserModelPrepare(model);
+                        return View(model);
+                    }
                 }
                 else
                 {
-                    TempData[ErrorMessageKey] = result;
+                    TempData[ErrorMessageKey] = $"Паролата не отговаря на ISO 27000";
                     model = CreateUserModelPrepare(model);
                     return View(model);
                 }

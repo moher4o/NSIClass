@@ -26,7 +26,7 @@ namespace Nsiclass.Common
         public const string DeveloperPassword = "A!23soft"; //for first use
 
         public const string FirmName = "НСИ";
-        public const bool IsoActive = false;
+        public const bool IsoActive = true;
         public const string ClassFilesSubDirectory = "ClassFiles";
 
         private static readonly Dictionary<string, string> MIMETypesDictionary = new Dictionary<string, string>

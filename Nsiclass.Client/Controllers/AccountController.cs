@@ -15,6 +15,7 @@ using Nsiclass.Data.Models;
 using Nsiclass.Client.Models.AccountViewModels;
 using Nsiclass.Client.Services;
 using static Nsiclass.Common.DataConstants;
+using System.Text.RegularExpressions;
 
 namespace Nsiclass.Client.Controllers
 {
@@ -67,10 +68,15 @@ namespace Nsiclass.Client.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    if (model.Password.Length < 8)
+                    if (IsoActive)
                     {
-                        TempData[ErrorMessageKey] = $"Паролата е твърде кратка. Моля сменете я с такава отговаряща на ISO 27000";
-                        if (IsoActive)
+                        Regex regex = new Regex(@"^(?=.*[\p{Ll}])(?=.*[\p{Lu}])(?=.*\d)(?=.*[$@$!%*?&])[\p{Ll}\p{Lu}\d$@$!%*?&]{8,}");
+                        Match match = regex.Match(model.Password);
+                        if (match.Success)
+                        {
+                            Console.WriteLine("MATCH VALUE: " + match.Value);
+                        }
+                        else
                         {
                             TempData[ErrorMessageKey] = $"Паролата не отговаря на ISO 27000";
                             await _signInManager.SignOutAsync();
