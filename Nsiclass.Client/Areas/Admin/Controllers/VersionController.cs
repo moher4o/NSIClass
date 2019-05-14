@@ -215,6 +215,8 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
             }
         }
 
+
+
         [HttpPost]
         [Authorize(Roles = "Програмист, Администратор")]
         [ValidateAntiForgeryToken]

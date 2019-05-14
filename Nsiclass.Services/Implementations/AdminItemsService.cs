@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Nsiclass.Data;
+using Nsiclass.Data.Models;
 using Nsiclass.Services.Models;
 
 namespace Nsiclass.Services.Implementations
@@ -47,13 +48,21 @@ namespace Nsiclass.Services.Implementations
             return result;
         }
 
-        public async Task<string> EditItemDetailsAsync(string classCode, string versionCode, string itemCode, string newItemCode, string description, string descriptionShort, string descriptionEng, string include, string includeMore, string includeNo, string userId, DateTime editTime)
+        public async Task<string> EditItemDetailsAsync(string classCode, string versionCode, string itemCode, string newItemCode, string description, string descriptionShort, string descriptionEng, string include, string includeMore, string includeNo, string userId, DateTime editTime, bool isLeaf)
         {
-            var item = await this.db.ClassItems.Where(i => i.Classif == classCode && i.Version == versionCode && i.ItemCode == itemCode).FirstOrDefaultAsync();
+            var item = await this.db.ClassItems.Where(i => i.Classif == classCode && i.Version == versionCode && i.ItemCode == itemCode).Include(i=>i.ChildItems).FirstOrDefaultAsync();
             if (newItemCode.Trim() != itemCode)
             {
                 try
                 {
+                    if (item.IsLeaf != isLeaf)
+                    {
+                        if (isLeaf && item.ChildItems.Count != 0)
+                        {
+                            return "Грешка! Елемента е родителски за други елементи и не може да бъде маркиран като листо.";
+                        }
+                    }
+
                     item.ItemCode = newItemCode.Trim();
                     item.Description = description;
                     item.DescriptionShort = descriptionShort;
@@ -63,6 +72,7 @@ namespace Nsiclass.Services.Implementations
                     item.IncludesNo = includeNo;
                     item.ModifiedByUserId = userId;
                     item.ModifyTime = editTime;
+                    item.IsLeaf = isLeaf;
                     await this.db.SaveChangesAsync();
                     return "Редакцията на елемента беше успешна.";
                 }
@@ -75,6 +85,14 @@ namespace Nsiclass.Services.Implementations
             {
                 try
                 {
+                    if (item.IsLeaf != isLeaf)
+                    {
+                        if (isLeaf && item.ChildItems.Count != 0)
+                        {
+                            return "Грешка! Елемента е родителски за други елементи и не може да бъде маркиран като листо.";
+                        }
+                    }
+
                     item.Description = description;
                     item.DescriptionShort = descriptionShort;
                     item.DescriptionEng = descriptionEng;
@@ -83,6 +101,7 @@ namespace Nsiclass.Services.Implementations
                     item.IncludesNo = includeNo;
                     item.ModifiedByUserId = userId;
                     item.ModifyTime = editTime;
+                    item.IsLeaf = isLeaf;
                     await this.db.SaveChangesAsync();
                     return "Редакцията на елемента беше успешна.";
                 }
@@ -208,6 +227,67 @@ namespace Nsiclass.Services.Implementations
             }
             await this.db.SaveChangesAsync();
             return result;
+        }
+
+        public async Task<string> AddNewItemAsync(string classCode, string versionCode, string newItemId, string description, string parentItemCode, bool isLeaf, string userId)
+        {
+            var checkMetaData = await this.versions.IsClassVersionExistAsync(classCode, versionCode);
+            if (!checkMetaData)
+            {
+                return $"Грешка! Няма такава версия {classCode} {versionCode}";
+            }
+
+            checkMetaData = await this.ItemExistAsync(classCode, versionCode, newItemId);
+            if (checkMetaData)
+            {
+                return $"Грешка! Вече има елемент с този код: {newItemId}";
+            }
+            int maxLevel = this.db.ClassItems.Where(i => i.Classif == classCode && i.Version == versionCode).Select(i => i.ItemLevel).DefaultIfEmpty(0).Max();
+
+            var newItem = new TC_Classif_Items();
+            try
+            {
+                newItem.Classif = classCode;
+                newItem.Version = versionCode;
+                newItem.ItemCode = newItemId;
+                newItem.Description = description;
+                newItem.DescriptionShort = description;
+                newItem.EnteredByUserId = userId;
+                if (!string.IsNullOrEmpty(parentItemCode))
+                {
+                    var parentItem = await this.db.ClassItems.Where(i => i.Classif == classCode && i.Version == versionCode && i.ItemCode == parentItemCode).FirstOrDefaultAsync();
+                    if (parentItem != null)
+                    {
+                        newItem.ParentItemCode = parentItemCode;
+                        newItem.ItemLevel = parentItem.ItemLevel + 1;
+                    }
+                    else
+                    {
+                        return $"Няма родителски елемент с код {parentItemCode}";
+                    }
+                    
+                }
+                else
+                {
+                    newItem.ItemLevel = 1;
+                }
+                newItem.EntryTime = DateTime.Now;
+
+                if (isLeaf && newItem.ItemLevel < maxLevel && maxLevel >= 1)
+                {
+                    return $"Има листа с по-висок ранг! Листата трябва да са с еднакъв ранг.";
+                }
+                newItem.IsLeaf = isLeaf;
+                await this.db.ClassItems.AddAsync(newItem);
+                await this.db.SaveChangesAsync();
+                return "Създаването на елемент беше успешно.";
+            }
+            catch (Exception)
+            {
+                return "Грешка! Наличие на дълго поле.";
+            }
+
+
         }
     }
 }

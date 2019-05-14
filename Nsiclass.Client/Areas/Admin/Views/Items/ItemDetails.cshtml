@@ -148,14 +148,15 @@
                     </td>
                     <td>
                         <p>
-                            @if (Model.IsLeaf)
+                            <input asp-for="IsLeaf" />
+                            @*@if (Model.IsLeaf)
                             {
                                 <strong>Да</strong>
                             }
                             else
                             {
                                 <strong>Не</strong>
-                            }
+                            }*@
                         </p>
                     </td>
                 </tr>

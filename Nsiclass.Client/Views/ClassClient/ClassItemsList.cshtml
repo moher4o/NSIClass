@@ -52,7 +52,7 @@
                 }
 
             </ul>
-    }</text>;
+}</text>;
 
 
             ShowTreeChilds = @<text>@{
@@ -84,7 +84,7 @@
                 }
 
             </ul>
-    }</text>;
+}</text>;
 
         }
         @if (Model.isSearchResult)
@@ -107,15 +107,15 @@
             </div>
         }
 
-            <form method="get" asp-controller="ClassClient" asp-action="ClassItemsList">
-                <input name="classCode" value="@Model.ClassCode" hidden />
-                <input name="versionCode" value="@Model.VersionCode" hidden />
-                <input name="searchString" style="width:30%;" />
-                <button type="submit" class="button search" style="margin-bottom:10px;">Търси</button>
-                <a class="button back-small" style="text-decoration: none;" asp-area="" asp-action="ClassList" asp-controller="ClassClient">Назад</a>
-                <a href="/ClassClient/ExportVersion?classCode=@(Model.ClassCode)&versionCode=@(Model.VersionCode)" style="text-decoration: none;" class="button btnrestore-small">Експорт</a>
+        <form method="get" asp-controller="ClassClient" asp-action="ClassItemsList">
+            <input name="classCode" value="@Model.ClassCode" hidden />
+            <input name="versionCode" value="@Model.VersionCode" hidden />
+            <input name="searchString" style="width:30%;" />
+            <button type="submit" class="button search" style="margin-bottom:10px;">Търси</button>
+            <a class="button back-small" style="text-decoration: none;" asp-area="" asp-action="ClassList" asp-controller="ClassClient">Назад</a>
+            <a href="/ClassClient/ExportVersion?classCode=@(Model.ClassCode)&versionCode=@(Model.VersionCode)" style="text-decoration: none;" class="button btnrestore-small">Експорт</a>
 
-            </form>
+        </form>
 
     </div>
     <div class="col-md-6">
@@ -262,6 +262,10 @@
                                     <p style="margin-top:12px;"><strong>Действия: </strong></p>
                                 </td>
                                 <td id="adminActions"></td>
+                                <td class="meaning-version">
+                                        <a class="button redaction" style="text-decoration: none;" data-toggle="modal" data-target="#addNewElement" id="addChildBtn">Добавяне на нов елемент</a>
+                                </td>
+
                             </tr>
                         }
                     </tbody>
@@ -309,7 +313,14 @@
             success: function (data) {
                 $('#tblinfo').show();
                 $("#noinfo").hide();
+                if (data["isLeaf"]) {
+                    $('#addChildBtn').hide();
+                }
+                else {
+                    $('#addChildBtn').show();
+                }
                 $("#infoItemCode").text(data["itemCode"]);
+                $("#parentItemCode").val(data["itemCode"]);
                 $("#infoItemNameBG").text(data["description"]);
                 $("#infoItemNameShortBG").text(data["descriptionShort"]);
                 $("#infoItemNameEn").text(data["descriptionEng"]);
@@ -349,6 +360,40 @@
     }
 
 </script>
+
+<form method="post" asp-area="Admin" asp-controller="Items" asp-action="AddNewElement" asp-route-classCode="@Model.ClassCode" asp-route-versionCode="@Model.VersionCode">
+    <input name="parentItemCode" id="parentItemCode" value="" hidden />
+    <div class="modal fade" id="addNewElement" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div style="background-color:papayawhip;" class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Въведете уникален код за новия елемент:</h5>
+                            <input type="text" name="newItemId" />
+                        </div>
+                        <div class="col-md-4" style="padding-top:8px;">
+                            <input type="checkbox" name="isItLeaf" value="check"/>
+                            <label>Листо ли е?</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5>Описание:</h5>
+                            <input style="width:80%;" type="text" name="description" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отказ</button>
+                    <button type="submit" class="btn btn-danger">Добави елемент</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }

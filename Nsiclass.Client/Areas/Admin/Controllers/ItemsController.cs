@@ -16,14 +16,58 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
     {
 
         private readonly IAdminItemsService items;
-        
+        private readonly IAdminVersionService versions;
+
         private readonly UserManager<User> userManager;
 
-        public ItemsController(UserManager<User> userManager, IAdminItemsService items)
+        public ItemsController(UserManager<User> userManager, IAdminItemsService items, IAdminVersionService versions)
         {
             this.items = items;
             this.userManager = userManager;
+            this.versions = versions;
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Програмист, Администратор")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddNewElement(string classCode, string versionCode, string newItemId, string parentItemCode, string isItLeaf, string description)
+        {
+            try
+            {
+                if (!await this.versions.IsClassVersionExistAsync(classCode, versionCode))
+                {
+                    TempData[ErrorMessageKey] = "Грешка!!! Грешен код на класификация или версия.";
+                    return RedirectToAction("AdminTasks", "Users");
+                }
+
+                var currentuser = await this.userManager.GetUserAsync(User);
+                bool isLeaf = false;
+
+                if (isItLeaf == "check")
+                {
+                    isLeaf = true;
+                }
+
+                string result = await this.items.AddNewItemAsync(classCode, versionCode, newItemId, description, parentItemCode, isLeaf, currentuser.Id);
+                if (result.Contains("успешно"))
+                {
+                    TempData[SuccessMessageKey] = result;
+                    return RedirectToAction("ClassItemsList", "ClassClient", new { classCode, versionCode, area="" });
+                }
+                else
+                {
+                    TempData[ErrorMessageKey] = result;
+                    return RedirectToAction("ClassItemsList", "ClassClient", new { classCode, versionCode, area="" });
+                }
+
+            }
+            catch (Exception)
+            {
+                TempData[ErrorMessageKey] = "Грешка!!! Възникна неочаквана грешка.";
+                return RedirectToAction("ClassList", "ClassClient", new { area = "" });
+            }
+        }
+
 
         public async Task<IActionResult> ItemDetails(string classCode, string versionCode, string itemCode)
         {
@@ -45,6 +89,8 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
             }
         }
 
+
+
         [HttpPost]
         [Authorize(Roles = "Администратор, Програмист")]
         [ValidateAntiForgeryToken]
@@ -64,7 +110,7 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
                 }
                 var currentUser = await this.userManager.GetUserAsync(User);
 
-                var result = await this.items.EditItemDetailsAsync(model.Classif, model.Version, model.ItemCode, model.OtherCode, model.Description, model.DescriptionShort, model.DescriptionEng, model.Includes, model.IncludesMore, model.IncludesNo,currentUser.Id, DateTime.UtcNow);
+                var result = await this.items.EditItemDetailsAsync(model.Classif, model.Version, model.ItemCode, model.OtherCode, model.Description, model.DescriptionShort, model.DescriptionEng, model.Includes, model.IncludesMore, model.IncludesNo,currentUser.Id, DateTime.UtcNow, model.IsLeaf);
                 if (result.Contains("успешна"))
                 {
                     TempData[SuccessMessageKey] = result;
