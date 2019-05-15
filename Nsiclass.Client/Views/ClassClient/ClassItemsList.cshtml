@@ -55,35 +55,35 @@
 }</text>;
 
 
-            ShowTreeChilds = @<text>@{
-            var Items = item;
-            <ul class="nested" style="padding:10px;">
-                @foreach (var foo in Items)
-                {
-                    <li style="padding:10px;">
-                        @if (foo.IsLeaf)
-                        {
-                            if (foo.IsDeleted)
+                ShowTreeChilds = @<text>@{
+                var Items = item;
+                <ul class="nested" style="padding:10px;">
+                    @foreach (var foo in Items)
+                    {
+                        <li style="padding:10px;">
+                            @if (foo.IsLeaf)
                             {
-                                <span style="color:red;" class="classLeaf" classCode="@foo.Classif" versionCode="@foo.Version" id="@foo.ItemCode">| <strong style="color:red;">@foo.ItemCode</strong> | @foo.Description</span>
-                            }
-                            else
-                            {
-                                <span class="classLeaf" classCode="@foo.Classif" versionCode="@foo.Version" id="@foo.ItemCode">| <strong style="color:red;">@foo.ItemCode</strong> | @foo.Description</span>
-                            }
-                            @*<span class="classLeaf" classCode="@foo.Classif" versionCode="@foo.Version" id="@foo.ItemCode">| <strong style="color:red;">@foo.ItemCode</strong> | @foo.Description</span>*@
-                            }
-                            else
-                            {
-                                <span class="caret" style="padding:5px;" classCode="@foo.Classif" versionCode="@foo.Version" id="@foo.ItemCode">| <strong style="color:red;">@foo.ItemCode</strong> | @foo.Description</span>
+                                if (foo.IsDeleted)
+                                {
+                                    <span style="color:red;" class="classLeaf" classCode="@foo.Classif" versionCode="@foo.Version" id="@foo.ItemCode">| <strong style="color:red;">@foo.ItemCode</strong> | @foo.Description</span>
+                                }
+                                else
+                                {
+                                    <span class="classLeaf" classCode="@foo.Classif" versionCode="@foo.Version" id="@foo.ItemCode">| <strong style="color:red;">@foo.ItemCode</strong> | @foo.Description</span>
+                                }
+                                @*<span class="classLeaf" classCode="@foo.Classif" versionCode="@foo.Version" id="@foo.ItemCode">| <strong style="color:red;">@foo.ItemCode</strong> | @foo.Description</span>*@
+                                }
+                                else
+                                {
+                                    <span class="caret" style="padding:5px;" classCode="@foo.Classif" versionCode="@foo.Version" id="@foo.ItemCode">| <strong style="color:red;">@foo.ItemCode</strong> | @foo.Description</span>
 
-                                @ShowTreeChilds(foo.ChildItems)
+                                    @ShowTreeChilds(foo.ChildItems)
 
-                            }
-                    </li>
-                }
+                                }
+                        </li>
+                    }
 
-            </ul>
+                </ul>
 }</text>;
 
         }
@@ -119,164 +119,175 @@
 
     </div>
     <div class="col-md-6">
-        <div class="note-version-list">
-            <h4 class="center-block text-center">Информация за маркирания елемент</h4>
-            <h5 class="center-block text-center" style="font-size:small;" id="noinfo">Няма маркиран елемент</h5>
-            <div class="items-info">
-                <table id="tblinfo" class="table-info" hidden>
-                    <tbody>
-                        <tr>
-                            <td class="meaning">
-                                <p>
-                                    <strong>КОД :</strong>
-                                </p>
-                            </td>
-                            <td>
-                                <p id="infoItemCode">
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="meaning">
-                                <p>
-                                    <strong>Наименование :</strong>
-                                </p>
-                            </td>
-                            <td>
-                                <p id="infoItemNameBG">
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="meaning">
-                                <p>
-                                    <strong>Кратко наименование :</strong>
-                                </p>
-                            </td>
-                            <td>
-                                <p id="infoItemNameShortBG">
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="meaning">
-                                <p>
-                                    <strong>Name :</strong>
-                                </p>
-                            </td>
-                            <td>
-                                <p id="infoItemNameEn">
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="meaning">
-                                <p>
-                                    <strong>Ниво:&nbsp;</strong>
-                                </p>
-                            </td>
-                            <td>
-                                <p id="itemLevel">
-                                </p>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td class="meaning">
-                                <p>
-                                    <strong>Включва:&nbsp;</strong>
-                                </p>
-                            </td>
-                            <td>
-                                <pre id="dopinfoincl">
-                        </pre>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td class="meaning">
-                                <p>
-                                    <strong>Включва още:&nbsp;</strong>
-                                </p>
-                            </td>
-                            <td>
-                                <pre id="dopinfoinclMore">
-                        </pre>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="meaning">
-                                <p>
-                                    <strong>Не включва: </strong>
-                                </p>
-                            </td>
-                            <td>
-                                <pre id="dopinfoinclNo">
-                        </pre>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="meaning">
-                                <p>
-                                    <strong>Съставни елементи: </strong>
-                                </p>
-                            </td>
-                            <td>
-                                <p id="itemChildrenInfo">
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="meaning">
-                                <p>
-                                    <strong>Релации: </strong>
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="meaning">
-                                <p>
-                                    <strong>Елемента е източник в следните релации: </strong>
-                                </p>
-                            </td>
-                            <td>
-                                <p id="itemRelSrcInfo">
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="meaning">
-                                <p>
-                                    <strong>Елемента е цел в следните релации: </strong>
-                                </p>
-                            </td>
-                            <td>
-                                <p id="itemRelDstInfo">
-                                </p>
-                            </td>
-                        </tr>
-                        @if (User.IsInRole(DataConstants.AdministratorRole) || User.IsInRole(DataConstants.DeveloperRole))
-                        {
+        @*<div class="note-version-list">*@
+            <div class="classtree">
+                <h4 class="center-block text-center">Информация за маркирания елемент</h4>
+                <h5 class="center-block text-center" style="font-size:small;" id="noinfo">Няма маркиран елемент</h5>
+                <div class="items-info">
+                    <table id="tblinfo" class="table-info" hidden>
+                        <tbody>
                             <tr>
+                                <td class="meaning">
+                                    <p>
+                                        <strong>КОД :</strong>
+                                    </p>
+                                </td>
                                 <td>
-                                    <p style="margin-top:12px;"><strong>Действия: </strong></p>
+                                    <p id="infoItemCode">
+                                    </p>
                                 </td>
-                                <td id="adminActions"></td>
-                                <td class="meaning-version">
-                                        <a class="button redaction" style="text-decoration: none;" data-toggle="modal" data-target="#addNewElement" id="addChildBtn">Добавяне на нов елемент</a>
-                                </td>
-
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                            <tr>
+                                <td class="meaning">
+                                    <p>
+                                        <strong>Наименование :</strong>
+                                    </p>
+                                </td>
+                                <td>
+                                    <p id="infoItemNameBG">
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="meaning">
+                                    <p>
+                                        <strong>Кратко наименование :</strong>
+                                    </p>
+                                </td>
+                                <td>
+                                    <p id="infoItemNameShortBG">
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="meaning">
+                                    <p>
+                                        <strong>Name :</strong>
+                                    </p>
+                                </td>
+                                <td>
+                                    <p id="infoItemNameEn">
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="meaning">
+                                    <p>
+                                        <strong>Ниво:&nbsp;</strong>
+                                    </p>
+                                </td>
+                                <td>
+                                    <p id="itemLevel">
+                                    </p>
+                                </td>
+                            </tr>
 
+                            <tr>
+                                <td class="meaning">
+                                    <p>
+                                        <strong>Включва:&nbsp;</strong>
+                                    </p>
+                                </td>
+                                <td>
+                                    <pre style="max-width:735px;" id="dopinfoincl">
+                                   </pre>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="meaning">
+                                    <p>
+                                        <strong>Включва още:&nbsp;</strong>
+                                    </p>
+                                </td>
+                                <td>
+                                    <pre style="max-width:735px;" id="dopinfoinclMore">
+                        </pre>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="meaning">
+                                    <p>
+                                        <strong>Не включва: </strong>
+                                    </p>
+                                </td>
+                                <td>
+                                    <pre style="max-width:735px;" id="dopinfoinclNo">
+                        </pre>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="meaning">
+                                    <p>
+                                        <strong>Съставни елементи: </strong>
+                                    </p>
+                                </td>
+                                <td>
+                                    <p id="itemChildrenInfo">
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="meaning">
+                                    <p>
+                                        <strong>Релации: </strong>
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="meaning">
+                                    <p>
+                                        <strong>Елемента е източник в следните релации: </strong>
+                                    </p>
+                                </td>
+                                <td>
+                                    <p id="itemRelSrcInfo">
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="meaning">
+                                    <p>
+                                        <strong>Елемента е цел в следните релации: </strong>
+                                    </p>
+                                </td>
+                                <td>
+                                    <p id="itemRelDstInfo">
+                                    </p>
+                                </td>
+                            </tr>
+                            @if (User.IsInRole(DataConstants.AdministratorRole) || User.IsInRole(DataConstants.DeveloperRole))
+                            {
+                                <tr>
+                                    @*<td>
+                                    <p style="margin-top:12px;"><strong>Действия: </strong></p>
+                                </td>*@
+                                    @*<td id="adminActions" style="padding-left:50px;">
+                                </td>
+                                <td class="meaning-version">
+                                    <a class="button redaction" align="right" style="text-decoration: none;" data-toggle="modal" data-target="#addNewElement" id="addChildBtn">Добавяне на нов елемент</a>
+                                </td>*@
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+                @*<label id="classIdLabel"></label>*@
+                @*<textarea id="classInfo" rows="7" style="width:100%" placeholder="Информация за маркираната класификация"></textarea>*@
             </div>
-            @*<label id="classIdLabel"></label>*@
-            @*<textarea id="classInfo" rows="7" style="width:100%" placeholder="Информация за маркираната класификация"></textarea>*@
-        </div>
+            <div class="row">
+                @if (User.IsInRole(DataConstants.AdministratorRole) || User.IsInRole(DataConstants.DeveloperRole))
+                {
 
-    </div>
+                    <div class="col-md-2" id="adminActions"></div>
+                    <div class="col-md-7 meaning-version">
+                        <a class="button redaction" style="text-decoration: none; display:none; width:180px !important;" data-toggle="modal" data-target="#addNewElement" id="addChildBtn">Добавяне на нов елемент</a>
+                    </div>
+
+                }
+            </div>
+        </div>
 </div>
 <script>
     function getChilds(childs) {
@@ -331,7 +342,7 @@
                 $("#itemChildrenInfo").html(getChilds(data["childItems"]));
                 $("#itemRelSrcInfo").html(getRelations(data["destRelations"]));
                 $("#itemRelDstInfo").html(getRelations(data["srcRelations"]));
-                $("#adminActions").html("<a style=\"margin-top:8px; margin-right:8px; text-decoration:none;\"  class=\"button redaction\" href=\"\/Admin\/Items\/ItemDetails?classCode=" + classCode + "&versionCode=" + versionCode + "&itemCode=" + itemCode + "\">Редактиране</a><br />");
+                $("#adminActions").html("<a style=\"margin-right:8px; text-decoration:none;\"  class=\"button redaction\" href=\"\/Admin\/Items\/ItemDetails?classCode=" + classCode + "&versionCode=" + versionCode + "&itemCode=" + itemCode + "\">Редактиране</a>");
             },
             error: function () {
                 $('#tblinfo').hide();
@@ -373,7 +384,7 @@
                             <input type="text" name="newItemId" />
                         </div>
                         <div class="col-md-4" style="padding-top:8px;">
-                            <input type="checkbox" name="isItLeaf" value="check"/>
+                            <input type="checkbox" name="isItLeaf" value="check" />
                             <label>Листо ли е?</label>
                         </div>
                     </div>

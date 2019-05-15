@@ -220,7 +220,7 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
         [HttpPost]
         [Authorize(Roles = "Програмист, Администратор")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateCopyVersion(string classCode, string versionCode, string newVersion)
+        public async Task<IActionResult> CreateCopyVersion(string classCode, string versionCode, string newVersion, string copyRelations)
         {
             try
             {
@@ -232,7 +232,7 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
 
                 var currentuser = await this.userManager.GetUserAsync(User);
 
-                string result = await this.versions.CreateCopyVersionAsync(classCode, versionCode, newVersion, currentuser.Id);
+                string result = await this.versions.CreateCopyVersionAsync(classCode, versionCode, newVersion, currentuser.Id, copyRelations == "check" ? true : false);
                 if (result.Contains("успешно"))
                 {
                     TempData[SuccessMessageKey] = result;

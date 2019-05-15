@@ -215,7 +215,7 @@ namespace Nsiclass.Services.Implementations
 
         }
 
-        public async Task<string> CreateCopyVersionAsync(string classCode, string versionCode, string newVersion, string userId)
+        public async Task<string> CreateCopyVersionAsync(string classCode, string versionCode, string newVersion, string userId, bool copyRelations)
         {
             if (await this.IsClassVersionExistAsync(classCode, versionCode) == false)
             {
