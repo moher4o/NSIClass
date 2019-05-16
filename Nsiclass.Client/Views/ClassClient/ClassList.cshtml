@@ -148,16 +148,17 @@
                             </p>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <p>
-                                <strong>Версии: </strong>
-                            </p>
-                        </td>
-                        <td id="infoClassNumber"></td>
-                    </tr>
                     @if (User.IsInRole(DataConstants.AdministratorRole) || User.IsInRole(DataConstants.DeveloperRole))
                     {
+
+                        <tr>
+                            <td>
+                                <p>
+                                    <strong>Версии: </strong>
+                                </p>
+                            </td>
+                            <td id="infoClassNumber"></td>
+                        </tr>
                         <tr>
                             <td>
                                 <p style="margin-top:12px;"><strong>Действия: </strong></p>
@@ -192,12 +193,12 @@
         for (var i = 0; i <= versionList.length - 1; i++) {
             if (!versionList[i].isDeleted) {
                 if (!versionList[i].isActive) {
-                    //names = names + "<a href=\"#\">" + versionList[i].classif + " " + versionList[i].version + " не е активна</a><br />";
-                    names = names + "<a class=\"displayno\" style=\"color: red;\" href=\"\/ClassClient\/ClassItemsList?classCode=" + versionList[i].classif + "&amp;versionCode=" + versionList[i].version + "\">" + versionList[i].classif + " " + versionList[i].version + "</a><br />";
+                    names = names + "<a class=\"displayno\" style=\"color: red;\" href=\"\/Admin\/Version\/VersionDetails?classCode=" + versionList[i].classif + "&amp;versionCode=" + versionList[i].version + "\">" + versionList[i].classif + " " + versionList[i].version + "</a><br />";
 
                 }
                 else {
-                    names = names + "<a href=\"\/ClassClient\/ClassItemsList?classCode=" + versionList[i].classif + "&amp;versionCode=" + versionList[i].version + "\">" + versionList[i].classif + " " + versionList[i].version + "</a><br />";
+                    names = names + "<a href=\"\/Admin\/Version\/VersionDetails?classCode=" + versionList[i].classif + "&amp;versionCode=" + versionList[i].version + "\">" + versionList[i].classif + " " + versionList[i].version + "</a><br />";
+
                 }
             }
         }

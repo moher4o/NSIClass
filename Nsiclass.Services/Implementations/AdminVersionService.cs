@@ -14,7 +14,7 @@ using System.Data.SqlClient;
 
 namespace Nsiclass.Services.Implementations
 {
-   public class AdminVersionService : IAdminVersionService
+    public class AdminVersionService : IAdminVersionService
     {
         private readonly ClassDbContext db;
         public AdminVersionService(ClassDbContext db, IConfiguration configuration)
@@ -237,7 +237,9 @@ namespace Nsiclass.Services.Implementations
                 ByLow = sourceVersion.ByLow,
                 Publications = sourceVersion.Publications,
                 UseAreas = sourceVersion.UseAreas,
-                Parent = sourceVersion.Parent
+                Parent = sourceVersion.Parent,
+                Valid_From = sourceVersion.Valid_From,
+                Valid_To = sourceVersion.Valid_To
             };
 
             var connectionString = Configuration.GetSection("ConnectionStrings:DefaultConnection").Value;
@@ -281,7 +283,7 @@ namespace Nsiclass.Services.Implementations
                         ParentItemCode = item.ParentItemCode,
                         EnteredByUserId = userId,
                     };
-                   await this.db.ClassItems.AddAsync(newItem);
+                    await this.db.ClassItems.AddAsync(newItem);
                 }
                 await this.db.SaveChangesAsync();
             }
@@ -295,7 +297,95 @@ namespace Nsiclass.Services.Implementations
             this.db.Database.CommitTransaction();
             comend.ExecuteNonQuery();
             con.Close();
-            return $"Версия с код: {classCode} {newVersion} беше създадена успешно";
+            var result = $"Версия с код: {classCode} {newVersion} беше създадена успешно \n";
+
+            if (copyRelations)
+            {
+
+
+                await this.db.Database.BeginTransactionAsync();
+                try
+                {
+                    var sourceRelations = await this.db.ClassRelationsTypes.Where(r => r.SrcClassifId == classCode && r.SrcVersionId == versionCode).ToListAsync();
+                    var destRelations = await this.db.ClassRelationsTypes.Where(r => r.DestClassifId == classCode && r.DestVersionId == versionCode).ToListAsync();
+                    foreach (var rel in sourceRelations)
+                    {
+                        var newRelationType = new TC_Classif_Rel_Types()
+                        {
+                            SrcClassifId = classCode,
+                            SrcVersionId = newVersion,
+                            DestClassifId = rel.DestClassifId,
+                            DestVersionId = rel.DestVersionId,
+                            Description = $"Копие от релация \"{rel.Description}\". Сменена версия \"{versionCode}\" с версия \"{newVersion}\"",
+                            Valid_From = rel.Valid_From,
+                            Valid_To = rel.Valid_To
+                        };
+                        await this.db.ClassRelationsTypes.AddAsync(newRelationType);
+                        await this.db.SaveChangesAsync();
+                        var relItemsList = await this.db.ClassRelations.Where(ri => ri.RelationTypeId == rel.Id).ToListAsync();
+                        foreach (var relItem in relItemsList)
+                        {
+                            var newRelation = new TC_Classif_Rels()
+                            {
+                                RelationTypeId = newRelationType.Id,
+                                SrcClassif = relItem.SrcClassif,
+                                SrcVer = newRelationType.SrcVersionId,
+                                SrcItemId = relItem.SrcItemId,
+                                DestClassif = relItem.DestClassif,
+                                DestVer = relItem.DestVer,
+                                DestItemId = relItem.DestItemId,
+                                EntryTime = DateTime.Now,
+                                EnteredByUserId = userId
+                            };
+                            await this.db.ClassRelations.AddAsync(newRelation);
+                        }
+                        await this.db.SaveChangesAsync();
+                    }
+                    foreach (var rel in destRelations)
+                    {
+                        var newRelationType = new TC_Classif_Rel_Types()
+                        {
+                            SrcClassifId = classCode,
+                            SrcVersionId = rel.SrcVersionId,
+                            DestClassifId = rel.DestClassifId,
+                            DestVersionId = newVersion,
+                            Description = $"Копие от релация \"{rel.Description}\". Сменена версия \"{versionCode}\" с версия \"{newVersion}\"",
+                            Valid_From = rel.Valid_From,
+                            Valid_To = rel.Valid_To
+                        };
+                        await this.db.ClassRelationsTypes.AddAsync(newRelationType);
+                        await this.db.SaveChangesAsync();
+                        var relItemsList = await this.db.ClassRelations.Where(ri => ri.RelationTypeId == rel.Id).ToListAsync();
+                        foreach (var relItem in relItemsList)
+                        {
+                            var newRelation = new TC_Classif_Rels()
+                            {
+                                RelationTypeId = newRelationType.Id,
+                                SrcClassif = relItem.SrcClassif,
+                                SrcVer = relItem.SrcVer,
+                                SrcItemId = relItem.SrcItemId,
+                                DestClassif = relItem.DestClassif,
+                                DestVer = newRelationType.DestVersionId,
+                                DestItemId = relItem.DestItemId,
+                                EntryTime = DateTime.Now,
+                                EnteredByUserId = userId
+                            };
+                            await this.db.ClassRelations.AddAsync(newRelation);
+                        }
+                        await this.db.SaveChangesAsync();
+                    }
+
+                }
+                catch (Exception)
+                {
+                    this.db.Database.RollbackTransaction();
+                    return result + $"Грешка!!! Възникна проблем при копирането релационните таблици.";
+                }
+                this.db.Database.CommitTransaction();
+                result = result + Environment.NewLine + $"Копирането на релационните таблици беше успешно.";
+
+            }
+            return result;
 
         }
     }
