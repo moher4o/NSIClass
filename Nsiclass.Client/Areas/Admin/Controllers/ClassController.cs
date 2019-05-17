@@ -352,35 +352,38 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
                             currentItem.Classif = classCode;
                             currentItem.Version = versionCode;
                             currentItem.ItemCode = row.GetCell(0).ToString();
-                            currentItem.Description = row.GetCell(3).ToString();
-                            currentItem.DescriptionShort = row.GetCell(4).ToString();
-                            currentItem.Includes = row.GetCell(5).ToString();
-                            currentItem.IncludesMore = row.GetCell(6).ToString();
-                            currentItem.IncludesNo = row.GetCell(7).ToString();
+                            currentItem.Description = row.GetCell(4).ToString();
+                            currentItem.DescriptionShort = row.GetCell(5).ToString();
+                            currentItem.Includes = row.GetCell(6).ToString();
+                            currentItem.IncludesMore = row.GetCell(7).ToString();
+                            currentItem.IncludesNo = row.GetCell(8).ToString();
 
                             if (this.classification.IsClassificationHierachical(classCode))
                             {
                                 currentItem.ParentItemCode = row.GetCell(1) != null ? row.GetCell(1).ToString() : null;
                             }
 
-                            bool intParseSuccessfull = int.TryParse(row.GetCell(2).ToString(), out level);
+                            string isLeaf = row.GetCell(2).ToString();
+                            if (isLeaf == "Y" || isLeaf == "1")
+                            {
+                                currentItem.IsLeaf = true;
+                            }
+                            else
+                            {
+                                currentItem.IsLeaf = false;
+                            }
+
+                            bool intParseSuccessfull = int.TryParse(row.GetCell(3).ToString(), out level);
 
                             if (intParseSuccessfull)
                             {
                                 currentItem.ItemLevel = level;
-                                if (level == 4)
-                                {
-                                    currentItem.IsLeaf = true;
-                                }
-                                else
-                                {
-                                    currentItem.IsLeaf = false;
-                                }
                             }
                             else
                             {
                                 currentItem.ItemLevel = 9999;
                             }
+
 
                             currentItem.EnteredByUserId = currentuser.Id;
 
