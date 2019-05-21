@@ -17,7 +17,6 @@ namespace Nsiclass.Services.Models
         [Display(Name = "Име на български")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Полето е задължително")]
         [MaxLength(250)]
         [Display(Name = "Име на английски")]
         public string NameEng { get; set; }

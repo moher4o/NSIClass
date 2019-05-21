@@ -14,6 +14,8 @@ namespace Nsiclass.Services
 
         Task<string> DeleteClassVersionAsync(string classCode, string versionCode);
 
+        Task<string> TotalDeleteClassVersionAsync(string classCode, string versionCode);
+
         Task<string> RestoreClassVersionAsync(string classCode, string versionCode);
 
         Task<bool> IsClassVersionExistAsync(string classCode, string versionCode);
@@ -27,5 +29,7 @@ namespace Nsiclass.Services
         Task<string> DeactivateClassVersionAsync(string classCode, string versionCode);
 
         Task<string> CreateCopyVersionAsync(string classCode, string versionCode, string newVersion, string userId, bool copyRelations);
+
+        
     }
 }

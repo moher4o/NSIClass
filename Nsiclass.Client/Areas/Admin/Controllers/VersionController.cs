@@ -123,6 +123,39 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
         [HttpPost]
         [Authorize(Roles = "Програмист")]
         [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TotalDestroyVersion(string classCode, string versionCode)
+        {
+            try
+            {
+                if (!await this.versions.IsClassVersionExistAsync(classCode, versionCode))
+                {
+                    TempData[ErrorMessageKey] = "Грешка!!! Грешен код на класификация или версия.";
+                    return RedirectToAction("AdminTasks", "Users");
+                }
+
+                var result = await this.versions.TotalDeleteClassVersionAsync(classCode, versionCode);
+                if (result.Contains("успешно"))
+                {
+                    TempData[SuccessMessageKey] = result;
+                }
+                else
+                {
+                    TempData[ErrorMessageKey] = result;
+                }
+
+            }
+            catch (Exception)
+            {
+                TempData[ErrorMessageKey] = "Грешка!!! Възникна неочаквана грешка.";
+                return RedirectToAction("AdminTasks", "Users");
+            }
+            return RedirectToAction("VersionDetails", "Version", new { classCode, versionCode });
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = "Програмист")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> RestoreVersion(string classCode, string versionCode)
         {
             try

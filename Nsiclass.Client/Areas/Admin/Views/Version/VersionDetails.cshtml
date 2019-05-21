@@ -49,11 +49,11 @@
                         <td>
                             @if (Model.isDeleted)
                             {
-                                <p style="color:red;">Изтрита &nbsp;&nbsp;&nbsp;&nbsp;<a class="button btnrestore-small" style="text-decoration: none;" data-toggle="modal" data-target="#@Model.Version">Възстановяване &#33;&#33;&#33;</a></p>
+                                <p style="color:red;">Изтрита &nbsp;&nbsp;&nbsp;&nbsp;<a class="button btnrestore-small" style="text-decoration: none;" data-toggle="modal" data-target="#@Model.Version">Възстановяване &#33;&#33;&#33;</a> <a class="button btndelete-small" style="text-decoration: none; padding-left:15px;" data-toggle="modal" data-target="#@(Model.Version + "destroi")">Тотално Изтриване &#33;&#33;&#33;</a></p>
                             }
                             else
                             {
-                                <p style="color:green;">Налична &nbsp;&nbsp;&nbsp;&nbsp;<a class="button btndelete-small" style="text-decoration: none;" data-toggle="modal" data-target="#@Model.Version">Изтриване &#33;&#33;&#33;</a></p>
+                                <p style="color:green;">Налична &nbsp;&nbsp;&nbsp;&nbsp;<a class="button btndelete-small" style="text-decoration: none;" data-toggle="modal" data-target="#@Model.Version">Изтриване &#33;&#33;&#33;</a> <a class="button btndelete-small" style="text-decoration: none; padding-left:15px;" data-toggle="modal" data-target="#@(Model.Version + "destroi")">Тотално Изтриване &#33;&#33;&#33;</a></p>
                             }
                         </td>
                     </tr>
@@ -499,6 +499,24 @@ else
 
     </form>
 }
+<form method="post" asp-controller="Version" asp-action="TotalDestroyVersion" asp-route-classCode="@Model.Classif" asp-route-versionCode="@Model.Version">
+
+    <div class="modal fade" id="@(Model.Version + "destroi")" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div style="background-color:papayawhip;" class="modal-content">
+                <div class="modal-body">
+                    <h4>Сигурни ли сте, че искате да премахнете изцяло версия <span style="font-weight:700">@Model.Version</span></h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отказ</button>
+                    <button type="submit" class="btn btn-danger">Потвърди</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
 
 
 <script src="~/js/versionDetails.js"></script>

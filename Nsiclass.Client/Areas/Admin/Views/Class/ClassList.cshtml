@@ -38,7 +38,7 @@
                     <a asp-area="Admin" asp-action="ClassDetails" asp-controller="Class" asp-route-classCode=@itemClass.Id>@name</a>
                 </td>
                 <td class="col-sm-4">
-                    @{string nameEng = itemClass.NameEng.Length > 50 ? (itemClass.NameEng).Substring(0, 50) + "..." : itemClass.NameEng;}
+                    @{string nameEng = itemClass.NameEng != null ? (itemClass.NameEng.Length > 50 ? (itemClass.NameEng).Substring(0, 50) + "..." : itemClass.NameEng) : null ;}
                     <a asp-area="Admin" asp-action="ClassDetails" asp-controller="Class" asp-route-classCode=@itemClass.Id>@nameEng</a>
                 </td>
                 <td class="col-sm-1">

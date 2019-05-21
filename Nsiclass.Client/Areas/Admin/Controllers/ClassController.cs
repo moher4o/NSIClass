@@ -348,22 +348,27 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
                         try
                         {
                             var currentItem = new AddNewClassItemsServiceModel();
-
+                            var cellCount = row.Cells.Count;
+                            if(cellCount < 4)
+                            {
+                                TempData[ErrorMessageKey] = $"Възникна проблем на ред {i + 1} при четене от файла. Колоните са по-малко от 4.";
+                                break;
+                            }
                             currentItem.Classif = classCode;
                             currentItem.Version = versionCode;
                             currentItem.ItemCode = row.GetCell(0).ToString();
                             currentItem.Description = row.GetCell(4).ToString();
-                            currentItem.DescriptionShort = row.GetCell(5).ToString();
-                            currentItem.Includes = row.GetCell(6).ToString();
-                            currentItem.IncludesMore = row.GetCell(7).ToString();
-                            currentItem.IncludesNo = row.GetCell(8).ToString();
+                            currentItem.DescriptionShort = row.GetCell(5) != null ? row.GetCell(5).ToString() : null;
+                            currentItem.Includes = row.GetCell(6) != null ? row.GetCell(6).ToString() : null;
+                            currentItem.IncludesMore = row.GetCell(7) != null ? row.GetCell(7).ToString() : null;
+                            currentItem.IncludesNo = row.GetCell(8) != null ? row.GetCell(8).ToString() : null;
 
                             if (this.classification.IsClassificationHierachical(classCode))
                             {
                                 currentItem.ParentItemCode = row.GetCell(1) != null ? row.GetCell(1).ToString() : null;
                             }
-
-                            string isLeaf = row.GetCell(2).ToString();
+                            
+                            string isLeaf = row.GetCell(2) != null ? row.GetCell(2).ToString() : null;
                             if (isLeaf == "Y" || isLeaf == "1")
                             {
                                 currentItem.IsLeaf = true;

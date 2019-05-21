@@ -505,10 +505,10 @@ namespace Nsiclass.Services.Implementations
                         IsDeleted = false,
                         SrcClassif = items[i].SrcClassif,
                         SrcVer = items[i].SrcVer,
-                        SrcItemId = items[i].SrcItemId,
+                        SrcItemId = items[i].SrcItemId.Trim(),
                         DestClassif = items[i].DestClassif,
                         DestVer = items[i].DestVer,
-                        DestItemId = items[i].DestItemId,
+                        DestItemId = items[i].DestItemId.Trim(),
                         RelationTypeId = items[i].RelationTypeId,
                         EnteredByUserId = items[i].EnteredByUserId,
                         EntryTime = items[i].EntryTime

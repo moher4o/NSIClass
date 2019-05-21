@@ -388,5 +388,38 @@ namespace Nsiclass.Services.Implementations
             return result;
 
         }
+
+        public async Task<string> TotalDeleteClassVersionAsync(string classCode, string versionCode)
+        {
+            if (await this.IsClassVersionExistAsync(classCode, versionCode) == false)
+            {
+                return $"Грешка!!! Няма версия с код: {classCode} {versionCode}";
+            }
+
+            await this.db.Database.BeginTransactionAsync();
+            try
+            {
+
+                var relItems = this.db.ClassRelations.Where(r => (r.SrcClassif == classCode && r.SrcVer == versionCode) || (r.DestClassif == classCode && r.DestVer == versionCode)).ToList();
+                this.db.ClassRelations.RemoveRange(relItems);
+                await this.db.SaveChangesAsync();
+                this.db.ClassRelationsTypes.Where(r => (r.SrcClassifId == classCode && r.SrcVersionId == versionCode) || (r.DestClassifId == classCode && r.DestVersionId == versionCode)).ToList()
+                    .ForEach(r => this.db.ClassRelationsTypes.Remove(r));
+                await this.db.SaveChangesAsync();
+                var items = this.db.ClassItems.Where(i => i.Classif == classCode && i.Version == versionCode).ToList();
+                this.db.ClassItems.RemoveRange(items);
+                await this.db.SaveChangesAsync();
+                this.db.ClassVersions.Where(i => i.Classif == classCode && i.Version == versionCode).ToList().ForEach(r => this.db.ClassVersions.Remove(r));
+                await this.db.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                this.db.Database.RollbackTransaction();
+                return $"Грешка!!! Възникна проблем при изтриването на версията.";
+            }
+            this.db.Database.CommitTransaction();
+            return $"Версия с код: {classCode} {versionCode} беше тотално изтрита успешно";
+
+        }
     }
 }
