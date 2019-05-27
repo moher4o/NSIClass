@@ -329,11 +329,13 @@ namespace Nsiclass.Services.Implementations
             con.Open();
             com.ExecuteNonQuery();
             //SqlTransaction transaction = con.BeginTransaction(IsolationLevel.Serializable);
+            int i = 0;
             await this.db.Database.BeginTransactionAsync();
-            for (int i = 0; i <= items.Count() - 1; i++)
+            try
             {
-                try
+                for (i = 0; i <= items.Count() - 1; i++)
                 {
+
                     var newItemDb = new TC_Classif_Items()
                     {
                         Classif = items[i].Classif,
@@ -354,15 +356,15 @@ namespace Nsiclass.Services.Implementations
                         IsDeleted = false
                     };
                     await this.db.ClassItems.AddAsync(newItemDb);
-                    await this.db.SaveChangesAsync();
                 }
-                catch (Exception)
-                {
-                    this.db.Database.RollbackTransaction();
-                    comend.ExecuteNonQuery();
-                    con.Close();
-                    return string.Concat($"Ред N:{i}", " ", items[i].Classif, " ", items[i].Version, " ", items[i].ItemCode, " има грешка");
-                }
+                await this.db.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                this.db.Database.RollbackTransaction();
+                comend.ExecuteNonQuery();
+                con.Close();
+                return string.Concat($"Ред N:{i}", " ", items[i].Classif, " ", items[i].Version, " ", items[i].ItemCode, " има грешка (плюс минус един ред!)");
             }
             this.db.Database.CommitTransaction();
             //transaction.Commit();

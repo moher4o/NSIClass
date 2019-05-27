@@ -1,7 +1,7 @@
 ﻿
 .content {
-    background: url('../jpg/back2.jpg');
-    /*background-color:#dbeed2;*/
+    /*background: url('../jpg/back2.jpg');*/
+    background: radial-gradient(ellipse at center, #95c9e6 0%, #40b6a4 100%);
     background-repeat: no-repeat;
     background-position: center center;
     background-attachment: fixed;
@@ -13,9 +13,7 @@
     overflow-y: auto;
 }
 .contentin {
-    /*background: rgba(0, 148, 255, 0.9) !important;*/
     background: rgba(101, 142, 172, 0.90) !important; /*заден цвят*/
-    /*background-color: cornflowerblue;*/
     background-repeat: no-repeat;
     background-position: center center;
     background-attachment: fixed;
@@ -550,30 +548,6 @@ ul, #myUL {
 /*Login NAVBAR*/
 
 /*ToolType*/
-.tooltip {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
-}
-
-    /* Tooltip text */
-    .tooltip .tooltiptext {
-        visibility: hidden;
-        width: 120px;
-        background-color:beige;
-        color: #000;
-        text-align: center;
-        padding: 5px 0;
-        border-radius: 6px;
-        /* Position the tooltip text - see examples below! */
-        position: absolute;
-        z-index: 1;
-    }
-
-    /* Show the tooltip text when you mouse over the tooltip container */
-    .tooltip:hover .tooltiptext {
-        visibility: visible;
-    }
 
 /*ToolType*/
 

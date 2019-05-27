@@ -348,8 +348,8 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
                         try
                         {
                             var currentItem = new AddNewClassItemsServiceModel();
-                            var cellCount = row.Cells.Count;
-                            if(cellCount < 4)
+                            var cellCount = row.LastCellNum;
+                            if (cellCount < 4)
                             {
                                 TempData[ErrorMessageKey] = $"Възникна проблем на ред {i + 1} при четене от файла. Колоните са по-малко от 4.";
                                 break;
@@ -367,7 +367,7 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
                             {
                                 currentItem.ParentItemCode = row.GetCell(1) != null ? row.GetCell(1).ToString() : null;
                             }
-                            
+
                             string isLeaf = row.GetCell(2) != null ? row.GetCell(2).ToString() : null;
                             if (isLeaf == "Y" || isLeaf == "1")
                             {

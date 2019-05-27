@@ -55,6 +55,7 @@
 
   <ItemGroup>
     <Folder Include="ClassFiles\НКИД2008\" />
+    <Folder Include="wwwroot\build\" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

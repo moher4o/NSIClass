@@ -9,13 +9,15 @@ namespace Nsiclass.Client.Models.AccountViewModels
     public class LoginViewModel
     {
         [Required]
+        [Display(Name = "Потребителско име")]
         public string UserName { get; set; }
 
         [Required]
+        [Display(Name = "Парола")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "Запомни ме?")]
         public bool RememberMe { get; set; }
     }
 }
