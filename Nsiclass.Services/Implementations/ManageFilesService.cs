@@ -132,6 +132,37 @@ namespace Nsiclass.Services.Implementations
                 return false;
             }
         }
+
+        public async Task<byte[]> ExportFile(string classCode, string versionCode, string fileName)
+        {
+            try
+            {
+                string directoryName = string.Concat(classCode, versionCode);
+                string globalPath = Environment.CurrentDirectory;
+
+                var classDirectory = Path.Combine(
+                            globalPath, DataConstants.ClassFilesSubDirectory, directoryName);
+
+                if (!Directory.Exists(classDirectory))
+                {
+                    return null;
+                }
+
+                var filePath = Path.Combine(classDirectory, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                {
+                    byte[] imagen = new byte[stream.Length];
+                    await stream.ReadAsync(imagen, 0, (int)stream.Length);
+                    return imagen;
+                }
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
 }
 

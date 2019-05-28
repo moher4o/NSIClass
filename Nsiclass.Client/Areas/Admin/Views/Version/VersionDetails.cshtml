@@ -128,7 +128,7 @@
                         </p>
                     </td>
                     <td>
-                        <textarea asp-for="Remarks" class="form-control" rows="8" style="resize: none;" placeholder="Описание ..."></textarea>
+                        <textarea asp-for="Remarks" class="form-control" rows="8" style="resize: none; font-size:smaller;" placeholder="Описание ..."></textarea>
                         <span asp-validation-for="Remarks" class="text-danger"></span>
                     </td>
                 </tr>
@@ -139,7 +139,7 @@
                         </p>
                     </td>
                     <td>
-                        <textarea asp-for="ByLow" class="form-control" rows="3" style="resize: none;" placeholder="Правно основание ..."></textarea>
+                        <textarea asp-for="ByLow" class="form-control" rows="3" style="resize: none; font-size:smaller;" placeholder="Правно основание ..."></textarea>
                         <span asp-validation-for="ByLow" class="text-danger"></span>
                     </td>
                 </tr>
@@ -150,7 +150,7 @@
                         </p>
                     </td>
                     <td>
-                        <textarea asp-for="Publications" class="form-control" rows="3" style="resize: none;" placeholder="Публикации ..."></textarea>
+                        <textarea asp-for="Publications" class="form-control" rows="5" style="resize: none; font-size:smaller;" placeholder="Публикации ..."></textarea>
                         <span asp-validation-for="Publications" class="text-danger"></span>
                     </td>
                 </tr>
@@ -161,7 +161,7 @@
                         </p>
                     </td>
                     <td>
-                        <textarea asp-for="UseAreas" class="form-control" rows="3" style="resize: none;" placeholder="Приложение в ..."></textarea>
+                        <textarea asp-for="UseAreas" class="form-control" rows="3" style="resize: none; font-size:smaller;" placeholder="Приложение в ..."></textarea>
                         <span asp-validation-for="UseAreas" class="text-danger"></span>
                     </td>
 
@@ -183,7 +183,7 @@
                 <tr>
                     <td class="meaning-version">
                         <p>
-                            <strong>Ресурси</strong>
+                            <strong>Документи</strong>
                         </p>
                     </td>
                     <td>
@@ -247,11 +247,10 @@
         $.getJSON('\FilesList\?classCode=' + $("#classCodeName").val() + '&versionCode=' + $("#versionCodeName").val(), { get_param: 'value' }, function (data) {
             $("#ListofFiles tbody").html("");
             for (var i = 0; i < data.length; i++) {
-                var markup = "<tr><td>" + data[i] + "</td><td><a href='#' onclick='DeleteFile(\"" + data[i] + "\")'><span class='glyphicon glyphicon-remove red'></span></a></td></tr>"; // Binding the file name
+                var markup = "<tr><td><a href =\"/ClassClient/ExportFile/?fileName=" + data[i] + "&classCode=" + $("#classCodeName").val() + "&versionCode=" + $("#versionCodeName").val() + "\">" + data[i] + "</a></td><td><a href='#' onclick='DeleteFile(\"" + data[i] + "\")'><span class='glyphicon glyphicon-remove red'></span></a></td></tr>"; // Binding the file name
+
                 $("#ListofFiles tbody").append(markup);
             }
-            //$("#export").html("<a style=\"margin-top:8px; margin-right:8px;\"  class=\"btn btn-info btn-sm\" href=\"/ClassClient/ExportRelation?relCode=" + data["id"] + "\">Експорт</a><br />");
-            //$("#adminActions").html("<a style=\"margin-top:8px; margin-right:8px;\"  class=\"btn btn-info btn-sm\" href=\"\/Admin\/Relations\/RelDetails?relCode=" + data["id"] + "\">Редакция</a><br />");
         });
     }
     function DeleteFile(fileName) {
@@ -274,7 +273,7 @@
 
     function checkfile(sender) {
         let sizeMb = sender.files[0].size / 1048576;
-        var validExts = new Array(".xlsx", ".xls", ".doc", ".docx", ".rar", ".zip", ".pdf", ".txt", ".jpg");
+        var validExts = new Array(".xlsx", ".xls", ".doc", ".docx", ".rar", ".zip", ".pdf", ".txt", ".jpg", ".7z", ".csv");
         var fileExt = sender.value;
         var fullName = fileExt.substring(fileExt.lastIndexOf('\\') + 1);
         fileExt = fileExt.substring(fileExt.lastIndexOf('.'));

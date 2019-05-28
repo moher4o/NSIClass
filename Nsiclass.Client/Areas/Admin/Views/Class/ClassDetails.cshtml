@@ -82,12 +82,12 @@
                 {
                     if (Model.AsSourceClassification[i].IsDeleted)
                     {
-                        <a style="color:red;" asp-area="Admin" asp-controller="Relations" asp-action="RelationDetails" asp-route-versionCode="@Model.AsSourceClassification[i].Id">@Model.AsSourceClassification[i].Description</a>
+                        <a style="color:red;" asp-area="Admin" asp-controller="Relations" asp-action="RelDetails" asp-route-relCode="@Model.AsSourceClassification[i].Id">@Model.AsSourceClassification[i].Description</a>
                         <br />
                     }
                     else
                     {
-                        <a asp-area="Admin" asp-controller="Relations" asp-action="RelationDetails" asp-route-versionCode="@Model.AsSourceClassification[i].Id">@Model.AsSourceClassification[i].Description</a>
+                        <a asp-area="Admin" asp-controller="Relations" asp-action="RelDetails" asp-route-relCode="@Model.AsSourceClassification[i].Id">@Model.AsSourceClassification[i].Description</a>
                         <br />
                     }
                 }
@@ -99,12 +99,12 @@
                 {
                     if (Model.AsDestClassification[i].IsDeleted)
                     {
-                        <a style="color:red;" asp-area="Admin" asp-controller="Relations" asp-action="RelationDetails" asp-route-versionCode="@Model.AsDestClassification[i].Id">@Model.AsDestClassification[i].Description</a>
+                        <a style="color:red;" asp-area="Admin" asp-controller="Relations" asp-action="RelDetails" asp-route-relCode="@Model.AsDestClassification[i].Id">@Model.AsDestClassification[i].Description</a>
                         <br />
                     }
                     else
                     {
-                        <a asp-area="Admin" asp-controller="Relations" asp-action="RelationDetails" asp-route-versionCode="@Model.AsDestClassification[i].Id">@Model.AsDestClassification[i].Description</a>
+                        <a asp-area="Admin" asp-controller="Relations" asp-action="RelDetails" asp-route-relCode="@Model.AsDestClassification[i].Id">@Model.AsDestClassification[i].Description</a>
                         <br />
                     }
 

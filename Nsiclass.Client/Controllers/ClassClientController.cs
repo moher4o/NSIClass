@@ -21,13 +21,15 @@ namespace Nsiclass.Client.Controllers
         private readonly IAdminItemsService items;
         private readonly IAdminLinksService links;
         private readonly UserManager<User> userManager;
+        private readonly IManageFilesService files;
 
-        public ClassClientController(UserManager<User> userManager, IAdminClassService classification, IAdminItemsService items, IAdminLinksService links)
+        public ClassClientController(UserManager<User> userManager, IAdminClassService classification, IAdminItemsService items, IAdminLinksService links, IManageFilesService files)
         {
             this.classification = classification;
             this.userManager = userManager;
             this.items = items;
             this.links = links;
+            this.files = files;
         }
 
         public async Task<IActionResult> ClassList(string searchString)
@@ -225,6 +227,44 @@ namespace Nsiclass.Client.Controllers
         public IActionResult LinksList()
         {
             return View(this.links.GetAllLinks());
+        }
+
+        public async Task<IActionResult> ExportFile(string classCode, string versionCode, string fileName)
+        {
+            try
+            {
+                var file = await this.files.ExportFile(classCode, versionCode, fileName);
+                var reg = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(Path.GetExtension(fileName).ToLower());
+                string contentType = "application/unknown";
+
+                if (reg != null)
+                {
+                    string registryContentType = reg.GetValue("Content Type") as string;
+
+                    if (!String.IsNullOrWhiteSpace(registryContentType))
+                    {
+                        contentType = registryContentType;
+                    }
+                }
+
+
+                if (file == null)
+                {
+                    TempData[ErrorMessageKey] = "Грешка при извличането на файла";
+                    return RedirectToAction("ClassClient", "ClassList");
+                }
+                else
+                {
+                    return File(file, contentType, fileName);
+                    
+                }
+            }
+            catch (Exception)
+            {
+                TempData[ErrorMessageKey] = $"Грешка!";
+                return RedirectToAction("ClassClient", "ClassList");
+            }
+
         }
 
         //public async Task<IActionResult> TreeDownload()

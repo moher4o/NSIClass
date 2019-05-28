@@ -18,5 +18,7 @@ namespace Nsiclass.Services
         IList<string> GetFilesInDirectory(string classCode, string versionCode);
 
         bool DeleteFile(string classCode, string versionCode, string fileName);
+
+        Task<byte[]> ExportFile(string classCode, string versionCode, string fileName);
     }
 }
