@@ -176,6 +176,23 @@ div.items-info {
             background-color: #be0505;
         }
 
+    .button.btnversioninfo-extrasmall {
+        max-width: 70px !important;
+        min-width: 55px !important;
+        box-shadow: rgba(67, 93, 111, 0.4) 1px 4px !important;
+        /*box-shadow:none;*/
+        padding: 2px 2px;
+        margin-left: 15px;
+        font-size: 10px;
+        color: white;
+        background-color: #40b6a4;
+        display: normal;
+    }
+
+        .button.btnversioninfo-extrasmall:hover {
+            background-color: #15a38d;
+        }
+
 
     .button.btnrestore {
         min-width: 150px;
@@ -236,8 +253,8 @@ div.items-info {
         padding: 5px 10px;
         font-size: 12px;
         color: #fff;
-        /*background-color: #afce47*/
-        background-color:#40b6a4;
+        box-shadow: rgba(67, 93, 111, 0.4) 1px 4px !important;
+        background-color: #40b6a4;
     }
 
         .button.redaction:hover {
@@ -546,6 +563,14 @@ ul, #myUL {
 }
 
 /*Login NAVBAR*/
+
+textarea.client-version-info {
+    width: 100%;
+    resize: none;
+    font-size: smaller;
+    background-color: #c0eefa;
+   
+}
 
 /*ToolType*/
 

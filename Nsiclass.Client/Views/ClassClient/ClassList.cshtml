@@ -51,20 +51,24 @@
                         //var classVersionId = foo.Classif + "#$" + foo.Version;
                         var title = foo.Version;
 
-                    <li style="margin-top:18px;">
-                        @if (!foo.isDeleted)
-                        {
+                        <li style="margin-top:18px;">
+                            @if (!foo.isDeleted)
+                            {
 
-                            @if (!foo.isActive)
-                            {
-                                    <a class="classLeaf displayno" style="color:red;" asp-action="ClassItemsList" asp-controller="ClassClient" asp-route-classCode=@foo.Classif asp-route-versionCode=@foo.Version>@title</a>
-                            }
-                            else
-                            {
+                                @if (!foo.isActive)
+                                {
+                                    <a class="classLeaf displayno" style="color:red;" asp-action="ClassItemsList" asp-controller="ClassClient" asp-route-classCode=@foo.Classif asp-route-versionCode=@foo.Version>@title </a>
+                                    <a class="button btnversioninfo-extrasmall versionbtn displayno" style="text-decoration: none;" classCode="@foo.Classif" versionCode="@foo.Version">Детайли</a>
+
+                                }
+                                else
+                                {
                                     <a class="classLeaf" asp-action="ClassItemsList" asp-controller="ClassClient" asp-route-classCode=@foo.Classif asp-route-versionCode=@foo.Version>@title</a>
+                                    <a class="button btnversioninfo-extrasmall versionbtn" style="text-decoration: none;" classCode="@foo.Classif" versionCode="@foo.Version">Детайли</a>
+
+                                }
                             }
-                        }
-                    </li>
+                        </li>
                     }
                 </ul>
 }</text>;
@@ -90,8 +94,8 @@
     </div>
     <div class="col-md-6">
         <div class="note-version-list">
-            <h4 class="center-block text-center">Информация за маркираната класификация</h4>
-            <h5 class="center-block text-center" style="font-size:small; margin-top:15px;" id="noinfo">Няма маркирана класификация</h5>
+            <h4 class="center-block text-center">Информация за маркирания елемент</h4>
+            <h5 class="center-block text-center" style="font-size:small; margin-top:15px;" id="noinfo">Не е избран елемент</h5>
             <table id="tblinfo" hidden>
                 <tbody>
                     <tr>
@@ -170,6 +174,145 @@
                     }
                 </tbody>
             </table>
+            <table class="table-bordered" style="width:100%;" id="versioninfo" hidden>
+                <tbody>
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Идентификатор:</strong>
+                            </p>
+                        </td>
+                        <td>
+                            <p id="infoVersionCode">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Предшественик:</strong>
+                            </p>
+                        </td>
+                        <td>
+                            <p id="parentVersion">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Валидна от:</strong>
+                            </p>
+                        </td>
+                        <td>
+                            <p id="versionValidFrom">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Валидна до:</strong>
+                            </p>
+                        </td>
+                        <td>
+                            <p id="versionValidTo">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Статус:</strong>
+                            </p>
+                        </td>
+                        <td>
+                            <p id="versionIsActive">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Брой елементи:</strong>
+                            </p>
+                        </td>
+                        <td>
+                            <p id="versionItemsCount">
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Общо описание:</strong>
+                            </p>
+                        </td>
+                        <td>
+                            <textarea class="client-version-info" rows="11" readonly placeholder="Описание на версията..." id="versionRemarks">
+                            </textarea>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Правно основание:</strong>
+                            </p>
+                        </td>
+                        <td>
+                            <textarea class="client-version-info" rows="2" readonly id="versionByLow">
+                            </textarea>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Публикации:</strong>
+                            </p>
+                        </td>
+                        <td>
+                            <textarea class="client-version-info" rows="3" readonly id="versionPublications">
+                            </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Области на приложение:</strong>
+                            </p>
+                        </td>
+                        <td>
+                            <textarea class="client-version-info" rows="2" readonly id="versionUseAreas">
+                            </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="meaning-version">
+                            <p>
+                                <strong>Документи:</strong>
+                            </p>
+                        </td>
+                        <td>
+                            <p id="versionFiles">
+                            </p>
+                        </td>
+                    </tr>
+
+                    @if (User.IsInRole(DataConstants.AdministratorRole) || User.IsInRole(DataConstants.DeveloperRole))
+                    {
+                        <tr>
+                            <td>
+                                <p style="margin-top:12px;"><strong>Действия: </strong></p>
+                            </td>
+                            <td id="versionAdminActions"></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
         </div>
     </div>
 </div>
@@ -185,7 +328,8 @@
             $(".displayno").hide();
         }
     }
-        var toggler = document.getElementsByClassName("caret");
+    var toggler = document.getElementsByClassName("caret");
+    var detailsButton = document.getElementsByClassName("btnversioninfo-extrasmall");
         var i;
     function getHierachy(isMember) {
         return (isMember ? "Йерархична" : "Плоска");
@@ -207,6 +351,56 @@
         return names;
     }
 
+    function checkStatus(boolValue){
+        if (boolValue) {
+            return "Действаща";
+        }
+        else {
+            return "Недействаща";
+        }
+    }
+
+    Date.prototype.formatDDMMYYYY = function () {                      //СУПЕР РЕШЕНИЕ ЗА ДАТИТЕ!!!!!!!!
+        return  this.getDate() +
+            "/" + (this.getMonth() + 1) +
+            "/" + this.getFullYear();
+    }
+
+    function getDate(someDate) {
+        if (someDate) {
+            let date = new Date(someDate);
+            let result = date.formatDDMMYYYY();
+            return result;
+        }
+        else {
+            return "";
+        }
+    }
+
+    for (i = 0; i < detailsButton.length; i++) {
+        detailsButton[i].addEventListener("click", function () {
+
+            $.getJSON('\ClientVersionDetails\?classCode=' + $(this).attr("classCode") + '&versionCode=' + $(this).attr("versionCode"), function (data) {
+                console.log(data);
+                $('#versioninfo').show();
+                $("#tblinfo").hide();
+                $("#noinfo").hide();
+                $("#infoVersionCode").text(data["version"]);
+                $("#parentVersion").text(data["parent"]);
+                $("#versionValidFrom").text(getDate(data["valid_From"]));
+                $("#versionValidTo").text(getDate(data["valid_To"]));
+                $("#versionIsActive").text(checkStatus(data["isActive"]));
+                $("#versionItemsCount").text(data["itemsCount"]);
+                $("#versionRemarks").val(data["remarks"]);
+                $("#versionByLow").val(data["byLow"]);
+                $("#versionPublications").val(data["publications"]);
+                $("#versionUseAreas").val(data["useAreas"]);
+                //$("#adminActions").html("<a style=\"margin-top:8px; margin-right:8px; text-decoration:none;\"  class=\"button redaction\" href=\"\/Admin\/Class\/ClassDetails?classCode=" + data["id"] + "\">Редактиране</a><br />");
+                InactiveVersionShowOrHide();
+                            
+            });
+        });
+    }
 
         for (i = 0; i < toggler.length; i++) {
             toggler[i].addEventListener("click", function () {
@@ -215,6 +409,7 @@
                 $.getJSON('\GetClassInfoByCode\?classCode=' + $(this).attr("Id"), { get_param: 'value' }, function (data) {
                     $('#tblinfo').show();
                     $("#noinfo").hide();
+                    $("#versioninfo").hide();
                     $("#infoClassCode").text(data["id"]);
                     $("#infoClassNameBG").text(data["name"]);
                     $("#infoClassNameEn").text(data["nameEng"]);

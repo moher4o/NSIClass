@@ -18,18 +18,20 @@ namespace Nsiclass.Client.Controllers
     public class ClassClientController : Controller
     {
         private readonly IAdminClassService classification;
+        private readonly IAdminVersionService versions;
         private readonly IAdminItemsService items;
         private readonly IAdminLinksService links;
         private readonly UserManager<User> userManager;
         private readonly IManageFilesService files;
 
-        public ClassClientController(UserManager<User> userManager, IAdminClassService classification, IAdminItemsService items, IAdminLinksService links, IManageFilesService files)
+        public ClassClientController(UserManager<User> userManager, IAdminClassService classification, IAdminItemsService items, IAdminLinksService links, IManageFilesService files, IAdminVersionService versions)
         {
             this.classification = classification;
             this.userManager = userManager;
             this.items = items;
             this.links = links;
             this.files = files;
+            this.versions = versions;
         }
 
         public async Task<IActionResult> ClassList(string searchString)
@@ -213,14 +215,30 @@ namespace Nsiclass.Client.Controllers
 
         public async Task<IActionResult> GetClassInfoByCode(string classCode)
         {
-            var result = await this.classification.GetClassInfoAsync(classCode);
-            return Json(result);
+            try
+            {
+                var result = await this.classification.GetClassInfoAsync(classCode);
+                return Json(result);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
         }
 
         public async Task<IActionResult> GetItemInfoByCode(string classCode, string versionCode, string itemCode)
         {
-            ClassItemServiceModel result = await this.items.GetItemInfoAsync(classCode, versionCode, itemCode);
-            return Json(result);
+            try
+            {
+                ClassItemServiceModel result = await this.items.GetItemInfoAsync(classCode, versionCode, itemCode);
+                return Json(result);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
 
         }
 
@@ -266,6 +284,20 @@ namespace Nsiclass.Client.Controllers
             }
 
         }
+
+        public async Task<IActionResult> ClientVersionDetails(string classCode, string versionCode)
+        {
+            try
+            {
+                VersionServiceModel result = await this.versions.GetVersionDetailsAsync(classCode, versionCode);
+                return Json(result);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
 
         //public async Task<IActionResult> TreeDownload()
         //{
