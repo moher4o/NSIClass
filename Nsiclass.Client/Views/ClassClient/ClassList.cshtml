@@ -21,21 +21,50 @@
             <ul id="myUL">
                 @foreach (var foo in Items)
                 {
-                    <li style="padding:8px;">
-                        @if (foo.Versions.Count() < 1)
+                    @*if (!foo.IsDeleted)
                         {
-                            <span class="classLeaf" id="@foo.Id">| <strong style="color:red;">@foo.Id</strong> | @foo.Name</span>
+                            <li style="padding:8px;">
+                                @if (foo.Versions.Count() < 1)
+                                {
+                                    <span class="classLeaf" id="@foo.Id">| <strong style="color:red;">@foo.Id</strong> | @foo.Name</span>
+                                }
+                                else
+                                {
+                                    <span class="caret" style="padding:5px;" id="@foo.Id">| <strong style="color:red;">@foo.Id</strong> | @foo.Name</span>
+                                    @ShowTreeChilds(foo.Versions)
+
+                                }
+                            </li>
                         }
                         else
                         {
-                            <span class="caret" style="padding:5px;" id="@foo.Id">| <strong style="color:red;">@foo.Id</strong> | @foo.Name</span>
-                            @ShowTreeChilds(foo.Versions)
+                            <li class="displayno" style="padding:8px;">
+                                @if (foo.Versions.Count() < 1)
+                                {
+                                    <span class="classLeaf" id="@foo.Id">| <strong style="color:red;">@foo.Id</strong> | @foo.Name</span>
+                                }
+                                else
+                                {
+                                    <span class="caret" style="padding:5px;" id="@foo.Id">| <strong style="color:red;">@foo.Id</strong> | @foo.Name</span>
+                                    @ShowTreeChilds(foo.Versions)
 
-                        }
-                    </li>
+                                }
+                            </li>
+                        }*@
+                        <li class="@(foo.IsDeleted ? "displayno" : "")" style="padding:8px;">
+                            @if (foo.Versions.Count() < 1)
+                            {
+                                <span class="classLeaf" id="@foo.Id">| <strong style="color:red;">@foo.Id</strong> | @foo.Name</span>
+                            }
+                            else
+                            {
+                                <span class="caret" style="padding:5px;" id="@foo.Id">| <strong style="color:red;">@foo.Id</strong> | @foo.Name</span>
+                                @ShowTreeChilds(foo.Versions)
 
+                            }
+                        </li>
 
-                }
+                    }
 
             </ul>
 
@@ -52,8 +81,6 @@
                         var title = foo.Version;
 
                         <li style="margin-top:18px;">
-                            @if (!foo.isDeleted)
-                            {
 
                                 @if (!foo.isActive)
                                 {
@@ -67,7 +94,6 @@
                                     <a class="button btnversioninfo-extrasmall versionbtn" style="text-decoration: none;" classCode="@foo.Classif" versionCode="@foo.Version">Детайли</a>
 
                                 }
-                            }
                         </li>
                     }
                 </ul>
@@ -296,8 +322,14 @@
                             </p>
                         </td>
                         <td>
-                            <p id="versionFiles">
-                            </p>
+                            <table class="table" id="ListofFiles">
+                                <tr>
+                                    <th>
+                                        Файлове
+                                    </th>
+                                </tr>
+                            </table>
+
                         </td>
                     </tr>
 
@@ -314,12 +346,47 @@
             </table>
 
         </div>
+     </div>
+</div>
+
+<div class="modal fade" id="deletedInResults" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content"  style="background-color:papayawhip;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Информация</h4>
+            </div>
+            <div class="modal-body">
+                Има неактивни класификации отговарящи на търсенето. Да бъдат ли включени в резултата?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-dismiss="modal">Не</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="showInctiveClassifications()">Да</button>
+
+            </div>
+        </div>
     </div>
 </div>
 
+
 <script>
         //var inactiveVersions = documet.getElementsByClassName("displayno");
+    function showInactiveSearchResults() {
+
+    }
+
     $(".displayno").hide();
+    InactiveVersionShowOrHide();
+
+    function showInctiveClassifications() {
+        $("#showInactive").prop('checked', true);
+        InactiveVersionShowOrHide();
+    }
+
     function InactiveVersionShowOrHide(){
         if ($("#showInactive").prop('checked') == true) {
             $(".displayno").show();
@@ -377,11 +444,23 @@
         }
     }
 
+    function FileList(classCode, versionCode) {
+        $.getJSON('\FilesList\?classCode=' + classCode + '&versionCode=' + versionCode, { get_param: 'value' }, function (data) {
+            $("#ListofFiles tbody").html("");
+
+            for (var i = 0; i < data.length; i++) {
+                var markup = "<tr><td><a href =\"/ClassClient/ExportFile/?fileName=" + data[i] + "&classCode=" + classCode + "&versionCode=" + versionCode + "\">" + data[i] + "</a></td></tr>"; // Binding the file name
+
+                $("#ListofFiles tbody").append(markup);
+            }
+        });
+    }
+
+
     for (i = 0; i < detailsButton.length; i++) {
         detailsButton[i].addEventListener("click", function () {
 
             $.getJSON('\ClientVersionDetails\?classCode=' + $(this).attr("classCode") + '&versionCode=' + $(this).attr("versionCode"), function (data) {
-                console.log(data);
                 $('#versioninfo').show();
                 $("#tblinfo").hide();
                 $("#noinfo").hide();
@@ -395,9 +474,10 @@
                 $("#versionByLow").val(data["byLow"]);
                 $("#versionPublications").val(data["publications"]);
                 $("#versionUseAreas").val(data["useAreas"]);
-                //$("#adminActions").html("<a style=\"margin-top:8px; margin-right:8px; text-decoration:none;\"  class=\"button redaction\" href=\"\/Admin\/Class\/ClassDetails?classCode=" + data["id"] + "\">Редактиране</a><br />");
+                FileList(data["classif"], data["version"]);
+                $("#versionAdminActions").html("<a style=\"margin-top:8px; margin-right:8px; text-decoration:none;\"  class=\"button redaction\" href=\"\/Admin\/Version\/VersionDetails?classCode=" + data["classif"] + '&versionCode=' + data["version"] + "\">Редакция</a><br />");
                 InactiveVersionShowOrHide();
-                            
+
             });
         });
     }
@@ -416,7 +496,7 @@
                     $("#infoClassType").text(getHierachy(data["isHierachy"]));
                     $("#dopinfoClass").text(data["remarks"]);
                     $("#infoClassNumber").html(getVersions(data["versions"]));
-                    $("#adminActions").html("<a style=\"margin-top:8px; margin-right:8px; text-decoration:none;\"  class=\"button redaction\" href=\"\/Admin\/Class\/ClassDetails?classCode=" + data["id"] + "\">Редактиране</a><br />");
+                    $("#adminActions").html("<a style=\"margin-top:8px; margin-right:8px; text-decoration:none;\"  class=\"button redaction\" href=\"\/Admin\/Class\/ClassDetails?classCode=" + data["id"] + "\">Редакция</a><br />");
                     InactiveVersionShowOrHide();
                 });
 
@@ -447,6 +527,13 @@
     }
 </script>
 @section Scripts {
+    @if (ViewBag.SearchString != null)
+    {
+        <script>
+            $('#deletedInResults').modal();
+        </script>
+    }
+
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }
 

@@ -8,7 +8,7 @@
     @*<h4 style="color:azure;" class="center-block text-center">@Model.Classif @Model.Version Детайли</h4>
         <hr />*@
     <div class="note-version">
-        <table id="tblinfo" class="table-info" style="width:98%;">
+        <table id="tblinfo" class="table-info table-bordered" style="width:98%;">
             <tbody>
                 <tr>
                     <td class="meaning-version">
@@ -188,16 +188,6 @@
                     </td>
                     <td>
                         <div id="FileBrowse" style="padding-left:10px; padding-top:10px;">
-                            <div class="row">
-                                <div class="col-sm-10">
-                                    <label for="myfile" class="button redaction">Избор на файл</label>
-                                    <label id="fileName"></label>
-                                    <input name="myfile" id="myfile" style="visibility:hidden;" type="file" onchange="checkfile(this);">
-                                </div>
-                                <div class="col-sm-2">
-                                    <input type="button" id="UploadBtn" class="button btndelete-small" value="Зареждане" />
-                                </div>
-                            </div>
                             <div>
                                 <div class="row">
                                     <div class="col-sm-6">
@@ -212,8 +202,7 @@
                                             </tr>
                                         </table>
                                     </div>
-                                    <div class="col-sm-6">
-
+                                    <div class="col-sm-6" style="margin-top:20px;">
                                         <div id="progressbar-5">
                                             <div class="progress-label">
                                             </div>
@@ -226,6 +215,17 @@
                                 <br />
                                 <br />
                             </div>
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <label for="myfile" class="button redaction">Избор на файл</label>
+                                    <label id="fileName"></label>
+                                    <input name="myfile" id="myfile" style="visibility:hidden;" type="file" onchange="checkfile(this);">
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="button" id="UploadBtn" class="button btndelete-small" value="Зареждане" />
+                                </div>
+                            </div>
+
                         </div>
                     </td>
                 </tr>
@@ -235,7 +235,7 @@
     </div>
     <div class="center-block text-center" style="margin-top:8px;">
         <button type="button" class="button save" id="send">Запис</button>
-        <a class="button btncansel" style="text-decoration: none;" asp-area="Admin" asp-controller="Class" asp-action="ClassDetails" asp-route-classCode="@Model.Classif">Отказ</a>
+        <a class="button btncansel" style="text-decoration: none;" asp-area="" asp-controller="ClassClient" asp-action="ClassList">Отказ</a>
     </div>
     <input type="submit" class="btn button-invisible" value="REALSENDSEND" id="realsend" />
 </form>
@@ -244,7 +244,7 @@
     $(document).ready(FileList);
 
     function FileList() {
-        $.getJSON('\FilesList\?classCode=' + $("#classCodeName").val() + '&versionCode=' + $("#versionCodeName").val(), { get_param: 'value' }, function (data) {
+        $.getJSON('/ClassClient/FilesList/?classCode=' + $("#classCodeName").val() + '&versionCode=' + $("#versionCodeName").val(), { get_param: 'value' }, function (data) {
             $("#ListofFiles tbody").html("");
             for (var i = 0; i < data.length; i++) {
                 var markup = "<tr><td><a href =\"/ClassClient/ExportFile/?fileName=" + data[i] + "&classCode=" + $("#classCodeName").val() + "&versionCode=" + $("#versionCodeName").val() + "\">" + data[i] + "</a></td><td><a href='#' onclick='DeleteFile(\"" + data[i] + "\")'><span class='glyphicon glyphicon-remove red'></span></a></td></tr>"; // Binding the file name

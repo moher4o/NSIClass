@@ -37,8 +37,10 @@ div.note-version-list {
     background-color: #f0f7fb;
     border: solid 1px #3498db;
     border-radius: 6px;
-    line-height: 18px;
+    line-height: 14px;
     padding: 12px;
+    max-height: 75vh;
+    overflow-y: auto;
 }
 
 
@@ -185,12 +187,12 @@ div.items-info {
         margin-left: 15px;
         font-size: 10px;
         color: white;
-        background-color: #40b6a4;
+        background-color: #40b6f4;
         display: normal;
     }
 
         .button.btnversioninfo-extrasmall:hover {
-            background-color: #15a38d;
+            background-color: #2ba5e5;
         }
 
 
@@ -237,14 +239,14 @@ div.items-info {
         margin-right: 20px;
         min-width: 50px;
         padding: 5px 10px;
-        font-size: 12px;
+        font-size: 14px;
         color: #fff;
         /*background-color: #afce47*/
-        background-color: rgb(132, 174, 204);
+        background-color:  #3498db;
     }
 
         .button.search:hover {
-            background-color: rgb(171, 188, 200);
+            background-color: #0094ff;
         }
 
     .button.redaction {

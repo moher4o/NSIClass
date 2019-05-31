@@ -304,11 +304,11 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult FilesList(string classCode, string versionCode)
-        {
-            var result = this.files.GetFilesInDirectory(classCode, versionCode);
-            return Json(result);
-        }
+        //public IActionResult FilesList(string classCode, string versionCode)
+        //{
+        //    var result = this.files.GetFilesInDirectory(classCode, versionCode);
+        //    return Json(result);
+        //}
 
         
         public IActionResult DeleteFile(string classCode, string versionCode, string fileName)

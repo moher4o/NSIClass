@@ -207,7 +207,7 @@ namespace Nsiclass.Services.Implementations
             if (string.IsNullOrEmpty(searchString))
             {
                 return await this.db.Classifications
-                .Where(c => c.isDeleted == false)
+                //.Where(c => c.isDeleted == false)
                 .Include(c => c.Versions)
                 .OrderBy(c => c.Name)
                 .ProjectTo<ClassListServiceModel>()
@@ -216,7 +216,8 @@ namespace Nsiclass.Services.Implementations
             else
             {
                 return await this.db.Classifications
-                .Where(c => c.isDeleted == false && (c.Id.Contains(searchString) || c.Name.Contains(searchString) || c.NameEng.Contains(searchString)))
+                //.Where(c => c.isDeleted == false && (c.Id.Contains(searchString) || c.Name.Contains(searchString) || c.NameEng.Contains(searchString)))
+                .Where(c => (c.Id.Contains(searchString) || c.Name.Contains(searchString) || c.NameEng.Contains(searchString)))
                 .Include(c => c.Versions)
                 .OrderBy(c => c.Name)
                 .ProjectTo<ClassListServiceModel>()

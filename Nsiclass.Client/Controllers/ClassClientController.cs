@@ -36,9 +36,20 @@ namespace Nsiclass.Client.Controllers
 
         public async Task<IActionResult> ClassList(string searchString)
         {
-                return View(await this.classification.GetClassCodesNamesVersions(searchString));
-           
+            var result = await this.classification.GetClassCodesNamesVersions(searchString);
+            if (result.Any(c => c.IsDeleted == true) && !string.IsNullOrWhiteSpace(searchString))
+            {
+                ViewBag.SearchString = "Има неактивни класификации в резултата.";
+            }
+            return View(result);
         }
+
+        public IActionResult FilesList(string classCode, string versionCode)
+        {
+            var result = this.files.GetFilesInDirectory(classCode, versionCode);
+            return Json(result);
+        }
+
 
         public async Task<IActionResult> Relations(string searchString)
         {
