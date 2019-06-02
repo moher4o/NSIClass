@@ -125,11 +125,11 @@
         <a class="button btncansel" style="text-decoration: none;" asp-controller="Users" asp-action="AdminTasks">Отказ</a>
         @if (Model.isDeleted != true)
         {
-            <a class="button btndelete" style="text-decoration: none;" data-toggle="modal" data-target="#@Model.Id">Изтриване &#33;&#33;&#33;</a>
+            <a class="button btndelete" style="text-decoration: none;" data-toggle="modal" data-target="#@Model.Id">Деактивиране &#33;&#33;&#33;</a>
         }
         else
         {
-            <a class="button btnrestore" style="text-decoration: none;" data-toggle="modal" data-target="#@Model.Id">Възстановяване &#33;&#33;&#33;</a>
+            <a class="button btnrestore" style="text-decoration: none;" data-toggle="modal" data-target="#@Model.Id">Активиране &#33;&#33;&#33;</a>
         }
 
 

@@ -54,11 +54,11 @@
                         <li class="@(foo.IsDeleted ? "displayno" : "")" style="padding:8px;">
                             @if (foo.Versions.Count() < 1)
                             {
-                                <span class="classLeaf" id="@foo.Id">| <strong style="color:red;">@foo.Id</strong> | @foo.Name</span>
+                                <span class="classLeaf" style="@(foo.IsDeleted ? "color: red" : "")" id="@foo.Id">| <strong style="color:orangered;">@foo.Id</strong> | @foo.Name</span>
                             }
                             else
                             {
-                                <span class="caret" style="padding:5px;" id="@foo.Id">| <strong style="color:red;">@foo.Id</strong> | @foo.Name</span>
+                                <span class="caret" style="padding:5px; @(foo.IsDeleted ? "color: red" : "")" id="@foo.Id">| <strong style="color:orangered;">@foo.Id</strong> | @foo.Name</span>
                                 @ShowTreeChilds(foo.Versions)
 
                             }
