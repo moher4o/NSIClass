@@ -51,11 +51,11 @@
             <button type="button" class="button search" onclick="document.getElementsByName('newItems')[0].click()">Избор на файл с елементи</button>
             <button type="button" class="button save" id="send">Зареждане</button>
             <a class="button btncansel" asp-controller="Users" asp-action="AdminTasks">Отказ</a>  
-            <button type="button" class="button search" id="help">Помощ</button>
+            <button type="button" class="button search" id="btnHelp">Помощ</button>
         </div>
     </div>
-    <div class="row">
-        <img src="~/jpg/ItemsExample.jpg" alt="example" style="padding:40px;">
+    <div class="row" >
+        <img src="~/jpg/ItemsExample.jpg" alt="example" style="padding:40px;" id="helpImage" hidden>
     </div>
         <input type="submit" class="btn button-invisible" value="REALSENDSEND" id="realsend" />
     

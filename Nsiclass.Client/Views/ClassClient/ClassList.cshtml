@@ -82,18 +82,18 @@
 
                         <li style="margin-top:18px;">
 
-                                @if (!foo.isActive)
-                                {
-                                    <a class="classLeaf displayno" style="color:red;" asp-action="ClassItemsList" asp-controller="ClassClient" asp-route-classCode=@foo.Classif asp-route-versionCode=@foo.Version>@title </a>
-                                    <a class="button btnversioninfo-extrasmall versionbtn displayno" style="text-decoration: none;" classCode="@foo.Classif" versionCode="@foo.Version">Детайли</a>
+                            @if (!foo.isActive)
+                            {
+                                <a class="classLeaf displayno" style="color:red;" asp-action="ClassItemsList" asp-controller="ClassClient" asp-route-classCode=@foo.Classif asp-route-versionCode=@foo.Version>@title </a>
+                                <a class="button btnversioninfo-extrasmall versionbtn displayno" style="text-decoration: none;" classCode="@foo.Classif" versionCode="@foo.Version">Детайли</a>
 
-                                }
-                                else
-                                {
-                                    <a class="classLeaf" asp-action="ClassItemsList" asp-controller="ClassClient" asp-route-classCode=@foo.Classif asp-route-versionCode=@foo.Version>@title</a>
-                                    <a class="button btnversioninfo-extrasmall versionbtn" style="text-decoration: none;" classCode="@foo.Classif" versionCode="@foo.Version">Детайли</a>
+                            }
+                            else
+                            {
+                                <a class="classLeaf" asp-action="ClassItemsList" asp-controller="ClassClient" asp-route-classCode=@foo.Classif asp-route-versionCode=@foo.Version>@title</a>
+                                <a class="button btnversioninfo-extrasmall versionbtn" style="text-decoration: none;" classCode="@foo.Classif" versionCode="@foo.Version">Детайли</a>
 
-                                }
+                            }
                         </li>
                     }
                 </ul>
@@ -346,13 +346,13 @@
             </table>
 
         </div>
-     </div>
+    </div>
 </div>
 
 <div class="modal fade" id="deletedInResults" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
-        <div class="modal-content"  style="background-color:papayawhip;">
+        <div class="modal-content" style="background-color:papayawhip;">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"
                         aria-label="Close">
@@ -403,6 +403,7 @@
     }
     function getVersions(versionList) {
         let names = "";
+        if (versionList) {
         for (var i = 0; i <= versionList.length - 1; i++) {
             if (!versionList[i].isDeleted) {
                 if (!versionList[i].isActive) {
@@ -413,6 +414,7 @@
                     names = names + "<a href=\"\/Admin\/Version\/VersionDetails?classCode=" + versionList[i].classif + "&amp;versionCode=" + versionList[i].version + "\">" + versionList[i].classif + " " + versionList[i].version + "</a><br />";
 
                 }
+            }
             }
         }
         return names;
@@ -447,11 +449,12 @@
     function FileList(classCode, versionCode) {
         $.getJSON('\FilesList\?classCode=' + classCode + '&versionCode=' + versionCode, { get_param: 'value' }, function (data) {
             $("#ListofFiles tbody").html("");
+            if (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var markup = "<tr><td><a href =\"/ClassClient/ExportFile/?fileName=" + data[i] + "&classCode=" + classCode + "&versionCode=" + versionCode + "\">" + data[i] + "</a></td></tr>"; // Binding the file name
 
-            for (var i = 0; i < data.length; i++) {
-                var markup = "<tr><td><a href =\"/ClassClient/ExportFile/?fileName=" + data[i] + "&classCode=" + classCode + "&versionCode=" + versionCode + "\">" + data[i] + "</a></td></tr>"; // Binding the file name
-
-                $("#ListofFiles tbody").append(markup);
+                    $("#ListofFiles tbody").append(markup);
+                }
             }
         });
     }

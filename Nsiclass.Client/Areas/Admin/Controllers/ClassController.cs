@@ -452,6 +452,25 @@ namespace Nsiclass.Client.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Програмист")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TotalDestroyClass(string classId)
+        {
+            string result = await this.classification.TotalDeleteClasificationAsync(classId);
+            if (result.Contains("успешно"))
+            {
+                TempData[SuccessMessageKey] = result;
+            }
+            else
+            {
+                TempData[ErrorMessageKey] = result;
+            }
+
+            return RedirectToAction("AdminTasks", "Users");
+        }
+
+
+        [HttpPost]
         // [Authorize(Roles = "Администратор, Програмист")]
         [Authorize(Policy = "MustBeAdmin")]
         [ValidateAntiForgeryToken]

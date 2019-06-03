@@ -657,6 +657,47 @@ namespace Nsiclass.Services.Implementations
             return $"Класификация с код: {classId} беше изтрита успешно";
         }
 
+        public async Task<string> TotalDeleteClasificationAsync(string classId)
+        {
+            if (classId == null)
+            {
+                return "Грешка! Нулев код на класификация.";
+            }
+
+            if (!this.IsClassificationExist(classId))
+            {
+                return $"Грешка!!! Няма класификация с код: {classId}";
+            }
+
+            await this.db.Database.BeginTransactionAsync();
+            try
+            {
+
+                var relItems = await this.db.ClassRelations.Where(r => r.SrcClassif == classId || r.DestClassif == classId).ToListAsync();
+                this.db.ClassRelations.RemoveRange(relItems);
+                await this.db.SaveChangesAsync();
+                this.db.ClassRelationsTypes.Where(r => r.SrcClassifId == classId || r.DestClassifId == classId).ToList()
+                    .ForEach(r => this.db.ClassRelationsTypes.Remove(r));
+                await this.db.SaveChangesAsync();
+                var items = await this.db.ClassItems.Where(i => i.Classif == classId).ToListAsync();
+                this.db.ClassItems.RemoveRange(items);
+                await this.db.SaveChangesAsync();
+                this.db.ClassVersions.Where(i => i.Classif == classId).ToList().ForEach(r => this.db.ClassVersions.Remove(r));
+                await this.db.SaveChangesAsync();
+                var currentClass = await this.db.Classifications.Where(i => i.Id == classId).FirstOrDefaultAsync();
+                this.db.Classifications.Remove(currentClass);
+                await this.db.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                this.db.Database.RollbackTransaction();
+                return $"Грешка!!! Възникна проблем при тоталното изтриване на класификацията.";
+            }
+            this.db.Database.CommitTransaction();
+            return $"Класификация с код: {classId} беше изтрита успешно";
+        }
+
+
         public async Task<string> RestoreClasificationAsync(string classId)
         {
             if (classId == null)
@@ -700,6 +741,8 @@ namespace Nsiclass.Services.Implementations
             this.db.Database.CommitTransaction();
             return $"Класификация с код: {classId} беше възстановена успешно";
         }
+
+
 
         public async Task<string> UpdateRelationAsync(string id, string description, DateTime valid_From, DateTime? valid_To)
         {

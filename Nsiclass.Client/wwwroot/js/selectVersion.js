@@ -4,8 +4,13 @@
     function attachEvents() {
         $('#selectedVersion').on('click', function () { $("#selectedVersion").css('background-color', '#ffffff'); });
         $('#selectedVersion').on('change', function () { $("#versionName").text('Версия: ' + $(this).val()); });
-
+        $('#btnHelp').on('click', ShowHelp);
         $('#send').on('click', CheckFieldsChoose);
+    }
+
+    function ShowHelp() {
+        console.log('help');
+        $('#helpImage').show();
     }
 
     function CheckFieldsChoose() {

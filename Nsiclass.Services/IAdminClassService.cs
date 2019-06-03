@@ -74,5 +74,7 @@ namespace Nsiclass.Services
         Task<IList<ExportClassVersionServiceModel>> ExportClassVersionAsync(string classCode, string versionCode);
 
         Task<string> GetClassNameByIdAsync(string classCode);
+
+        Task<string> TotalDeleteClasificationAsync(string classId);
     }
 }
