@@ -4,9 +4,14 @@
     function attachEvents() {
         $('#relName').on('click', function () { $("#relName").css('background-color', '#ffffff'); });
         $('#relName').on('change', function () { $("#relNameSelected").text('Релация: ' + $(this).val()); });
-
+        $('#btnHelp').on('click', ShowHelp);
         $('#send').on('click', CheckFieldsChoose);
     }
+
+    function ShowHelp() {
+        $('#helpImage').show();
+    }
+
 
     function CheckFieldsChoose() {
         let result = true;

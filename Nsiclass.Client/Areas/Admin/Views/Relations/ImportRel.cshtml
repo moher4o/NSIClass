@@ -9,6 +9,8 @@
 
 <form method="post" enctype="multipart/form-data">
     <div class="row">
+        <div class="col-md-2">
+        </div>
         <div class="col-md-4">
             <label style="color:azure;" asp-for="@Model.RelCodes">Избор на релация:</label>
             <select name="relName" asp-items="@Model.RelCodes" class="form-control" id="relName"></select>
@@ -21,7 +23,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="col-md-4" style="color:black;">
             <div class="bg-info">
@@ -30,22 +31,27 @@
                 <label id="fileName">Не е избран файл с елементи</label>
                 <br />
                 <label id="warning" style="margin-top:10px; font-size:small; color:red">Внимание! Заеждането може да продължи от няколко секунди до няколко минути</label>
-
             </div>
             <br />
-
         </div>
-        <div class="col-md-4">
-            <input type="file" name="newItems" style="display:none" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" id="fileSelected" onchange="checkfile(this);" />
-            <button type="button" class="button choice" onclick="document.getElementsByName('newItems')[0].click()">Избор на файл с елементи</button>
-            <br />
-            <button type="button" class="button save" id="send">Зареждане</button>
-            <br />
-            <a class="button btncansel" asp-controller="Users" asp-action="AdminTasks">Отказ</a>
+        <div class="col-md-2">
         </div>
     </div>
-
-    <input type="submit" class="btn button-invisible" value="REALSENDSEND" id="realsend" />
+    <div class="row" style="margin-top:15px;">
+        <div class="center-block text-center">
+            <input type="file" name="newItems" style="display:none" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" id="fileSelected" onchange="checkfile(this);" />
+            <button type="button" class="button search" onclick="document.getElementsByName('newItems')[0].click()">Избор на файл с елементи</button>
+            <button type="button" class="button save" id="send">Зареждане</button>
+            <a class="button btncansel" asp-controller="Users" asp-action="AdminTasks">Отказ</a>
+            <button type="button" class="button search" id="btnHelp">Помощ</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="center-block text-center">
+            <img src="~/jpg/Relexample.jpg" alt="example_image" style="padding-top:25px;" id="helpImage" hidden>
+        </div>
+    </div>
+        <input type="submit" class="btn button-invisible" value="REALSENDSEND" id="realsend" />
 
 </form>
 

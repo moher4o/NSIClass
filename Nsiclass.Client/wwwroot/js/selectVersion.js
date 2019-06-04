@@ -9,7 +9,6 @@
     }
 
     function ShowHelp() {
-        console.log('help');
         $('#helpImage').show();
     }
 
