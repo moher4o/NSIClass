@@ -23,7 +23,7 @@ namespace Nsiclass.Common
         public const string DeveloperUsername = "avukov@nsi.bg";
         public const string DeveloperFirstName = "Ангел";
         public const string DeveloperLastName = "Вуков";
-        public const string DeveloperPassword = "A!23soft"; //for first use
+        public const string DeveloperPassword = "Q!23nsibg"; //for first use
 
         public const string FirmName = "НСИ";
         public const bool IsoActive = false;
